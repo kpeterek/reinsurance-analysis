@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#1A0A0A</color>
+    <color name="ic_launcher_foreground">#A23B48</color>
+    <color name="burgundy_900">#1A0A0A</color>
+    <color name="rich_red">#A23B48</color>
+    <color name="rose_gold">#D4A574</color>
+    <color name="champagne_gold">#E8D5B5</color>
+    <color name="ivory_white">#FFF8F0</color>
+</resources>
