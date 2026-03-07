@@ -117,7 +117,7 @@ fun DCFScreen(
                 SummaryRow("PV of Terminal Value", Fmt.currency(result.pvTerminalValue))
 
                 Spacer(modifier = Modifier.height(8.dp))
-                HorizontalDivider(color = Burgundy500)
+                Divider(color = Burgundy500)
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
