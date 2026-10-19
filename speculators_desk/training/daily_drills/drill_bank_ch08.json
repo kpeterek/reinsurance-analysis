@@ -1,0 +1,485 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D026",
+   "category": "A",
+   "topic": "cre_fundamentals",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Leased, physical, and economic occupancy",
+   "inputs": {
+    "rentable_sf": 200000,
+    "leased_sf": 180000,
+    "dark_sf": 10000,
+    "free_rent_sf": 20000
+   },
+   "question": "An office building has 200,000 rsf. Leases cover 180,000 sf. One 10,000 sf tenant has moved out but still pays rent. Tenants on another 20,000 sf (moved in) are in a free-rent period. All leases carry the same rent per sf. Give leased, physical, and economic occupancy.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "leased occupancy (%)",
+      "value": 90.0,
+      "tolerance": 0.05,
+      "units": "%"
+     },
+     {
+      "label": "physical occupancy (%)",
+      "value": 85.0,
+      "tolerance": 0.05,
+      "units": "%"
+     },
+     {
+      "label": "economic occupancy (%)",
+      "value": 80.0,
+      "tolerance": 0.05,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Leased = 180,000/200,000 = 90%. Physical excludes the dark suite: 170,000/200,000 = 85%. Economic excludes space not paying: (180,000 - 20,000)/200,000 = 80% (the dark tenant pays, so it counts economically).",
+   "common_mistakes": [
+    "Reporting leased occupancy as 'occupancy' in a valuation",
+    "Excluding the dark tenant from economic occupancy (it pays) or including the free-rent tenants (they do not)"
+   ],
+   "intuition": "Three questions: who has signed, who is in the building, who is paying. Each answers a different risk.",
+   "takeaway": "Dark space is future vacancy with a date; free-rent space is a concession already granted. Underwrite both explicitly.",
+   "related": [
+    "ch08",
+    "ch09"
+   ]
+  },
+  {
+   "id": "D027",
+   "category": "A",
+   "topic": "property_tax",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Loaded cap rate and the seller's tax bill",
+   "inputs": {
+    "noi_pre_tax": 1200000,
+    "cap_rate": 0.07,
+    "tax_rate_on_value": 0.025,
+    "seller_tax": 150000
+   },
+   "question": "Pre-tax NOI is $1,200,000. Market cap rate on NOI after reassessed tax is 7.0%. Tax is 2.5% of value and resets to the price. The seller's current tax bill is $150,000. Give the value and the overpayment of a buyer who capitalizes NOI after the seller's bill.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "value with reassessment ($)",
+      "value": 12631579,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "overpayment ($)",
+      "value": 2368421,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "V = N/(c+t) = 1,200,000/0.095 = $12,631,579. Wrong: (1,200,000 - 150,000)/0.07 = $15,000,000. Overpayment $2,368,421 (18.75%).",
+   "common_mistakes": [
+    "Capitalizing the seller's tax bill",
+    "Adding the tax rate to the cap rate when tax will not be reassessed (e.g., a refinance)"
+   ],
+   "intuition": "When tax depends on price, value and tax are solved together: V = N/(c+t).",
+   "takeaway": "The larger the gap between the old assessment and your price, the larger the error from ignoring reassessment.",
+   "related": [
+    "ch08",
+    "ch09",
+    "case_A"
+   ]
+  },
+  {
+   "id": "D028",
+   "category": "A",
+   "topic": "supply_absorption",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Months of supply",
+   "inputs": {
+    "vacant_msf": 2.4,
+    "under_construction_msf": 3.0,
+    "preleased_share": 0.4,
+    "monthly_absorption_msf": 0.35
+   },
+   "question": "A submarket has 2.4 million sf vacant and 3.0 million sf under construction, 40% pre-leased. Net absorption runs 350,000 sf a month. How many months of supply?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "months of supply",
+      "value": 12.0,
+      "tolerance": 0.05,
+      "units": "months"
+     }
+    ]
+   },
+   "solution": "Speculative pipeline = 3.0 x 0.60 = 1.8m sf. MOS = (2.4 + 1.8)/0.35 = 12.0 months.",
+   "common_mistakes": [
+    "Counting pre-leased space as supply",
+    "Using quarterly or annual absorption without converting to monthly"
+   ],
+   "intuition": "Supply measured in months of demand puts vacancy and pipeline on one scale.",
+   "takeaway": "Ask whether pre-leasing tenants are relocating within the same submarket; if so, their move-outs add supply.",
+   "related": [
+    "ch08",
+    "ch04"
+   ]
+  },
+  {
+   "id": "D029",
+   "category": "B",
+   "topic": "supply_absorption",
+   "difficulty": 2,
+   "time_minutes": 2,
+   "title": "Positive absorption, rising vacancy",
+   "inputs": {
+    "net_absorption": "positive",
+    "vacancy_rate": "rising",
+    "report": "quarterly broker market report"
+   },
+   "question": "A quarterly report shows positive net absorption for the third straight quarter, yet the vacancy rate rose each quarter. A colleague calls the report contradictory. Explain how both can be true, and what you would check.",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Completions exceeded absorption: vacancy identity V' = V + C - AB, so positive AB with larger C raises vacancy",
+     "Inventory growth: deliveries enlarge the denominator, but vacant new space raises the numerator faster",
+     "Checks the pipeline delivered in the quarter and how much was pre-leased",
+     "Checks whether pre-leasing tenants vacated space in the same submarket (backfill risk, sublease additions)",
+     "Notes possible definitional differences (direct vs total vacancy including sublease; inventory changes from reclassification)"
+    ]
+   },
+   "solution": "Nothing is contradictory. Vacant space rises whenever completions exceed net absorption. Check completions, pre-leasing, sublease availability, and any inventory reclassification.",
+   "common_mistakes": [
+    "Treating positive absorption as proof of a tightening market",
+    "Ignoring sublease space"
+   ],
+   "intuition": "Absorption is demand; vacancy is demand relative to supply.",
+   "takeaway": "Read absorption next to completions every time.",
+   "related": [
+    "ch08",
+    "ch12"
+   ]
+  },
+  {
+   "id": "D030",
+   "category": "C",
+   "topic": "operating_leverage",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Operating leverage meets financial leverage",
+   "inputs": {
+    "revenue": 10000000,
+    "fixed_costs": 5500000,
+    "variable_cost_ratio": 0.2,
+    "revenue_change": -0.1,
+    "cap_rate": 0.085,
+    "ltv": 0.6
+   },
+   "question": "A full-service hotel has $10.0m revenue, fixed costs $5.5m, and variable costs 20% of revenue. Revenue falls 10%. Cap rate is unchanged at 8.5%. Debt is 60% of the starting value. Give base NOI, the NOI change, and the equity change. Would you finance this asset at 60% LTV? State conditions.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "base NOI ($)",
+      "value": 2500000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "NOI change (%)",
+      "value": -32.0,
+      "tolerance": 0.05,
+      "units": "%"
+     },
+     {
+      "label": "equity change (%)",
+      "value": -80.0,
+      "tolerance": 0.05,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "Computes DOL = 8.0/2.5 = 3.2 and links it to the NOI change",
+     "Recognizes that cap rates usually widen in hotel downturns, so -80% is not the worst case",
+     "Ties LTV to a stress that includes both revenue and cap-rate moves; proposes lower leverage or reserves",
+     "States what would change the answer (cost flexibility, management contract terms, debt structure)"
+    ]
+   },
+   "solution": "NOI = 10.0 x 0.8 - 5.5 = $2.5m. After -10%: 9.0 x 0.8 - 5.5 = $1.7m, -32%. DOL = 8.0/2.5 = 3.2. Value falls 32%; equity at 60% LTV falls 32%/0.4 = 80%. 60% LTV is too high for this cost structure unless there are debt-service reserves and a stress that includes cap-rate widening still shows positive equity.",
+   "common_mistakes": [
+    "Assuming NOI falls 10% because revenue fell 10%",
+    "Ignoring cap-rate widening in the stress"
+   ],
+   "intuition": "Operating leverage and financial leverage multiply.",
+   "takeaway": "Size debt on the product of DOL and LTV, not on either alone.",
+   "related": [
+    "ch08",
+    "ch10",
+    "ch11"
+   ]
+  },
+  {
+   "id": "D031",
+   "category": "D",
+   "topic": "noi_construction",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Apartment NOI from market rent",
+   "inputs": {
+    "units": 120,
+    "market_rent_monthly": 1450,
+    "loss_to_lease": 0.03,
+    "vacancy": 0.06,
+    "concessions": 0.01,
+    "bad_debt": 0.015,
+    "other_income_monthly_per_unit": 90,
+    "opex_per_unit": 6200,
+    "mgmt_fee_pct_egi": 0.03,
+    "reserve_per_unit": 300
+   },
+   "question": "A 120-unit apartment property: average market rent $1,450/month. Deductions from gross potential rent: loss-to-lease 3%, vacancy 6%, concessions 1%, bad debt 1.5%. Other income $90 per unit per month. Operating expenses $6,200 per unit per year before management; management 3% of EGI. Reserve $300 per unit per year. Compute GPR, EGI, NOI, and NCF.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "GPR ($)",
+      "value": 2088000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "EGI ($)",
+      "value": 1977480,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "NOI ($)",
+      "value": 1174156,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "NCF ($)",
+      "value": 1138156,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "GPR = 120 x 1,450 x 12 = $2,088,000. Net rental = GPR x (1 - 0.115) = $1,847,880. Other income = 120 x 90 x 12 = $129,600. EGI = $1,977,480. OpEx = 744,000 + 0.03 x 1,977,480 = $803,324. NOI = $1,174,156. NCF = NOI - 36,000 = $1,138,156.",
+   "common_mistakes": [
+    "Applying vacancy to EGI after other income",
+    "Forgetting loss-to-lease (in-place rents below market)",
+    "Deducting the reserve and calling the result NOI"
+   ],
+   "intuition": "Start from market rent and walk down to cash; each deduction is a separate risk.",
+   "takeaway": "Loss-to-lease is upside only if leases can roll to market; concessions are a cost even when called 'marketing'.",
+   "related": [
+    "ch08",
+    "ch09"
+   ]
+  },
+  {
+   "id": "D032",
+   "category": "C",
+   "topic": "capex_reserves",
+   "difficulty": 2,
+   "time_minutes": 5,
+   "title": "Deferred maintenance: price, not cap rate",
+   "inputs": {
+    "seller_noi": 2000000,
+    "reserve": 100000,
+    "cap_rate": 0.065,
+    "immediate_capex": 900000,
+    "contingency": 0.1
+   },
+   "question": "Seller NOI (no reserve) is $2.0m. Market reserve $100,000 a year. Cap rate 6.5% on NOI after reserve. The PCA shows $900,000 of immediate repairs; use a 10% contingency. What price, and how far below the seller's ask at 6.5% on its NOI?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "price ($)",
+      "value": 28240769,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "gap to ask ($)",
+      "value": 2528462,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "Value = (2,000,000 - 100,000)/0.065 = $29,230,769. Less 900,000 x 1.10 = $990,000: price $28,240,769. Ask = 2,000,000/0.065 = $30,769,231. Gap $2,528,462.",
+   "common_mistakes": [
+    "Capitalizing the one-time repair at the cap rate",
+    "Omitting the reserve because the PCA 'already covers' capex"
+   ],
+   "intuition": "Permanent items go through the cap rate; one-time items come off in dollars.",
+   "takeaway": "Negotiate one-time items as credits or escrows, permanent items as price.",
+   "related": [
+    "ch08",
+    "ch09",
+    "ch11"
+   ]
+  },
+  {
+   "id": "D033",
+   "category": "E",
+   "topic": "due_diligence",
+   "difficulty": 4,
+   "time_minutes": 30,
+   "title": "The T-12 and the rent roll disagree",
+   "inputs": {
+    "t12_noi_change": "+30% year over year",
+    "rent_roll_occupancy_change": "-6 points",
+    "deadline": "bids due in 48 hours",
+    "seller_explanation": "expense savings and a one-time recovery",
+    "documents_missing": [
+     "general ledger",
+     "bank statements",
+     "tax bills"
+    ]
+   },
+   "question": "A seller's T-12 shows NOI up 30% year over year on a multi-tenant office building. The rent roll shows occupancy down 6 points over the same period. The broker says the increase came from 'expense savings and a one-time recovery' and wants bids in 48 hours. You have no general ledger, bank statements, or tax bills. What do you do?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Identifies the contradiction: lower occupancy with higher NOI requires either non-recurring income, deferred expenses, or an error",
+     "Removes the one-time recovery and tests whether 'savings' are deferred maintenance or unpaid taxes",
+     "Lists the documents that would reconcile the two (GL, bank deposits vs rent roll, tax bills, AP aging)",
+     "Abstains from a firm bid in 48 hours; at most submits a non-binding indication priced on the prior year's NOI less the occupancy loss, conditional on reconciliation",
+     "States that passing is acceptable if the seller will not provide reconciling documents"
+    ]
+   },
+   "solution": "Abstain from a firm bid. Price only on information that reconciles. A non-binding indication on the prior-year NOI adjusted for lost occupancy, conditioned on the GL and bank statements, is the most that is defensible.",
+   "common_mistakes": [
+    "Capitalizing the T-12 because it is 'actual'",
+    "Treating a broker's verbal explanation as evidence"
+   ],
+   "intuition": "When two seller documents disagree, the one closer to cash (bank deposits) wins; the one closer to marketing loses.",
+   "takeaway": "Abstention is a decision. A missed deal costs nothing; a capitalized error costs the cap-rate multiple.",
+   "related": [
+    "ch08",
+    "ch01",
+    "ch24"
+   ]
+  },
+  {
+   "id": "D034",
+   "category": "A",
+   "topic": "rent_roll",
+   "difficulty": 1,
+   "time_minutes": 1,
+   "title": "WALT with and without the largest tenant",
+   "inputs": {
+    "tenants": [
+     {
+      "rent": 600000,
+      "years": 7
+     },
+     {
+      "rent": 300000,
+      "years": 2
+     },
+     {
+      "rent": 100000,
+      "years": 0.5
+     }
+    ]
+   },
+   "question": "Three tenants pay $600,000 (7.0 years left), $300,000 (2.0 years), and $100,000 (0.5 years). Compute WALT by rent, and WALT excluding the largest tenant.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "WALT (years)",
+      "value": 4.85,
+      "tolerance": 0.005,
+      "units": "years"
+     },
+     {
+      "label": "WALT ex-largest (years)",
+      "value": 1.625,
+      "tolerance": 0.005,
+      "units": "years"
+     }
+    ]
+   },
+   "solution": "(600 x 7 + 300 x 2 + 100 x 0.5)/1,000 = 4.85 years. Excluding the largest: (600 + 50)/400 = 1.625 years.",
+   "common_mistakes": [
+    "Averaging terms without weights (3.17 years)",
+    "Reporting only the portfolio WALT"
+   ],
+   "intuition": "WALT hides concentration; strip out the anchor to see the rest of the building.",
+   "takeaway": "A five-year WALT can be a seven-year lease and a short-term problem.",
+   "related": [
+    "ch08",
+    "ch09"
+   ]
+  },
+  {
+   "id": "D035",
+   "category": "D",
+   "topic": "property_tax",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Proposition 13 base year and comparable cap rates",
+   "inputs": {
+    "noi_pre_tax": 3000000,
+    "cap_rate": 0.05,
+    "tax_rate_on_value": 0.011,
+    "seller_tax": 80000
+   },
+   "question": "A long-held California building has pre-tax NOI of $3.0m. The seller's tax bill is $80,000 on an old base-year value. The buyer's tax will be 1.1% of the price (1% levy plus local debt). The market cap rate on NOI after reassessed tax is 5.0%. Give the value with reassessment, the value a buyer would compute on the seller's NOI, and the overpayment. Then explain how this affects the comparable-sales cap rates you collect.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "value with reassessment ($)",
+      "value": 49180328,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "value on seller's tax ($)",
+      "value": 58400000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "overpayment ($)",
+      "value": 9219672,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "Uses V = N/(c + t) with the base year reset to the price",
+     "Explains that Proposition 13 resets the base year on change in ownership, so the seller's low tax bill does not transfer",
+     "Recomputes comparable cap rates on buyers' reassessed taxes before using them",
+     "Notes the 2% annual inflation cap on base-year growth benefits the holder, not the next buyer"
+    ]
+   },
+   "solution": "V = 3,000,000/(0.05 + 0.011) = $49,180,328. Wrong: (3,000,000 - 80,000)/0.05 = $58,400,000. Overpayment $9,219,672 (18.7%). Comparable cap rates computed on sellers' NOIs overstate yields available to buyers; restate them on reassessed tax.",
+   "common_mistakes": [
+    "Capitalizing the seller's tax bill",
+    "Assuming Proposition 13 means no reassessment on sale"
+   ],
+   "intuition": "Acquisition-value regimes reset at the sale; the holder's benefit is not for sale.",
+   "takeaway": "Compare loaded cap rates (c + t), not headline cap rates, across tax regimes.",
+   "related": [
+    "ch08",
+    "ch09"
+   ]
+  }
+ ]
+}

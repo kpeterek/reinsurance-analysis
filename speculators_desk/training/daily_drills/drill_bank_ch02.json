@@ -1,0 +1,407 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D071",
+   "category": "A",
+   "topic": "price_formation",
+   "difficulty": 2,
+   "time_minutes": 0.5,
+   "title": "Unsmooth one quarter",
+   "inputs": {
+    "a": 0.6,
+    "r_star_prev": 0.01,
+    "r_star_now": -0.005
+   },
+   "question": "An appraisal index returned +1.0% last quarter and -0.5% this quarter. With smoothing parameter a = 0.6, what market-value return does the Geltner filter imply for this quarter (%)?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "unsmoothed return (%)",
+      "value": -2.75,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "r = (r*_t - a r*_{t-1})/(1 - a) = (-0.5 - 0.6 x 1.0)/0.4 = -1.1/0.4 = -2.75%.",
+   "common_mistakes": [
+    "Dividing by a instead of 1 - a",
+    "Adding rather than subtracting the lagged term",
+    "Treating the -0.5% appraisal return as the market return"
+   ],
+   "intuition": "The appraisal return is a weighted average of this quarter's market return and last quarter's appraisal return; removing the stale part and rescaling reveals a larger move.",
+   "takeaway": "Small negative appraisal returns after positive ones can hide a sharp market decline. Report the result at two values of a.",
+   "related": [
+    "ch02",
+    "ch09",
+    "ch12"
+   ]
+  },
+  {
+   "id": "D072",
+   "category": "A",
+   "topic": "price_formation",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Roll spread from an autocovariance",
+   "inputs": {
+    "autocov": -0.0004,
+    "mid": 25.0
+   },
+   "question": "The first-order autocovariance of trade-to-trade price changes in a stock is -0.0004 ($^2). The midpoint is $25.00. What is Roll's spread estimate in dollars and as a percent of the midpoint?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "spread ($)",
+      "value": 0.04,
+      "tolerance": 0.0005,
+      "units": "$"
+     },
+     {
+      "label": "spread (% of mid)",
+      "value": 0.16,
+      "tolerance": 0.001,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "S = 2 sqrt(0.0004) = 2 x 0.02 = $0.04. As a percent: 0.04/25 = 0.16%. A round trip costs about the full spread, 0.16%.",
+   "common_mistakes": [
+    "Forgetting the factor of 2",
+    "Taking the square root of a positive covariance as if it were valid",
+    "Calling the half-spread the round-trip cost"
+   ],
+   "intuition": "Bid-ask bounce makes successive price changes negatively correlated; the size of that negative correlation reveals the spread.",
+   "takeaway": "The estimator needs long samples and fails when price changes are positively autocorrelated.",
+   "related": [
+    "ch01",
+    "ch02"
+   ]
+  },
+  {
+   "id": "D073",
+   "category": "B",
+   "topic": "macro_interpretation",
+   "difficulty": 2,
+   "time_minutes": 2,
+   "title": "CPI surprise to bond and cap rate",
+   "inputs": {
+    "actual": 0.4,
+    "consensus": 0.2,
+    "surprise_sd": 0.1,
+    "bp_per_sd": 5,
+    "mod_duration": 8.0,
+    "pass_through": 0.4,
+    "cap0": 0.06
+   },
+   "question": "Core CPI prints 0.4% m/m against a 0.2% consensus. The sd of past surprises is 0.1 pp and the 10-year yield moves 5 bp per 1-sd surprise. Modified duration is 8.0. If 40% of a sustained yield move passes through to a 6.00% cap rate, give: the yield change (bp), the 10-year price change (%), and the eventual property value change (%).",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "yield change (bp)",
+      "value": 10.0,
+      "tolerance": 0.01,
+      "units": "bp"
+     },
+     {
+      "label": "10y price change (%)",
+      "value": -0.8,
+      "tolerance": 0.005,
+      "units": "%"
+     },
+     {
+      "label": "property value change (%)",
+      "value": -0.6623,
+      "tolerance": 0.005,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "z = (0.4 - 0.2)/0.1 = 2.0; dy = 2 x 5 = 10 bp. dP/P = -8.0 x 0.0010 = -0.80%. Cap moves 0.4 x 10 = 4 bp, 6.00% to 6.04%: 6.00/6.04 - 1 = -0.66%.",
+   "common_mistakes": [
+    "Using the raw surprise (0.2 pp) instead of the standardized one",
+    "Assuming full pass-through to cap rates",
+    "Expecting appraisals to show the move this quarter"
+   ],
+   "intuition": "Only the surprise relative to expectations moves prices; CRE values react later and partially.",
+   "takeaway": "Convert surprise to z, z to yield, yield to price; then ask whether positioning differed from consensus.",
+   "related": [
+    "ch02",
+    "ch04",
+    "ch06"
+   ]
+  },
+  {
+   "id": "D074",
+   "category": "C",
+   "topic": "cre_valuation",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Losing the financed bidders",
+   "inputs": {
+    "noi": 2000000,
+    "caps": [
+     0.045,
+     0.0475,
+     0.05,
+     0.0525
+    ],
+    "exits": [
+     0.045,
+     0.0475
+    ]
+   },
+   "question": "Four bidders for a building with $2.0m NOI value it at cap rates of 4.50% and 4.75% (both levered buyers using bridge debt), 5.00% and 5.25% (unlevered). In an ascending auction, what is the clearing price before and after the two levered bidders lose their financing and exit, and what is the percentage change?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "price before ($)",
+      "value": 42105263.16,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "price after ($)",
+      "value": 38095238.1,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "change (%)",
+      "value": -9.5238,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Reservation prices: 44.44m, 42.11m, 40.00m, 38.10m. Price = second highest: $42.11m (implied cap 4.75%). After exits: 40.00m and 38.10m; price = $38.10m (5.25%). Change = 38.095/42.105 - 1 = -9.52%.",
+   "common_mistakes": [
+    "Using the highest bid as the price",
+    "Averaging all bidders' valuations",
+    "Concluding that NOI or required returns must have changed"
+   ],
+   "intuition": "The second-highest bidder sets the price. Remove the top two and the price drops to the old fourth-highest valuation.",
+   "takeaway": "Ask who will be marginal at closing and what financing they depend on.",
+   "related": [
+    "ch02",
+    "ch10",
+    "ch12"
+   ]
+  },
+  {
+   "id": "D075",
+   "category": "B",
+   "topic": "cre_valuation",
+   "difficulty": 3,
+   "time_minutes": 2,
+   "title": "REITs down 25%, appraisals flat",
+   "inputs": {
+    "reit_change": "-25% over 12 months",
+    "appraisal_change": "-2% over 12 months"
+   },
+   "question": "Listed office REITs are down 25% over a year; an appraisal-based index of similar offices is down 2%. Give three explanations for the gap and the evidence that would discriminate between them. What would you not conclude?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Appraisal lag/smoothing: private values have fallen but appraisals lag; check transaction cap rates, unsmoothed series, volume collapse",
+     "REIT-specific factors: leverage, management, development exposure, sentiment or fund outflows; compare REIT-implied cap rates with transaction cap rates and REIT balance sheets",
+     "Composition: different property quality, markets, lease terms; compare holdings",
+     "Frozen market: few trades because bids are below sellers' reserves; volume data",
+     "Does not call the gap an arbitrage and does not assume either number is 'right'"
+    ]
+   },
+   "solution": "Appraisal smoothing and evidence lag, REIT-specific leverage and sentiment, and composition differences can each produce the gap. Transaction cap rates and volumes discriminate between lag and REIT overreaction; holdings comparison addresses composition. The gap cannot be traded as an arbitrage: private real estate cannot be shorted and there is no convergence date.",
+   "common_mistakes": [
+    "Treating the appraisal index as a price",
+    "Treating the REIT price as the private value without adjusting for leverage",
+    "Calling the gap a riskless trade"
+   ],
+   "intuition": "Public markets move first; appraisals follow transactions with a lag; claims differ.",
+   "takeaway": "Use REITs as a lead indicator of direction, transactions as a check on size, appraisals as a lagging record.",
+   "related": [
+    "ch02",
+    "ch12"
+   ]
+  },
+  {
+   "id": "D076",
+   "category": "D",
+   "topic": "cre_valuation",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Restating stale comps",
+   "inputs": {
+    "noi": 1800000,
+    "comps": [
+     [
+      5.0,
+      100
+     ],
+     [
+      5.3,
+      96
+     ],
+     [
+      5.6,
+      92
+     ]
+    ],
+    "index_now": 90,
+    "quality_premium_bp": 25
+   },
+   "question": "Subject NOI $1.8m. Three comps sold at 5.00%, 5.30%, 5.60% when a value index stood at 100, 96, 92; it is 90 now. Comps are one class better than the subject (+25 bp). Give the naive average-cap value, the time-adjusted average cap (%), and the time- and quality-adjusted value.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "naive value ($)",
+      "value": 33962264.15,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "time-adjusted cap (%)",
+      "value": 5.6444,
+      "tolerance": 0.001,
+      "units": "%"
+     },
+     {
+      "label": "adjusted value ($)",
+      "value": 30537229.03,
+      "tolerance": 2,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "Naive cap 5.30%: 1.8m/0.053 = $33.96m. Restated caps: 5.00x100/90 = 5.556%; 5.30x96/90 = 5.653%; 5.60x92/90 = 5.724%; average 5.644%. Add 25 bp: 5.894%. Value = 1.8m/0.05894 = $30.54m, 10.1% below naive.",
+   "common_mistakes": [
+    "Averaging unadjusted caps",
+    "Adjusting caps in the wrong direction (multiplying by I_now/I_sale)",
+    "Forgetting the quality premium",
+    "Ignoring that the index itself may understate the decline (selection)"
+   ],
+   "intuition": "A comp is a past auction under past financing; restate it to today and to the subject.",
+   "takeaway": "In a falling market, stale comps support the seller's price. Restate before you rely on them.",
+   "related": [
+    "ch02",
+    "ch09"
+   ]
+  },
+  {
+   "id": "D077",
+   "category": "E",
+   "topic": "cre_valuation",
+   "difficulty": 5,
+   "time_minutes": 30,
+   "title": "Price a hotel with no usable evidence",
+   "inputs": {
+    "appraisal": "12 months old",
+    "comps": "one REO sale, one sale 20 months ago",
+    "str_vs_pnl": "conflict",
+    "deadline_days": 3
+   },
+   "question": "A broker wants a firm price in three days for a 110-room hotel. The appraisal is 12 months old. The only comps are an REO sale last quarter and a sale 20 months ago. STR shows the comp set's RevPAR down 8%; the seller's P&L shows the subject up 3%. No PIP estimate. Lodging REITs are down 20%. What do you do?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Declines to give a firm price on this evidence (abstention or non-binding range with conditions is the best answer)",
+     "Identifies the STR/P&L conflict as the first item to resolve, with a specific test (STR penetration indices, bank deposits, tax filings)",
+     "Treats the REO comp as a forced-sale lower bound and the 20-month comp as stale",
+     "Uses the REIT decline as a directional signal, not a price",
+     "Lists the information that would allow a bid (reconciled NOI, PIP letter, lender quote) and walk-away triggers"
+    ]
+   },
+   "solution": "Abstain from a firm price. Offer a wide, non-binding range conditional on reconciling the STR data with the P&L, receiving a PIP estimate and obtaining a lender quote. Treat the REO sale as a floor and the old sale as stale. A bid made to stay in the process on unreconciled NOI is a bet on the seller's honesty.",
+   "common_mistakes": [
+    "Averaging the two comps",
+    "Using the appraisal as a price",
+    "Bidding firm to stay in the process"
+   ],
+   "intuition": "Where no price evidence is usable, the value of waiting for information exceeds the value of speed.",
+   "takeaway": "Abstention is a decision. Write down what would change it.",
+   "related": [
+    "ch02",
+    "ch11",
+    "ch20"
+   ]
+  },
+  {
+   "id": "D078",
+   "category": "A",
+   "topic": "price_formation",
+   "difficulty": 2,
+   "time_minutes": 2,
+   "title": "Clear a small call auction",
+   "inputs": {
+    "buys": [
+     [
+      10.3,
+      10
+     ],
+     [
+      10.2,
+      20
+     ],
+     [
+      10.1,
+      30
+     ]
+    ],
+    "sells": [
+     [
+      10.0,
+      15
+     ],
+     [
+      10.1,
+      20
+     ],
+     [
+      10.2,
+      25
+     ]
+    ]
+   },
+   "question": "Buy limits: $10.30 x 10, $10.20 x 20, $10.10 x 30. Sell limits: $10.00 x 15, $10.10 x 20, $10.20 x 25. Find the clearing price, executed volume, and imbalance (demand minus supply).",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "clearing price ($)",
+      "value": 10.1,
+      "tolerance": 0.001,
+      "units": "$"
+     },
+     {
+      "label": "volume",
+      "value": 35,
+      "tolerance": 0.01,
+      "units": "shares"
+     },
+     {
+      "label": "imbalance",
+      "value": 25,
+      "tolerance": 0.01,
+      "units": "shares"
+     }
+    ]
+   },
+   "solution": "D(10.0)=60, S=15, vol 15. D(10.1)=60, S=35, vol 35. D(10.2)=30, S=60, vol 30. D(10.3)=10, S=60, vol 10. Max volume 35 at $10.10; imbalance 60 - 35 = +25 (unfilled buy interest).",
+   "common_mistakes": [
+    "Choosing the price where D equals S on a continuous interpolation",
+    "Counting buy orders with limits below the price as demand",
+    "Picking the midpoint of best bid and ask"
+   ],
+   "intuition": "The auction price maximizes the volume that can trade; excess demand is left unfilled at that price.",
+   "takeaway": "Auction prices aggregate orders; a market order shifts the whole schedule.",
+   "related": [
+    "ch02"
+   ]
+  }
+ ]
+}
