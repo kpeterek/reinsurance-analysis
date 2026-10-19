@@ -1,0 +1,330 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D143",
+   "category": "A",
+   "topic": "fx_quotes",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "USD/JPY short: P&L in yen and dollars",
+   "inputs": {
+    "base_amount": 5000000,
+    "entry": 152.4,
+    "exit": 150.9,
+    "side": -1
+   },
+   "question": "You are short $5,000,000 of USD/JPY at 152.40 and cover at 150.90. What is the P&L in yen, and in dollars at the closing rate?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "P&L (JPY)",
+      "value": 7500000,
+      "tolerance": 1,
+      "units": "JPY"
+     },
+     {
+      "label": "P&L (USD at close)",
+      "value": 49701.8,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "P&L = side x N x (S1 - S0) = -1 x 5,000,000 x (150.90 - 152.40) = +JPY 7,500,000. In dollars at the close: 7,500,000 / 150.90 = $49,702.",
+   "common_mistakes": [
+    "Reporting the P&L in dollars directly as 5,000,000 x 1.50",
+    "Converting at the opening rate 152.40",
+    "Getting the sign wrong: USD/JPY fell, so a dollar short gains"
+   ],
+   "intuition": "P&L on a BASE position is earned in the QUOTE currency; it becomes dollars only when converted at the rate prevailing when you convert it.",
+   "takeaway": "Always state the currency of a P&L figure and the rate used to translate it.",
+   "related": [
+    "ch15"
+   ]
+  },
+  {
+   "id": "D144",
+   "category": "A",
+   "topic": "fx_quotes",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Inverse-pair percentage change",
+   "inputs": {
+    "s0": 1.05,
+    "s1": 1.1025
+   },
+   "question": "EUR/USD moves from 1.0500 to 1.1025. By what percentage did the euro change in dollars, and the dollar in euros?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "euro in dollars (%)",
+      "value": 5.0,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "dollar in euros (%)",
+      "value": -4.7619,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Euro: 1.1025/1.0500 - 1 = +5.00%. Dollar: 1.0500/1.1025 - 1 = -4.76%.",
+   "common_mistakes": [
+    "Saying the dollar fell 5%",
+    "Computing (1.0500-1.1025)/1.0500"
+   ],
+   "intuition": "Percentage changes are not symmetric under inversion: 1/(1+x) - 1 is not -x.",
+   "takeaway": "Compute the inverse change as S0/S1 - 1.",
+   "related": [
+    "ch15",
+    "ch07"
+   ]
+  },
+  {
+   "id": "D145",
+   "category": "B",
+   "topic": "fx_forwards",
+   "difficulty": 3,
+   "time_minutes": 2,
+   "title": "Forward points and the basis",
+   "inputs": {
+    "spot": 1.08,
+    "r_usd": 0.04,
+    "r_eur": 0.02,
+    "market_points": 235
+   },
+   "question": "EUR/USD spot 1.0800; one-year USD 4.00%, EUR 2.00% (accrual 1.0). The market one-year forward is quoted at +235 points. Compute the CIP forward points and the implied cross-currency basis on the euro rate (bp). Who benefits from the gap: a U.S. investor hedging euro assets or a euro investor hedging dollar assets?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "CIP forward points",
+      "value": 211.76,
+      "tolerance": 0.1,
+      "units": "pips"
+     },
+     {
+      "label": "implied basis (bp)",
+      "value": -21.48,
+      "tolerance": 0.05,
+      "units": "bp"
+     }
+    ],
+    "rubric": [
+     "CIP forward = 1.08 x 1.04/1.02 = 1.101176, i.e. +211.8 points",
+     "Market forward 1.1035 is above CIP, implying a negative basis of about -21.5 bp",
+     "A U.S. investor selling euros forward receives more dollars (benefits); a euro investor selling dollars forward pays more (loses)",
+     "Notes that the basis tends to widen at quarter-ends and in funding stress"
+    ]
+   },
+   "solution": "F_CIP = 1.08 x 1.04/1.02 = 1.101176 (+211.8 pips). F_mkt = 1.1035. b = 1.08 x 1.04/1.1035 - 1 - 0.02 = -0.215% (-21.5 bp). Euros are rich forward: the dollar-based hedger of euro assets gains, the euro-based hedger of dollar assets pays.",
+   "common_mistakes": [
+    "Reading positive points as a forecast that the euro will rise",
+    "Getting the sign of the basis backwards",
+    "Assuming the basis helps all hedgers"
+   ],
+   "intuition": "The basis is the price of synthetic dollar funding beyond the rate differential.",
+   "takeaway": "Hedge cost = rate differential + basis; check live forward points, not policy rates.",
+   "related": [
+    "ch15",
+    "ch07"
+   ]
+  },
+  {
+   "id": "D146",
+   "category": "C",
+   "topic": "fx_carry",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Break-even crash probability for a carry trade",
+   "inputs": {
+    "monthly_carry": 0.003,
+    "crash_spot_move": -0.09,
+    "months": 12
+   },
+   "question": "A carry trade earns 0.30% a month on notional. In a crash month the investment currency falls 9% (take the crash-month result as carry minus 9%). What monthly crash probability makes expected return zero, and at that probability, what is the chance of at least one crash in a year?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "break-even monthly crash probability (%)",
+      "value": 3.3333,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "P(at least one crash in 12 months) (%)",
+      "value": 33.42,
+      "tolerance": 0.05,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Crash month L = 0.003 - 0.09 = -0.087. p* = c/(c - L) = 0.003/0.090 = 3.33%. P(>=1 crash) = 1 - (1 - 0.03333)^12 = 33.4%.",
+   "common_mistakes": [
+    "Computing P(at least one crash) as 12p = 40% instead of 1 - (1 - p)^12",
+    "Treating a crash-free three-year record as evidence that p is below p*"
+   ],
+   "intuition": "Carry is selling crash insurance; the premium is small and regular, the payout rare and large.",
+   "takeaway": "If you cannot bound p away from p*, size small or abstain.",
+   "related": [
+    "ch15",
+    "ch21",
+    "ch01"
+   ]
+  },
+  {
+   "id": "D147",
+   "category": "D",
+   "topic": "fx_hedging",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Cash call at the roll of a sterling hedge",
+   "inputs": {
+    "equity_gbp": 20000000,
+    "hedge_ratio": 0.6,
+    "forward": 1.26,
+    "spot_at_roll": 1.34,
+    "r_usd": 0.0425,
+    "r_gbp": 0.0475,
+    "reserve_usd": 700000
+   },
+   "question": "A U.S. fund hedges 60% of \u00a320,000,000 of hotel equity with a one-year forward struck at GBP/USD 1.2600. At the roll, spot is 1.3400. Rates are USD 4.25%, GBP 4.75% (accrual 1.0). Compute the cash settlement, the new forward, and the shortfall against a $700,000 reserve.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "settlement ($, negative = paid)",
+      "value": -960000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "new forward",
+      "value": 1.333604,
+      "tolerance": 1e-05,
+      "units": "rate"
+     },
+     {
+      "label": "reserve shortfall ($)",
+      "value": 260000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "Settlement = h x N x (F - S) = 0.6 x 20,000,000 x (1.26 - 1.34) = -$960,000. New forward = 1.34 x 1.0425/1.0475 = 1.333604. Shortfall = 960,000 - 700,000 = $260,000.",
+   "common_mistakes": [
+    "Using the full \u00a320m rather than the hedged 60%",
+    "Getting the sign wrong: a short sterling forward loses when sterling rises",
+    "Assuming the new forward is struck at the old forward rate"
+   ],
+   "intuition": "A rolling hedge re-strikes at spot; the loss on the old forward is paid in cash while the hotel's dollar gain stays unrealized.",
+   "takeaway": "Size the reserve to the hedge, or the hedge to the reserve, before the roll date.",
+   "related": [
+    "ch15",
+    "ch07",
+    "ch13"
+   ]
+  },
+  {
+   "id": "D148",
+   "category": "E",
+   "topic": "fx_crises",
+   "difficulty": 5,
+   "time_minutes": 30,
+   "title": "The peg that has never been in doubt",
+   "inputs": {
+    "local_yield": 0.12,
+    "forward_discount": 0.1,
+    "tbill": 0.0425,
+    "reserves_trend": "falling 5 months",
+    "short_term_external_debt": "unknown"
+   },
+   "question": "A broker offers a retail center in a country whose currency has been pegged to the dollar for ten years. Local yield 12%. The one-year NDF implies a 10% forward discount on the local currency. Reserves have fallen for five months. You cannot obtain short-term external debt data before the bid deadline. T-bills yield 4.25%. Bid, bid unhedged, bid hedged, or abstain?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Computes the hedged dollar yield: 1.12/1.10 - 1 = 1.8%, below T-bills: no spread once currency risk is removed",
+     "Recognizes that an unhedged bid is a bet on the peg, and that the forward discount signals a material market-implied devaluation probability",
+     "Names the missing data (short-term external debt vs reserves, non-resident deposits) as decisive for first-generation timing",
+     "Notes the one-year NDF cannot hedge a multi-year illiquid hold and may be unavailable in a crisis",
+     "Concludes that abstaining (or bidding only at a price that prices in a large devaluation, with local debt) is the best answer under the deadline"
+    ]
+   },
+   "solution": "Hedged yield 1.8% < 4.25% T-bill. Unhedged requires the peg to hold. The key variable is unknown and the deadline prevents learning it. Abstain, or submit a conditional bid at a much lower price that survives a large devaluation.",
+   "common_mistakes": [
+    "Comparing 12% with U.S. cap rates",
+    "Treating ten years of stability as evidence of low risk",
+    "Assuming the NDF can be rolled through a crisis"
+   ],
+   "intuition": "A peg compresses observed volatility until the day it breaks.",
+   "takeaway": "When the decisive fact is unknowable before the deadline, abstention is a position.",
+   "related": [
+    "ch15",
+    "ch07",
+    "ch23"
+   ]
+  },
+  {
+   "id": "D149",
+   "category": "C",
+   "topic": "fx_hedging",
+   "difficulty": 2,
+   "time_minutes": 5,
+   "title": "Hedging transports the spread",
+   "inputs": {
+    "us_cap": 0.07,
+    "r_usd": 0.0425,
+    "r_jpy": 0.005,
+    "jp_yield": 0.04
+   },
+   "question": "A Japanese investor compares a U.S. hotel at a 7.0% cap rate (hedged to yen with one-year forwards, CIP, USD 4.25%, JPY 0.50%) with a Japanese hotel at 4.0%. Compute the hedged yen yield and the spread ratio (1+y)/(1+r) for each. Which offers more spread?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "hedged yen yield of U.S. hotel (%)",
+      "value": 3.1559,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "U.S. spread ratio",
+      "value": 1.026379,
+      "tolerance": 1e-05,
+      "units": "ratio"
+     },
+     {
+      "label": "Japan spread ratio",
+      "value": 1.034826,
+      "tolerance": 1e-05,
+      "units": "ratio"
+     }
+    ],
+    "rubric": [
+     "Uses (1+y)(1+r_jpy)/(1+r_usd) - 1 for the hedged yield",
+     "Shows the hedged spread ratio equals the U.S. asset's spread over U.S. short rates",
+     "Concludes the Japanese hotel offers more spread before basis and diversification",
+     "Notes a negative basis makes the U.S. hedge worse for the yen investor"
+    ]
+   },
+   "solution": "Hedged = 1.07 x 1.005/1.0425 - 1 = 3.156%. U.S. spread ratio = 1.07/1.0425 = 1.02638; Japan = 1.04/1.005 = 1.03483. The Japanese hotel offers more spread over its short rate.",
+   "common_mistakes": [
+    "Comparing 7.0% with 4.0% directly",
+    "Using the long-rate differential as the hedge cost"
+   ],
+   "intuition": "Under CIP a hedge moves the spread over short rates from one currency to another; it cannot create spread.",
+   "takeaway": "Compare (1+y)/(1+r) across markets, then adjust for the basis.",
+   "related": [
+    "ch15",
+    "ch07"
+   ]
+  }
+ ]
+}
