@@ -49,3 +49,6 @@ Mix categories A–F. Include messy, contradictory, incomplete-information drill
 
 ## 6. Done means
 `python3 -m pytest -q tests` passes in full. Report: files created, approximate word counts, test count, verified sources, pending verifications, and any library issues found.
+
+## 7. Working alongside other authors
+Other authors write files at the same time. If the full test suite fails **only** in files you do not own (another author's work in progress), first run your own tests (`python3 -m pytest -q tests/test_chNN_examples.py tests/test_drills.py -k "DNNN or chNN"` and your case tests). Retry the full suite a few minutes later. Report the foreign failure, but do not fix another author's files. Do not delete or rewrite files you did not create.
