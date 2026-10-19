@@ -72,4 +72,4 @@ def d015(i):
     return [v, naive - v]
 
 
-CHECKS = {k.upper(): v for k, v in globals().items() if k.startswith("d0") and callable(v)}
+CHECKS = {k.upper(): v for k, v in globals().items() if k[0] == "d" and k[1:].isdigit() and callable(v)}

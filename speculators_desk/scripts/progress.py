@@ -59,7 +59,9 @@ def cases():
 
 
 def drills():
-    bank = json.loads((ROOT / "training/daily_drills/drill_bank.json").read_text())["drills"]
+    bank = []
+    for f in sorted((ROOT / "training/daily_drills").glob("drill_bank*.json")):
+        bank.extend(json.loads(f.read_text())["drills"])
     by_cat = {}
     for d in bank:
         by_cat[d["category"]] = by_cat.get(d["category"], 0) + 1

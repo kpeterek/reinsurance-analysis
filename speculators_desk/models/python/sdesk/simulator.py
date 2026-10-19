@@ -58,8 +58,14 @@ CREATE TABLE IF NOT EXISTS part_results (
 
 # ----------------------------------------------------------------- data access
 
-def load_bank(path: Path = BANK_PATH) -> list[dict]:
-    return json.loads(Path(path).read_text())["drills"]
+def load_bank(path: Path | None = None) -> list[dict]:
+    """Load drills from drill_bank.json plus any drill_bank_*.json files, sorted by id."""
+    if path is not None:
+        return json.loads(Path(path).read_text())["drills"]
+    drills = []
+    for f in sorted(BANK_PATH.parent.glob("drill_bank*.json")):
+        drills.extend(json.loads(f.read_text())["drills"])
+    return sorted(drills, key=lambda d: d["id"])
 
 
 def connect(db_path: Path | str = DB_PATH) -> sqlite3.Connection:

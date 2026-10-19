@@ -7,10 +7,19 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-BANK = json.loads((ROOT / "training/daily_drills/drill_bank.json").read_text())
-_spec = importlib.util.spec_from_file_location("drill_checks", ROOT / "training/daily_drills/drill_checks.py")
-dc = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(dc)
+DRILL_DIR = ROOT / "training/daily_drills"
+BANK = {"drills": []}
+for _f in sorted(DRILL_DIR.glob("drill_bank*.json")):
+    BANK["drills"].extend(json.loads(_f.read_text())["drills"])
+
+CHECKS = {}
+for _f in sorted(DRILL_DIR.glob("drill_checks*.py")):
+    _spec = importlib.util.spec_from_file_location(_f.stem, _f)
+    _m = importlib.util.module_from_spec(_spec)
+    _spec.loader.exec_module(_m)
+    overlap = set(CHECKS) & set(_m.CHECKS)
+    assert not overlap, f"duplicate drill checks {overlap}"
+    CHECKS.update(_m.CHECKS)
 
 REQUIRED = ["id", "category", "topic", "difficulty", "time_minutes", "title", "inputs", "question",
             "answer", "solution", "common_mistakes", "intuition", "takeaway", "related"]
@@ -40,8 +49,8 @@ NUMERIC = [d for d in BANK["drills"] if d["answer"]["type"] in ("numeric", "mixe
 
 @pytest.mark.parametrize("drill", NUMERIC, ids=lambda d: d["id"])
 def test_numeric_answers(drill):
-    assert drill["id"] in dc.CHECKS, f"no independent check for {drill['id']}"
-    computed = dc.CHECKS[drill["id"]](drill["inputs"])
+    assert drill["id"] in CHECKS, f"no independent check for {drill['id']}"
+    computed = CHECKS[drill["id"]](drill["inputs"])
     parts = drill["answer"]["parts"]
     assert len(computed) == len(parts)
     for part, val in zip(parts, computed):
