@@ -1,0 +1,311 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D150",
+   "category": "A",
+   "topic": "commodity_futures",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "WTI P&L with the right multiplier",
+   "inputs": {
+    "contracts": 5,
+    "side": 1,
+    "entry": 64.2,
+    "exit": 66.85,
+    "multiplier": 1000
+   },
+   "question": "You are long 5 NYMEX WTI (CL) contracts from $64.20 to $66.85 per barrel. What is the P&L?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "P&L ($)",
+      "value": 13250,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "P&L = +1 x (66.85 - 64.20) x 1,000 bbl x 5 = 2.65 x 5,000 = $13,250.",
+   "common_mistakes": [
+    "Using 100 or 42 (gallons) instead of 1,000 barrels",
+    "Forgetting the number of contracts"
+   ],
+   "intuition": "One CL contract is 1,000 barrels, so each $1/bbl is $1,000 per contract.",
+   "takeaway": "Memorize the dollar value of a 1.00 move for each contract you trade: CL $1,000; NG $10,000; GC $100; SI $5,000; HG $25,000; ZC $50 per cent.",
+   "related": [
+    "ch16",
+    "ch14"
+   ]
+  },
+  {
+   "id": "D151",
+   "category": "A",
+   "topic": "commodity_futures",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Corn is quoted in cents",
+   "inputs": {
+    "contracts": 8,
+    "side": -1,
+    "entry_cents": 512.75,
+    "exit_cents": 498.25,
+    "bushels": 5000
+   },
+   "question": "You are short 8 CBOT corn contracts from 512'6 to 498'2. What is the P&L in dollars?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "P&L ($)",
+      "value": 5800,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "512'6 = 512.75 cents; 498'2 = 498.25 cents. Move = -14.50 cents. Short gains: 14.50 cents x $50 per cent x 8 = $5,800.",
+   "common_mistakes": [
+    "Reading cents as dollars and reporting $580,000",
+    "Reading 512'6 as 512.6 rather than 512 and 6/8"
+   ],
+   "intuition": "5,000 bushels x $0.01 = $50 per cent per contract.",
+   "takeaway": "Store the quotation unit with every price. A factor-of-100 error is the most expensive typo on a commodity desk.",
+   "related": [
+    "ch16"
+   ]
+  },
+  {
+   "id": "D152",
+   "category": "B",
+   "topic": "commodity_curve",
+   "difficulty": 3,
+   "time_minutes": 2,
+   "title": "What a backwardated curve implies",
+   "inputs": {
+    "front": 70.0,
+    "six_month": 66.5,
+    "t": 0.5,
+    "r": 0.045,
+    "u": 0.03
+   },
+   "question": "Front WTI is $70.00 and the six-month contract is $66.50. Financing is 4.5% and storage is a 3% yield, both continuous. Compute the annualized curve slope and the implied convenience yield, and say what they imply about inventory and about the expected spot price.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "annualized slope (%)",
+      "value": -10.2587,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "implied convenience yield (%)",
+      "value": 17.7587,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "Computes slope = ln(66.5/70)/0.5 = -10.26%",
+     "Computes y = r + u - slope = 17.76%",
+     "Interprets a high convenience yield as tight prompt inventory (theory of storage)",
+     "States that the curve is not a forecast of spot; a risk premium separates futures and expected spot",
+     "Names data that would confirm (location-specific inventories, refinery runs)"
+    ]
+   },
+   "solution": "Slope = ln(66.50/70.00)/0.5 = -10.26% a year. y = 0.045 + 0.03 + 0.1026 = 17.76%. Holders value prompt barrels highly, which is the signature of low inventory. The curve does not say spot will fall 5% in six months.",
+   "common_mistakes": [
+    "Reading backwardation as a forecast of falling prices",
+    "Forgetting storage cost in the implied yield"
+   ],
+   "intuition": "The curve is a price of storage. Negative slope means paying to have barrels now.",
+   "takeaway": "Translate curve shape into an inventory statement, then check inventories.",
+   "related": [
+    "ch16"
+   ]
+  },
+  {
+   "id": "D153",
+   "category": "C",
+   "topic": "roll_yield",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "A year of steady contango",
+   "inputs": {
+    "months": 12,
+    "contango_per_month": 0.015,
+    "bill_per_month": 0.004
+   },
+   "question": "Spot stays flat for 12 months. Each month the one-month future trades 1.5% above spot, and you roll a fully collateralized long. Bills pay 0.4% a month. Compute the monthly total return and the 12-month compounded total return. Then compute the 12-month excess return without collateral. Should the fund hold this as an inflation hedge?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "monthly total return (%)",
+      "value": -1.0778,
+      "tolerance": 0.005,
+      "units": "%"
+     },
+     {
+      "label": "12-month total return (%)",
+      "value": -12.1941,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "12-month excess return (%)",
+      "value": -16.3613,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "Roll per month = (S - 1.015S)/1.015S = -1.478%",
+     "Compounds rather than sums",
+     "Notes that spot is flat yet the position loses about 12%",
+     "Links persistent contango to ample inventory and a negative expected roll",
+     "Proposes a targeted hedge (fixed-price contracts, specific inputs) rather than a rolling energy long"
+    ]
+   },
+   "solution": "Monthly roll = -0.015/1.015 = -1.4778%; total = 0.40% - 1.4778% = -1.0778%. Twelve months: (1 - 0.010778)^12 - 1 = -12.19%. Excess: (1 - 0.014778)^12 - 1 = -16.36%.",
+   "common_mistakes": [
+    "Assuming the position tracks spot",
+    "Computing roll as -1.5% rather than -1.5%/1.015"
+   ],
+   "intuition": "In contango a long buys dear and sells cheap every month.",
+   "takeaway": "Spot + roll + collateral, not spot, is the return on commodity futures.",
+   "related": [
+    "ch16",
+    "ch05"
+   ]
+  },
+  {
+   "id": "D154",
+   "category": "D",
+   "topic": "hotel_energy",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Oil shock to RevPAR",
+   "inputs": {
+    "oil_change": -0.3,
+    "rig_elasticity": 1.2,
+    "energy_share": 0.4,
+    "energy_demand_elasticity": 1.0,
+    "supply_change": 0.0,
+    "occ0": 0.75,
+    "adr0": 120.0,
+    "adr_elasticity": 0.5
+   },
+   "question": "A hotel in an energy market runs 75% occupancy at a $120 ADR. Oil falls 30%. Hypothetical elasticities: rigs 1.2 to oil; energy room-nights 1.0 to rigs; energy share of demand 40%; ADR moves 0.5 times the proportional occupancy change; no new supply. Compute occupancy, ADR and the RevPAR change.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "occupancy after (%)",
+      "value": 64.2,
+      "tolerance": 0.05,
+      "units": "%"
+     },
+     {
+      "label": "ADR after ($)",
+      "value": 111.36,
+      "tolerance": 0.01,
+      "units": "$"
+     },
+     {
+      "label": "RevPAR change (%)",
+      "value": -20.5632,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Rigs -36%; energy demand -36%; total demand 0.4 x -36% = -14.4%. Occ = 0.75 x 0.856 = 64.2%. ADR = 120 x (1 - 0.5 x 0.144) = $111.36. RevPAR from $90.00 to $71.49, -20.56%.",
+   "common_mistakes": [
+    "Applying the oil change directly to occupancy",
+    "Forgetting the ADR response, which compounds the occupancy loss"
+   ],
+   "intuition": "Each link dampens or amplifies; hotel pricing then amplifies the occupancy loss.",
+   "takeaway": "Label every elasticity as an assumption and test the RevPAR result against the last downturn.",
+   "related": [
+    "ch16",
+    "ch11"
+   ]
+  },
+  {
+   "id": "D155",
+   "category": "E",
+   "topic": "commodity_curve",
+   "difficulty": 4,
+   "time_minutes": 30,
+   "title": "Ample inventories, backwardated curve",
+   "inputs": {
+    "reported_inventory_vs_5yr_avg": 0.06,
+    "front_six_month_spread": -2.4,
+    "hub": "delivery hub stocks unreported in the summary"
+   },
+   "question": "An analyst's note says national crude inventories are 6% above their five-year average, so 'the backwardated curve (front minus six-month = +$2.40) is a mispricing; sell the front, buy the deferred'. The note does not break out stocks at the futures delivery hub or by grade. Evaluate the trade.",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Identifies that the futures delivers at one location and grade; national stocks may be in the wrong place or of the wrong quality",
+     "Notes that inventory data are incomplete (floating, pipeline fill, consumer stocks) and that the convenience yield is location-specific",
+     "Recognizes that backwardation has no arbitrage bound, so 'mispricing' cannot be enforced",
+     "Specifies the data needed before trading: hub stocks, hub capacity, pipeline flows, refinery runs",
+     "Sizes or declines: does not put on a front-month spread without hub data; abstention is acceptable"
+    ]
+   },
+   "solution": "The claim confuses national with deliverable inventory. Backwardation can coexist with ample national stocks if the delivery hub is tight or pipelines into it are constrained. There is no reverse cash-and-carry for a trader without barrels at the hub. Obtain hub inventories and flows first; without them, pass.",
+   "common_mistakes": [
+    "Treating full carry as a two-sided bound",
+    "Using national aggregates to price a location-specific contract"
+   ],
+   "intuition": "The convenience yield belongs to the barrel at the delivery point.",
+   "takeaway": "Match the inventory data to the contract's location and grade before calling a curve mispriced.",
+   "related": [
+    "ch16",
+    "ch02"
+   ]
+  },
+  {
+   "id": "D156",
+   "category": "F",
+   "topic": "hotel_energy",
+   "difficulty": 5,
+   "time_minutes": 60,
+   "title": "Investment committee: hedge the Midland loan with oil futures?",
+   "inputs": {
+    "loan": 11600000,
+    "dscr_now": 1.72,
+    "segmentation": "not provided",
+    "oil_beta": "not estimated",
+    "proposal": "short 60 CL, 24-month strip"
+   },
+   "question": "A lender asks your fund, as sponsor of a Midland hotel, to 'hedge oil' as a condition of a loan extension. The asset manager proposes shorting 60 CL contracts across a 24-month strip. You have no segmentation data and no estimate of NOI's oil sensitivity. Current DSCR is 1.72x. The committee meets today. What do you recommend?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Recognizes that the hedge size (60 contracts) is not derived from any exposure estimate, so the position may be a speculation",
+     "Identifies the margin-call risk of a 60-contract short (about $60,000 per $1 move) relative to hotel cash flow",
+     "Notes concavity: a put structure matches hotel NOI better than short futures",
+     "Recommends abstaining from the proposed trade today; obtains segmentation and estimates beta first; offers the lender alternatives (reserve, partial paydown, puts sized to debt service)",
+     "States what evidence would justify a hedge and how it would be sized (N = beta/1,000 per year)"
+    ]
+   },
+   "solution": "Do not approve the 60-contract short today. Without segmentation there is no beta, so the size is arbitrary and may exceed the exposure several times. A $10 oil rally would require $600,000 of margin. Offer the lender a debt-service reserve or a put position sized to protect DSCR, and commit to sizing any hedge from account-level data within a set period.",
+   "common_mistakes": [
+    "Approving a hedge because a lender asked for it",
+    "Sizing a hedge to notional or to the loan balance rather than NOI sensitivity"
+   ],
+   "intuition": "An unsized hedge is a speculation with a hedging label.",
+   "takeaway": "No exposure estimate, no hedge; abstention plus information gathering is the correct first step.",
+   "related": [
+    "ch16",
+    "ch01",
+    "ch12"
+   ]
+  }
+ ]
+}
