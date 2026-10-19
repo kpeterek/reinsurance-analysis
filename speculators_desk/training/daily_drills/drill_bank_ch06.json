@@ -1,0 +1,486 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D016",
+   "category": "A",
+   "topic": "fixed_income",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "DV01 of a 10-year position",
+   "inputs": {
+    "face": 10000000,
+    "price": 96.0,
+    "mod_duration": 8.12,
+    "shock_bps": 25
+   },
+   "question": "You hold $10 million face of a 10-year note priced at 96.00 with modified duration 8.12. What is the position DV01, and the approximate loss if yields rise 25 bp?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "DV01 ($ per bp)",
+      "value": 7795.2,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "loss at +25 bp ($)",
+      "value": 194880,
+      "tolerance": 25,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "DV01 = market value x D_mod x 0.0001 = $9,600,000 x 8.12 x 0.0001 = $7,795.20 per bp. Loss = 25 x 7,795.20 = $194,880. Convexity would reduce the loss by roughly 0.5 x 78 x 0.0025^2 = 0.024% of value (about $2,300), so the duration figure is slightly high.",
+   "common_mistakes": [
+    "Using face ($10m) instead of market value ($9.6m): gives $8,120",
+    "Multiplying by 0.01 instead of 0.0001 (confusing 1% with 1 bp)"
+   ],
+   "intuition": "DV01 is duration expressed in dollars per basis point; it scales with market value, not face.",
+   "takeaway": "Memorize: a 10-year note near par has a DV01 near $780 per $1 million face.",
+   "related": [
+    "ch06"
+   ]
+  },
+  {
+   "id": "D017",
+   "category": "A",
+   "topic": "fixed_income",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Bill discount rate to price, BEY and effective yield",
+   "inputs": {
+    "discount_rate": 0.04,
+    "days": 182
+   },
+   "question": "A 26-week (182-day) Treasury bill is quoted at a 4.00% discount rate. Compute its price per 100, its bond-equivalent yield, and its effective annual yield.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "price per 100",
+      "value": 97.9778,
+      "tolerance": 0.0005,
+      "units": "points"
+     },
+     {
+      "label": "BEY (%)",
+      "value": 4.1393,
+      "tolerance": 0.002,
+      "units": "%"
+     },
+     {
+      "label": "effective annual (%)",
+      "value": 4.1822,
+      "tolerance": 0.002,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Price = 100(1 - 0.04 x 182/360) = 97.9778. BEY = (100 - 97.9778)/97.9778 x 365/182 = 4.1393%. Effective = (100/97.9778)^(365/182) - 1 = 4.1822%. The discount rate understates the investment return by about 14 bp because it divides by face and uses a 360-day year.",
+   "common_mistakes": [
+    "Treating the 4.00% discount rate as the yield",
+    "Using 360 days in the BEY",
+    "Dividing the discount by face instead of price in the BEY"
+   ],
+   "intuition": "Bills are quoted the way a banker discounts a note, not the way an investor measures return.",
+   "takeaway": "Convert every money-market quote to the same basis before comparing it with a note or a mortgage.",
+   "related": [
+    "ch06",
+    "ch05"
+   ]
+  },
+  {
+   "id": "D018",
+   "category": "B",
+   "topic": "macro_interpretation",
+   "difficulty": 2,
+   "time_minutes": 2,
+   "title": "Name the curve move and give two readings",
+   "inputs": {
+    "dy_2y_bps": 30,
+    "dy_10y_bps": 5,
+    "context": "day of a central bank meeting"
+   },
+   "question": "On the day of a central bank meeting the 2-year Treasury yield rises 30 bp and the 10-year rises 5 bp. Name the move. Give two economic interpretations and the data that would distinguish them. What does it mean for a floating-rate CRE borrower versus a fixed-rate borrower refinancing in five years?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Names it correctly: a bear flattener (yields up, short end more); 2s10s narrows 25 bp",
+     "Interpretation 1: the policy path was repriced higher (hawkish surprise); check fed funds futures and OIS for the change in expected rates",
+     "Interpretation 2: the market believes tighter policy now lowers long-run inflation or growth, so long-term expectations or the term premium fell; check breakevens and real yields at 10 years",
+     "Notes that the split between expectations and term premium is model-dependent",
+     "CRE: floating-rate borrower faces higher near-term debt service immediately; the five-year refinancer's base rate (5- to 10-year) moved much less, though cap rates may respond to credit conditions"
+    ]
+   },
+   "solution": "A bear flattener. Either the policy path rose (front end) while long-run inflation expectations or the term premium fell (long end), or long-end buyers absorbed supply. Distinguish with OIS/futures changes, 10-year breakevens versus real yields, and published term-premium estimates (state the model). Floating borrowers feel the 30 bp now; fixed borrowers refinancing in five years face a base rate that barely moved.",
+   "common_mistakes": [
+    "Calling it a steepener because yields rose",
+    "Assuming the long end must follow the short end"
+   ],
+   "intuition": "The front end prices policy; the long end prices the average of policy plus a premium.",
+   "takeaway": "Read curve moves by tenor and map each tenor to the exposure it controls in your book.",
+   "related": [
+    "ch05",
+    "ch06"
+   ]
+  },
+  {
+   "id": "D019",
+   "category": "C",
+   "topic": "fixed_income",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Size a DV01-neutral steepener",
+   "inputs": {
+    "face_10y": 40000000,
+    "dv01_10y_per100": 0.079,
+    "dv01_2y_per100": 0.019,
+    "dy_2y_bps": -20,
+    "dy_10y_bps": 5
+   },
+   "question": "You short $40 million face of the 10-year (DV01 0.0790 per 100) and buy the 2-year (DV01 0.0190 per 100) to be DV01-neutral. What 2-year face do you buy, what is the DV01 of each leg, and what is the approximate P&L if the 2-year falls 20 bp and the 10-year rises 5 bp? Name one risk the DV01 match does not remove.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "2-year face ($)",
+      "value": 166315789.47,
+      "tolerance": 1000,
+      "units": "$"
+     },
+     {
+      "label": "DV01 per leg ($ per bp)",
+      "value": 31600,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "approximate P&L ($)",
+      "value": 790000,
+      "tolerance": 100,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "Short convexity: loses on large parallel moves either way",
+     "Financing and repo specialness of the short 10-year",
+     "Gross notional and balance-sheet/margin limits",
+     "Exposure to other curve points (e.g., a 5-year twist)"
+    ]
+   },
+   "solution": "10-year leg DV01 = 40,000,000 x 0.0790/100 = $31,600 per bp. 2-year face = 31,600 / 0.000190 = $166.3 million (ratio 4.16). The 2s10s spread widens 5 - (-20) = 25 bp, so P&L is about 25 x 31,600 = +$790,000 before convexity and financing.",
+   "common_mistakes": [
+    "Matching face instead of DV01",
+    "Getting the sign wrong: a steepener gains when the long yield rises relative to the short yield"
+   ],
+   "intuition": "DV01 neutrality removes first-order exposure to parallel moves and leaves the spread.",
+   "takeaway": "Always report the trade's convexity and financing alongside its DV01.",
+   "related": [
+    "ch06",
+    "ch18"
+   ]
+  },
+  {
+   "id": "D020",
+   "category": "A",
+   "topic": "cre_valuation",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Decompose a cap-rate spread",
+   "inputs": {
+    "cap_rate": 0.0625,
+    "treasury_10y": 0.0425,
+    "noi_growth": 0.025
+   },
+   "question": "A property trades at a 6.25% cap rate. The 10-year Treasury yields 4.25%. Expected NOI growth after reserves is 2.5%. What is the cap-rate spread, and what unlevered risk premium does it imply?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "spread (bp)",
+      "value": 200,
+      "tolerance": 0.5,
+      "units": "bp"
+     },
+     {
+      "label": "implied risk premium (%)",
+      "value": 4.5,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Spread = 6.25 - 4.25 = 200 bp. From c = r_f + RP - g: RP = 6.25 + 2.50 - 4.25 = 4.50%. Required unlevered return = 8.75%.",
+   "common_mistakes": [
+    "Reading the 200 bp spread as the risk premium (it is RP minus g)",
+    "Ignoring growth"
+   ],
+   "intuition": "The spread is what is left of the risk premium after expected growth.",
+   "takeaway": "Never compare a spread with its history without asking whether growth or risk appetite changed.",
+   "related": [
+    "ch06",
+    "ch09"
+   ]
+  },
+  {
+   "id": "D021",
+   "category": "D",
+   "topic": "cre_debt",
+   "difficulty": 4,
+   "time_minutes": 15,
+   "title": "Refinancing a loan that no longer fits",
+   "inputs": {
+    "noi": 1800000,
+    "cap_rate": 0.07,
+    "balance": 22000000,
+    "new_rate": 0.0725,
+    "amort_years": 30,
+    "ltv_max": 0.65,
+    "dscr_min": 1.3
+   },
+   "question": "A suburban office property's maturing loan has a $22,000,000 balance. NOI after reserves is $1,800,000 and the appraiser uses a 7.00% cap rate. A lender offers 7.25% on 30-year amortization, max 65% LTV and min 1.30x DSCR. Compute value, the loan constant, the maximum loan, the refinancing gap, and the DSCR the existing balance would have at the new rate. What are the owner's options?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "value ($)",
+      "value": 25714285.71,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "loan constant (%)",
+      "value": 8.1861,
+      "tolerance": 0.001,
+      "units": "%"
+     },
+     {
+      "label": "maximum loan ($)",
+      "value": 16714285.71,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "refinancing gap ($)",
+      "value": 5285714.29,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "DSCR on existing balance",
+      "value": 0.9995,
+      "tolerance": 0.0005,
+      "units": "x"
+     }
+    ],
+    "rubric": [
+     "Identifies LTV as binding (DSCR test allows $16.91m)",
+     "Notes the existing balance would not even cover debt service at the new rate (DSCR about 1.00x)",
+     "Lists options: equity paydown, preferred equity or mezzanine, extension with paydown, discounted payoff, deed-in-lieu",
+     "Questions the 7.00% cap and the NOI: office leasing risk and capex may make both optimistic"
+    ]
+   },
+   "solution": "V = 1,800,000/0.07 = $25,714,286. K = 12 x PMT(7.25%/12, 360) per $1 = 8.1861%. LTV test 65% x V = $16,714,286; DSCR test 1,800,000/(1.30 x 0.081861) = $16,914,193. Max loan = $16,714,286 (LTV binds). Gap = 22,000,000 - 16,714,286 = $5,285,714. DSCR on $22m at 8.1861% = 0.9995x.",
+   "common_mistakes": [
+    "Sizing on DSCR only and missing that LTV binds",
+    "Using the interest rate instead of the loan constant",
+    "Ignoring that the appraisal cap may itself be stale"
+   ],
+   "intuition": "At refinancing, the rate shock arrives through two doors at once: lower value (LTV) and a higher constant (DSCR).",
+   "takeaway": "Compute the gap before the maturity year, while options (extension, partial paydown, sale) are still cheap.",
+   "related": [
+    "ch06",
+    "ch10",
+    "ch12"
+   ]
+  },
+  {
+   "id": "D022",
+   "category": "C",
+   "topic": "fixed_income",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Carry, roll and breakeven on a 2-year note",
+   "inputs": {
+    "coupon": 0.04,
+    "years": 2,
+    "yield_now": 0.04,
+    "yield_rolled": 0.0385,
+    "horizon": 0.5,
+    "repo": 0.043
+   },
+   "question": "You buy a 2-year note with a 4.00% coupon at par and finance it in repo at 4.30%. The 1.5-year par yield is 3.85%. Over six months, curve unchanged, compute carry, roll-down, total per 100 face, and the breakeven yield rise. Is this a carry trade?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "carry per 100",
+      "value": -0.15,
+      "tolerance": 0.0005,
+      "units": "points"
+     },
+     {
+      "label": "roll-down per 100",
+      "value": 0.2166,
+      "tolerance": 0.0005,
+      "units": "points"
+     },
+     {
+      "label": "total per 100",
+      "value": 0.0666,
+      "tolerance": 0.0005,
+      "units": "points"
+     },
+     {
+      "label": "breakeven rise (bp)",
+      "value": 4.606,
+      "tolerance": 0.01,
+      "units": "bp"
+     }
+    ]
+   },
+   "solution": "Carry = 4.00 x 0.5 - 100 x 4.30% x 0.5 = 2.00 - 2.15 = -0.15. At the horizon the note is a 1.5-year 4.00% bond priced at 3.85%: 100.2166, so roll-down = +0.2166. Total = +0.0666. Horizon DV01 = 0.014462, so breakeven = 0.0666/0.014462 = 4.6 bp. It is not a carry trade: carry is negative and a 5 bp rise wipes out the total.",
+   "common_mistakes": [
+    "Ignoring financing",
+    "Calling roll-down 'carry'",
+    "Using today's DV01 instead of the horizon DV01"
+   ],
+   "intuition": "Roll-down pays only if the curve stays put; carry pays only if funding is cheaper than the coupon.",
+   "takeaway": "State the breakeven move with every carry argument.",
+   "related": [
+    "ch06"
+   ]
+  },
+  {
+   "id": "D023",
+   "category": "E",
+   "topic": "cre_valuation",
+   "difficulty": 4,
+   "time_minutes": 30,
+   "title": "The cheap-spread pitch with contradictory evidence",
+   "inputs": {
+    "broker_claim": "spread 120 bp above its 10-year average",
+    "cap_rate_source": "appraisal-based index, last updated 2 quarters ago",
+    "transactions_last_quarter": "very few; two sales, one distressed",
+    "growth_forecasts": "brokers +4%, independent research -1% to +1%",
+    "financing": "lenders quoting, but terms not yet indicated for this asset"
+   },
+   "question": "A broker argues that a property type is 'cheap' because its cap-rate/Treasury spread is 120 bp above its 10-year average. The cap rates come from an appraisal-based index last updated two quarters ago; there were two sales last quarter, one distressed; growth forecasts range from +4% (brokers) to -1% (independent research); and you have no financing terms for the asset. What is your recommendation?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Best answer is to abstain from a firm view or bid for now and specify the information to obtain",
+     "Explains that a wide spread can mean a high risk premium (cheap) or low expected growth (fair) and that the data cannot distinguish them",
+     "Flags appraisal lag and a thin, distressed-contaminated transaction sample as unreliable price evidence",
+     "Names the decisive data: transaction cap rates on arm's-length sales, lease rollover and market rent evidence, lender sizing terms",
+     "States what would change the answer: several arm's-length trades confirming cap rates, financing at a quoted DSCR and rate, growth evidence converging"
+    ]
+   },
+   "solution": "Abstain. Spread = RP - g. With growth forecasts spanning five percentage points, the same spread is consistent with a risk premium from about 'cheap' to 'expensive'. The cap-rate data are stale and the transaction sample is two trades, one forced. Without financing terms you cannot even compute the refinancing exposure. The professional answer is a list of information to buy, with a date to revisit, not a trade.",
+   "common_mistakes": [
+    "Treating the 10-year average as fair value",
+    "Treating appraisal cap rates as transaction prices",
+    "Averaging broker and independent forecasts without asking why they differ"
+   ],
+   "intuition": "When the inputs to RP - g are both unknown, the spread is not a signal.",
+   "takeaway": "Abstention plus a specific information plan is a decision, and often the best one.",
+   "related": [
+    "ch02",
+    "ch06",
+    "ch09"
+   ]
+  },
+  {
+   "id": "D024",
+   "category": "A",
+   "topic": "fixed_income",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Duration plus convexity for a 150 bp move",
+   "inputs": {
+    "mod_duration": 7.0,
+    "convexity": 60,
+    "dy": 0.015
+   },
+   "question": "A bond has modified duration 7.0 and convexity 60. Estimate the percentage price change for a 150 bp rise, first with duration only and then with convexity.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "duration only (%)",
+      "value": -10.5,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "duration + convexity (%)",
+      "value": -9.825,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Duration term = -7.0 x 0.015 = -10.50%. Convexity term = 0.5 x 60 x 0.015^2 = +0.675%. Total = -9.825%.",
+   "common_mistakes": [
+    "Squaring 150 instead of 0.015",
+    "Subtracting the convexity term for a yield rise (it is always added for option-free bonds)"
+   ],
+   "intuition": "Convexity cushions losses and boosts gains; it grows with the square of the move.",
+   "takeaway": "For stress moves of 150 bp or more, include convexity or reprice.",
+   "related": [
+    "ch06"
+   ]
+  },
+  {
+   "id": "D025",
+   "category": "F",
+   "topic": "cre_debt",
+   "difficulty": 5,
+   "time_minutes": 60,
+   "title": "IC case: lock the refinancing rate or not",
+   "inputs": {
+    "spot_1y": 0.045,
+    "spot_2y": 0.043,
+    "refi_in_years": 1,
+    "refi_balance": 30000000,
+    "context": "hotel loan matures in one year; NOI recovering; sponsor wants to lock a forward-starting hedge"
+   },
+   "question": "A hotel owner must refinance a $30 million loan in one year. The annually compounded Treasury zero curve is 1-year 4.50%, 2-year 4.30%. The sponsor proposes locking the one-year rate one year forward with a forward-starting swap. Compute the implied 1-year rate one year forward. Then prepare an investment-committee recommendation: lock, buy an option (swaption or cap), or stay open.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "1y1y forward (%)",
+      "value": 4.1004,
+      "tolerance": 0.001,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "Computes the forward correctly and notes it is below spot because the curve is inverted: the market prices cuts",
+     "Explains that locking the forward gives up the benefit if cuts exceed what is priced, and pays any term premium embedded in the forward",
+     "Ties hedge size to the refinancing balance and to the probability the refinancing happens as planned (sale, recapitalization or paydown would leave a naked swap)",
+     "Compares a lock with an option: the option costs premium but does not create a liability if rates fall",
+     "Addresses credit spread risk: the hedge covers the base rate only; hotel loan spreads may widen in a downturn",
+     "States what would change the decision: lender term sheet, NOI trajectory, the sponsor's liquidity to post collateral on a swap"
+    ]
+   },
+   "solution": "f(1,2) = 1.043^2/1.045 - 1 = 4.1004%. The forward is about 40 bp below the 1-year spot, so the market already prices lower rates. A forward-starting swap locks the base rate near 4.10% but creates a liability if rates fall further and requires collateral; it hedges only the Treasury/swap component, not the hotel spread. Because the refinancing may be replaced by a sale or recapitalization, a cap or payer swaption sized to the balance is usually the better fit unless the lender requires a swap and the sponsor has liquidity for margin.",
+   "common_mistakes": [
+    "Treating the forward as the expected rate (it contains a premium)",
+    "Hedging the full balance when the refinancing is uncertain",
+    "Forgetting that a swap's mark-to-market can require cash before the refinancing date"
+   ],
+   "intuition": "A forward lock removes the base-rate uncertainty and replaces it with a contingent liability.",
+   "takeaway": "Hedge the exposure you will certainly have, with an instrument whose worst case you can fund.",
+   "related": [
+    "ch06",
+    "ch10",
+    "ch13",
+    "ch18"
+   ]
+  }
+ ]
+}
