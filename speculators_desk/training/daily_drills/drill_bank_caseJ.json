@@ -1,0 +1,283 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D131",
+   "category": "A",
+   "topic": "cre_debt",
+   "difficulty": 2,
+   "time_minutes": 0.5,
+   "title": "Is leverage still accretive in a credit crunch?",
+   "inputs": {
+    "going_in_cap": 0.0934,
+    "ltv": 0.45,
+    "rate": 0.0825,
+    "amort_years": 25
+   },
+   "question": "A hotel trades at a 9.34% going-in cap (ignore closing costs). Crunch-period bank debt is 45% LTV at 8.25% on a 25-year monthly amortization. Compute the loan constant and the year-1 cash-on-cash yield to equity. Is leverage accretive?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "loan constant (%)",
+      "value": 9.4614,
+      "tolerance": 0.005,
+      "units": "%"
+     },
+     {
+      "label": "equity cash-on-cash (%)",
+      "value": 9.2407,
+      "tolerance": 0.005,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "K = 12 x PMT(8.25%/12, 300, -1) = 0.094614. Equity yield = (c - lambda K)/(1 - lambda) = (0.0934 - 0.45 x 0.094614)/0.55 = (0.0934 - 0.042576)/0.55 = 9.24%. Because K (9.46%) exceeds the cap (9.34%), each dollar of debt lowers the equity yield: leverage is dilutive. At normal terms (6.50%, K = 8.10%) it was accretive.",
+   "common_mistakes": [
+    "Comparing the interest rate (8.25%) with the cap rate instead of the loan constant (9.46%)",
+    "Using annual rather than monthly amortization for the constant"
+   ],
+   "intuition": "Debt helps equity only when it costs less, per dollar per year including amortization, than the asset yields.",
+   "takeaway": "In a crunch, the rate can turn leverage negative; then a lower LTV is not what lowers the price.",
+   "related": [
+    "ch10",
+    "case_J"
+   ]
+  },
+  {
+   "id": "D132",
+   "category": "C",
+   "topic": "cre_valuation",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Band-of-investment price before and after the crunch",
+   "inputs": {
+    "noi": 1000000,
+    "target_coc": 0.09,
+    "normal": {
+     "ltv": 0.65,
+     "rate": 0.065
+    },
+    "crunch": {
+     "ltv": 0.45,
+     "rate": 0.0825
+    },
+    "amort_years": 25
+   },
+   "question": "A cash-on-cash buyer requires 9% year-1 cash-on-cash and always borrows the maximum LTV. NOI is $1,000,000 (tax not reassessed; ignore closing costs). Normal credit: 65% LTV at 6.50%. Crunch: 45% LTV at 8.25%. Both 25-year monthly amortization. Compute the maximum price in each regime and the percentage change.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "normal-credit price ($)",
+      "value": 11881260,
+      "tolerance": 50,
+      "units": "$"
+     },
+     {
+      "label": "crunch price ($)",
+      "value": 10860557,
+      "tolerance": 50,
+      "units": "$"
+     },
+     {
+      "label": "change (%)",
+      "value": -8.5909,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "P = NOI / (lambda K + (1 - lambda) y). Normal: K = 0.081025; denominator = 0.65 x 0.081025 + 0.35 x 0.09 = 0.052666 + 0.0315 = 0.084166; P = $11,881,260. Crunch: K = 0.094614; denominator = 0.45 x 0.094614 + 0.55 x 0.09 = 0.042576 + 0.0495 = 0.092076; P = $10,860,557. Change -8.59%. The required equity return did not move; the price fell because the band-of-investment cap rose from 8.42% to 9.21%.",
+   "common_mistakes": [
+    "Using the interest rate instead of the loan constant",
+    "Assuming a lower LTV always lowers the price: here the rate rise does most of the work (at 8.25%, 65% LTV would give an even lower price because K > y)"
+   ],
+   "intuition": "The marginal buyer's price is NOI divided by its weighted cost of capital. Change the debt terms and the price moves even if NOI and the equity target do not.",
+   "takeaway": "A credit-driven price decline is a change in the buyer's cap rate, not in the asset's income. Separate the two before deciding whether it is an opportunity.",
+   "related": [
+    "ch09",
+    "ch10",
+    "case_J"
+   ]
+  },
+  {
+   "id": "D133",
+   "category": "D",
+   "topic": "cre_valuation",
+   "difficulty": 4,
+   "time_minutes": 15,
+   "title": "Decomposing a hotel price decline: path dependence",
+   "inputs": {
+    "p_normal_old_noi": 20000000,
+    "p_normal_new_noi": 19400000,
+    "p_crunch_new_noi": 16800000,
+    "p_crunch_old_noi": 17300000,
+    "rgi_trend": "110 to 104 over 18 months",
+    "comp_revpar_change": -0.02
+   },
+   "question": "Clearing prices from a marginal-buyer model: normal credit with old NOI $20.0m; normal credit with new NOI $19.4m; crunch credit with new NOI $16.8m; crunch credit with old NOI $17.3m. (a) Compute the share of the decline explained by fundamentals with fundamentals moved first, and with fundamentals moved last. (b) The hotel's RGI fell from 110 to 104 over the same 18 months while comp-set RevPAR fell 2%. Is this a liquidity discount?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "fundamentals share, fundamentals first (%)",
+      "value": 18.75,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "fundamentals share, fundamentals last (%)",
+      "value": 15.625,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "Computes both orders and reports the range (about 16-19% fundamentals, 81-84% financing) rather than one number",
+     "Explains path dependence: a buyer's sensitivity to NOI depends on its financing, and vice versa",
+     "Notices that the falling RGI contradicts the 'pure liquidity' story: the hotel is losing share in a market that is only slightly weaker, so the NOI decline may not be finished",
+     "Does not classify as a liquidity discount without asking for T-3 data, the cause of the share loss (renovation at a competitor, management change, brand), and forward bookings",
+     "States what would change the answer: RGI stabilizing, an identified temporary cause, or a price that works on further-reduced NOI"
+    ]
+   },
+   "solution": "Total decline = 20.0 - 16.8 = $3.2m. Fundamentals first: 20.0 - 19.4 = 0.6 -> 18.75%. Fundamentals last: 17.3 - 16.8 = 0.5 -> 15.625%. Financing explains 81.25-84.375%. On the price data alone the discount looks like liquidity. But the penetration trend says the hotel is losing share (RGI -6 points against a comp set down 2%), so the 'new NOI' is a moving target. The decomposition is only as good as the NOI it starts from. Re-run with NOI that reflects continued share loss before calling it a liquidity discount.",
+   "common_mistakes": [
+    "Reporting one order as 'the' decomposition",
+    "Treating a high financing share as proof of durable NOI: the decomposition takes NOI as given"
+   ],
+   "intuition": "Factor shares in a non-linear pricing model depend on the order of the steps. The order is a choice, so report a range.",
+   "takeaway": "A decomposition answers 'how much of the price move came from credit, given this NOI'. The durability tests answer whether the NOI is right. You need both.",
+   "related": [
+    "ch09",
+    "ch11",
+    "case_J"
+   ]
+  },
+  {
+   "id": "D134",
+   "category": "E",
+   "topic": "decision_under_uncertainty",
+   "difficulty": 4,
+   "time_minutes": 30,
+   "title": "All-cash with a refinancing plan: averaging IRRs",
+   "inputs": {
+    "hurdle": 0.12,
+    "early": {
+     "p": 0.6,
+     "flows": [
+      -10000000,
+      7600000,
+      300000,
+      300000,
+      300000,
+      5100000
+     ]
+    },
+    "late": {
+     "p": 0.4,
+     "flows": [
+      -10000000,
+      900000,
+      900000,
+      900000,
+      7300000,
+      5000000
+     ]
+    }
+   },
+   "question": "You buy a hotel all-cash for $10.0m of equity. If credit returns in a year (p = 0.6), equity flows are -10.0, 7.6, 0.3, 0.3, 0.3, 5.1 ($m, years 0-5). If it returns in year 4 (p = 0.4): -10.0, 0.9, 0.9, 0.9, 7.3, 5.0. The hurdle is 12%. Compute each IRR, the expected NPV at 12%, and the IRR of the probability-weighted cash flows. Would you do the deal, and what does the timing risk cost?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "IRR, early refinance (%)",
+      "value": 13.6162,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "IRR, late refinance (%)",
+      "value": 10.9287,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "expected NPV at 12% ($)",
+      "value": 48989,
+      "tolerance": 5,
+      "units": "$"
+     },
+     {
+      "label": "IRR of expected flows (%)",
+      "value": 12.1924,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "Uses expected NPV at the hurdle as the criterion and notes that it is barely positive (+$49k on $10m)",
+     "Shows that the probability-weighted IRR (12.54%) overstates the IRR of the expected deal (12.19%)",
+     "Notes that the late case earns MORE dollars ($5.0m vs $3.6m profit) but a lower IRR, so the cost of late refinancing is time value, not dollars",
+     "Quantifies the timing cost: NPV falls from +$323k to -$362k, a $685k swing at 12%",
+     "Decision: marginal; proceeds only if the early-refinancing probability is well supported, or negotiates price; states the break-even probability or the price change needed"
+    ]
+   },
+   "solution": "IRR early = 13.62%; IRR late = 10.93%. NPV at 12%: early +$322,939; late -$361,936. Expected NPV = 0.6 x 322,939 + 0.4 x (-361,936) = +$48,989. Probability-weighted IRR = 12.54%, but the IRR of the expected flows (-10.0, 4.92, 0.54, 0.54, 3.10, 5.06) is 12.19%. The deal clears the hurdle by a thin margin, and only if p(early) >= about 0.53 (solve 0 = p x 322,939 - (1-p) x 361,936 -> p* = 0.528).",
+   "common_mistakes": [
+    "Accepting because the average IRR (12.54%) 'beats 12%' by a comfortable margin",
+    "Calling the late case worse because it has a lower IRR, without noticing that it produces more dollars"
+   ],
+   "intuition": "Refinancing early hands back equity that can earn the hurdle elsewhere. The value of early refinancing is that time value, which IRR captures but dollar profit does not.",
+   "takeaway": "Price a timing bet with expected NPV at the hurdle. Report the break-even probability, not an average IRR.",
+   "related": [
+    "ch10",
+    "ch21",
+    "case_J"
+   ]
+  },
+  {
+   "id": "D135",
+   "category": "B",
+   "topic": "hotel_metrics",
+   "difficulty": 5,
+   "time_minutes": 2,
+   "title": "'It's just a liquidity discount' -- with contradictory data",
+   "inputs": {
+    "broker_claim": "pure financing discount",
+    "t3_rgi": [
+     112,
+     98
+    ],
+    "comp_revpar_yoy": -0.09,
+    "franchise_expiry_months": 20,
+    "pip": "unknown",
+    "new_supply_rooms": 180,
+    "bid_deadline_days": 3
+   },
+   "question": "A broker markets a hotel at a 'credit-crunch discount' of 20% to last year's comps and wants bids in three days. The STR report shows T-3 RGI falling from 112 to 98. Comp-set RevPAR is down 9% year over year. The franchise agreement expires in 20 months and the brand has not stated renewal terms or a PIP. A 180-room competitor is under construction. What do you do?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Recognizes that every durability test fails: falling penetration, a weakening market, new supply, and an unpriced brand event. The discount cannot be classified as liquidity",
+     "Declines to bid by the deadline, or submits only a non-binding indication conditional on brand renewal terms, a PIP letter, and T-12/T-3 STR detail, and says so explicitly (abstention is the best answer)",
+     "Explains that a 20% discount to comps set in a different credit and operating regime is not evidence of value; the comps are stale on both counts",
+     "Names what would change the answer: a signed franchise extension with a quantified PIP, an identified temporary cause of the RGI drop, and a price that works on NOI after the new supply",
+     "Does not let the deadline set the decision; the cost of missing this deal is small relative to buying impaired NOI at a 'discount'"
+    ]
+   },
+   "solution": "The broker's claim is a hypothesis about why the price fell. The data contradict it on four counts: share loss (RGI 112 -> 98), a market decline (-9%), supply (180 rooms), and a franchise expiry with an unknown PIP. Any of these could explain a 20% price decline without any help from credit markets. With three days and no brand terms, you cannot value the hotel. The correct action is to abstain or give a conditional, non-binding indication.",
+   "common_mistakes": [
+    "Anchoring on the 20% discount to last year's comps",
+    "Assuming a credit-crunch discount and a fundamental decline cannot occur together; historically they usually do"
+   ],
+   "intuition": "A discount is only an opportunity if what is being discounted is still there.",
+   "takeaway": "Classify the discount before you price it. When the classification fails, do not bid.",
+   "related": [
+    "ch01",
+    "ch11",
+    "case_J"
+   ]
+  }
+ ]
+}
