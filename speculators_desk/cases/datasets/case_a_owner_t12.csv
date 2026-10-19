@@ -1,0 +1,19 @@
+line_item,amount_usd,notes
+rooms_revenue,2472218,"20,951 room-nights sold of 29,930 available; ADR 118.00; excludes hotel occupancy tax"
+other_operated_revenue,28600,"pantry/vending, pet fees, meeting room"
+misc_income,55000,"hail damage insurance proceeds (owner label: 'other income')"
+total_revenue,2555818,
+rooms_expense,672000,"front desk, housekeeping, laundry, breakfast, supplies, OTA/travel agent commissions"
+other_operated_expense,9500,
+admin_general,264000,"includes credit card fees, accounting, owner vehicle/phones/travel 38000, spouse salary 30000 (titled GM)"
+sales_marketing,68000,"local sales, digital; excludes brand marketing fee"
+repairs_maintenance,162000,"includes roof replacement 62000"
+utilities,164000,
+it_telecom,26000,
+gross_operating_profit,1190318,
+management_fee,0,"owner-operated"
+franchise_fees,259583,"10.5% of rooms revenue: royalty, marketing, reservation, loyalty"
+property_tax,78200,"CAD assessed value 3,400,000 x 2.30% combined rate (owner protests annually)"
+insurance,41000,"policy written 2 years ago; renewal pending"
+ffe_reserve,0,"none reserved"
+ebitda_as_presented,811535,"owner's 'NOI'"
