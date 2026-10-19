@@ -317,3 +317,9 @@ def test_waterfall_without_irr_returns_none():
     res = cre.irr_hurdle_waterfall(flows, [0.08, 0.12], [1.0, 0.8, 0.7])
     assert res["investor_irr"] is None
     assert sum(res["promote"]) == pytest.approx(0.0)
+
+
+def test_distressed_recovery_zero_price():
+    r = cre.distressed_loan_recovery(0, [dict(p=1, recovery=1.1, years=1)], 0.1)
+    assert r["expected_pv"] == pytest.approx(1.0)
+    assert r["detail"][0]["annualized_return"] is None

@@ -1,0 +1,451 @@
+{
+  "schema_version": 1,
+  "drills": [
+    {
+      "id": "D111",
+      "category": "A",
+      "topic": "cre_distress",
+      "difficulty": 2,
+      "time_minutes": 0.5,
+      "title": "Rate reset on an interest-only loan",
+      "inputs": {
+        "old_rate_io": 0.035,
+        "new_rate": 0.0675,
+        "amort_years": 30,
+        "old_dscr": 2.2
+      },
+      "question": "A loan is interest-only at 3.50% with a DSCR of 2.20x. At maturity the same balance must be refinanced at 6.75% with 30-year amortization (monthly payments). NOI is unchanged. Give the new loan constant and the new DSCR on the same balance.",
+      "answer": {
+        "type": "numeric",
+        "parts": [
+          {
+            "label": "loan constant (%)",
+            "value": 7.7832,
+            "tolerance": 0.005,
+            "units": "%"
+          },
+          {
+            "label": "new DSCR (x)",
+            "value": 0.9893,
+            "tolerance": 0.005,
+            "units": "x"
+          }
+        ]
+      },
+      "solution": "Loan constant at 6.75%/30 years = 12 x PMT(0.0675/12, 360, -1) = 7.7832%. Coverage scales by old rate / new constant: 2.20 x 3.50/7.7832 = 0.989x. The property now fails to cover debt service on its existing balance without any change in NOI.",
+      "common_mistakes": [
+        "Using the 6.75% interest rate instead of the amortizing loan constant (gives 1.14x)",
+        "Forgetting that interest-only debt service equals balance x rate"
+      ],
+      "intuition": "An IO-to-amortizing reset multiplies debt service by K1/r0. Here that factor is 2.22.",
+      "takeaway": "A rate reset alone can turn a 2.2x-covered loan into a sub-1.0x loan: diagnose liquidity versus solvency before assuming distress.",
+      "related": [
+        "ch10",
+        "ch12"
+      ]
+    },
+    {
+      "id": "D112",
+      "category": "A",
+      "topic": "cre_distress",
+      "difficulty": 2,
+      "time_minutes": 1,
+      "title": "REIT-implied cap rate",
+      "inputs": {
+        "share_price": 25.0,
+        "shares": 80000000.0,
+        "debt": 2400000000.0,
+        "preferred": 0.0,
+        "cash": 100000000.0,
+        "other_assets": 0.0,
+        "forward_cash_noi": 300000000.0
+      },
+      "question": "A REIT trades at $25 with 80 million shares, $2.4 billion of debt, no preferred, $0.1 billion of cash, and forward cash NOI of $300 million. What cap rate does the share price imply?",
+      "answer": {
+        "type": "numeric",
+        "parts": [
+          {
+            "label": "implied cap rate (%)",
+            "value": 6.9767,
+            "tolerance": 0.005,
+            "units": "%"
+          }
+        ]
+      },
+      "solution": "Market cap = $2.0bn. Implied real estate value = 2.0 + 2.4 - 0.1 = $4.3bn. Implied cap = 300/4,300 = 6.98%.",
+      "common_mistakes": [
+        "Dividing NOI by market cap (15%) instead of enterprise value",
+        "Using GAAP straight-line NOI instead of cash NOI"
+      ],
+      "intuition": "Enterprise value strips leverage out of the share price so it can be compared with a property cap rate.",
+      "takeaway": "Compare the implied cap with private appraisal cap rates and ask which one is stale.",
+      "related": [
+        "ch12",
+        "ch14"
+      ]
+    },
+    {
+      "id": "D113",
+      "category": "B",
+      "topic": "cre_distress",
+      "difficulty": 3,
+      "time_minutes": 2,
+      "title": "Public down, private flat",
+      "inputs": {
+        "reit_office_index_2q_change": -0.2,
+        "appraisal_index_2q_change": 0.0,
+        "transaction_volume": "down 60%"
+      },
+      "question": "Over two quarters an office REIT index fell 20% while an appraisal-based private office index was flat and transaction volume fell 60%. What are the competing explanations, and what would you check to decide which applies?",
+      "answer": {
+        "type": "judgment",
+        "rubric": [
+          "Appraisal lag: few trades, so appraisers have no comparables; the private index will catch down (check the few transactions that did close, and broker opinions of value)",
+          "REIT leverage: equity falls more than assets (estimate GAV change implied by the price move using GAV/NAV)",
+          "REIT-specific factors: fund flows, index changes, dividend cuts, management (check flows and stock-specific news)",
+          "Converts the price move into an implied cap-rate change rather than reading it as a property-value change",
+          "Does not assert one explanation without a test"
+        ]
+      },
+      "solution": "A 20% equity fall at roughly 1.6x GAV/NAV implies about a 12-13% asset-value fall. With volume down 60%, the flat private index likely reflects appraisal lag. Check closed transactions, broker opinions, and REIT flows before concluding.",
+      "common_mistakes": [
+        "Treating the REIT fall as a 20% property-value fall",
+        "Calling the gap an arbitrage without a mechanism to capture it"
+      ],
+      "intuition": "Public markets price fast and noisily; private marks price slowly and smoothly.",
+      "takeaway": "De-lever the REIT move, then decide which price is stale.",
+      "related": [
+        "ch02",
+        "ch12"
+      ]
+    },
+    {
+      "id": "D114",
+      "category": "C",
+      "topic": "cre_distress",
+      "difficulty": 2,
+      "time_minutes": 3,
+      "title": "Texas sale date with a holiday",
+      "inputs": {
+        "notice_date": "2028-06-01",
+        "min_notice_days": 21
+      },
+      "question": "A trustee gives notice of a Texas foreclosure sale on Thursday 1 June 2028. Under Tex. Prop. Code 51.002 (first Tuesday of the month, at least 21 days' notice; if the first Tuesday is January 1 or July 4, the sale is on the first Wednesday), how many days after notice is the earliest sale?",
+      "answer": {
+        "type": "numeric",
+        "parts": [
+          {
+            "label": "days from notice to sale",
+            "value": 34,
+            "tolerance": 0,
+            "units": "days"
+          }
+        ]
+      },
+      "solution": "Earliest permissible date = 22 June 2028. The first Tuesday of June (6 June) is too early. The first Tuesday of July 2028 is 4 July, so the sale moves to Wednesday 5 July 2028: 34 days after notice.",
+      "common_mistakes": [
+        "Counting 21 days and stopping (22 June is a Thursday, not a sale date)",
+        "Missing the July 4 exception"
+      ],
+      "intuition": "The monthly sale calendar turns small delays in notice into month-long delays in recovery.",
+      "takeaway": "Statutory minimums are not expected timelines; lawsuits and bankruptcy filings dominate the real distribution.",
+      "related": [
+        "ch12",
+        "case_G"
+      ]
+    },
+    {
+      "id": "D115",
+      "category": "C",
+      "topic": "cre_distress",
+      "difficulty": 3,
+      "time_minutes": 5,
+      "title": "Concentration screens and the sale loop",
+      "inputs": {
+        "capital": 60000000.0,
+        "cld": 50000000.0,
+        "total_cre": 200000000.0,
+        "total_cre_36m_ago": 120000000.0,
+        "sale_price": 0.9,
+        "target": 3.0
+      },
+      "question": "A bank has total risk-based capital of $60m, CLD loans of $50m, and non-owner-occupied CRE of $200m (up from $120m 36 months ago). Give the CLD ratio, the CRE ratio, and the par amount of CRE loans it must sell at 90 cents (no tax effect) to reach 300%.",
+      "answer": {
+        "type": "numeric",
+        "parts": [
+          {
+            "label": "CLD ratio (%)",
+            "value": 83.33,
+            "tolerance": 0.01,
+            "units": "%"
+          },
+          {
+            "label": "CRE ratio (%)",
+            "value": 333.33,
+            "tolerance": 0.01,
+            "units": "%"
+          },
+          {
+            "label": "loans to sell ($)",
+            "value": 28571429,
+            "tolerance": 1,
+            "units": "$"
+          }
+        ]
+      },
+      "solution": "CLD 50/60 = 83.3% (screen 1 not met). CRE 200/60 = 333.3% with 66.7% growth (screen 2 met). Naive sale 200 - 180 = $20m. With a 10% loss reducing capital: X = 20/(1 - 3 x 0.10) = $28.57m.",
+      "common_mistakes": [
+        "Answering $20m (ignores the capital lost on sale)",
+        "Treating the screens as hard limits"
+      ],
+      "intuition": "At 3x, every dollar of sale loss removes three dollars of CRE capacity.",
+      "takeaway": "Banks sell loans that clear near par first; deep-discount loans come later, if at all.",
+      "related": [
+        "ch12"
+      ]
+    },
+    {
+      "id": "D116",
+      "category": "D",
+      "topic": "cre_distress",
+      "difficulty": 3,
+      "time_minutes": 15,
+      "title": "Maximum bid for a small NPL",
+      "inputs": {
+        "upb": 10000000.0,
+        "required_return": 0.18,
+        "scenarios": [
+          {
+            "p": 0.4,
+            "recovery": 8000000.0,
+            "costs": 50000.0,
+            "years": 0.5
+          },
+          {
+            "p": 0.45,
+            "recovery": 7200000.0,
+            "costs": 600000.0,
+            "years": 1.5
+          },
+          {
+            "p": 0.15,
+            "recovery": 6800000.0,
+            "costs": 1000000.0,
+            "years": 3.0
+          }
+        ]
+      },
+      "question": "A $10m UPB loan resolves by DPO (p 0.40, $8.0m gross, $50k costs, 0.5 years), foreclosure and resale (p 0.45, $7.2m, $600k, 1.5 years), or bankruptcy then resale (p 0.15, $6.8m, $1.0m, 3.0 years). What is the maximum bid at an 18% required return?",
+      "answer": {
+        "type": "numeric",
+        "parts": [
+          {
+            "label": "maximum bid ($)",
+            "value": 5773976,
+            "tolerance": 2,
+            "units": "$"
+          }
+        ]
+      },
+      "solution": "PVs at 18%: DPO 7.95/1.18^0.5 = 7,318,553; foreclosure 6.6/1.18^1.5 = 5,148,941; bankruptcy 5.8/1.18^3 = 3,530,094. Weighted: 0.40 x 7,318,553 + 0.45 x 5,148,941 + 0.15 x 3,530,094 = $5,773,976, 57.7% of UPB.",
+      "common_mistakes": [
+        "Discounting gross recovery before costs",
+        "Using expected time instead of discounting each scenario"
+      ],
+      "intuition": "The slow, litigated scenarios cost more in time than in dollars.",
+      "takeaway": "Bid off expected PV at your required return, then test the probability of contested outcomes.",
+      "related": [
+        "ch12",
+        "case_G"
+      ]
+    },
+    {
+      "id": "D117",
+      "category": "D",
+      "topic": "cre_distress",
+      "difficulty": 3,
+      "time_minutes": 10,
+      "title": "ARA and a control shift",
+      "inputs": {
+        "principal": 25000000.0,
+        "accrued_interest": 750000.0,
+        "advances": 250000.0,
+        "other": 0.0,
+        "appraisal": 15000000.0,
+        "reserves": 0.0,
+        "haircut": 0.1,
+        "coupon": 0.05,
+        "controlling_class_original": 12000000.0
+      },
+      "question": "A $25m CMBS loan (5.0% coupon) has $0.75m accrued unpaid interest and $0.25m of advances; the new appraisal is $15m. Using ARA = claim - 90% of appraisal, give the ARA, the controlling class's remaining share of its $12m original balance after ARA (floored at zero), and the reduced monthly interest advance.",
+      "answer": {
+        "type": "numeric",
+        "parts": [
+          {
+            "label": "ARA ($)",
+            "value": 12500000,
+            "tolerance": 1,
+            "units": "$"
+          },
+          {
+            "label": "controlling class remaining (%)",
+            "value": 0.0,
+            "tolerance": 0.01,
+            "units": "%"
+          },
+          {
+            "label": "reduced monthly advance ($)",
+            "value": 52083.33,
+            "tolerance": 1,
+            "units": "$"
+          }
+        ]
+      },
+      "solution": "Claim = 25 + 0.75 + 0.25 = $26.0m. 90% of $15m = $13.5m. ARA = $12.5m, which exceeds the $12m class: its control balance is zero and control passes up. Advance = 25m x 5%/12 = $104,167 x (1 - 12.5/25) = $52,083.",
+      "common_mistakes": [
+        "Using 100% of the appraisal",
+        "Forgetting accrued interest and advances in the claim"
+      ],
+      "intuition": "Appraisals move control and cash in a CMBS trust, so their timing is contested.",
+      "takeaway": "Before buying from a special servicer, know who controls and how close they are to losing control.",
+      "related": [
+        "ch12",
+        "ch17"
+      ]
+    },
+    {
+      "id": "D118",
+      "category": "E",
+      "topic": "cre_distress",
+      "difficulty": 4,
+      "time_minutes": 30,
+      "title": "Fifty-five cents and forty-eight hours",
+      "inputs": {
+        "price_pct_upb": 0.55,
+        "broker_value": 14000000.0,
+        "upb": 20000000.0,
+        "tax_roll_value": 9000000.0,
+        "borrower_status": "Chapter 11 filed last week",
+        "ground_lease": "unknown",
+        "hours_to_bid": 48
+      },
+      "question": "A broker offers a $20m UPB note at 55 cents ($11m) and says the collateral is worth $14m. The county appraisal district value is $9m. The borrower filed Chapter 11 last week. The data room does not say whether the property is on a ground lease. Bids are due in 48 hours. What do you do?",
+      "answer": {
+        "type": "judgment",
+        "rubric": [
+          "Identifies the contradictory values ($14m broker vs $9m tax roll) and that the bid is within that range, so the edge depends on which is right",
+          "Recognizes the bankruptcy stay: timing, cramdown risk, and SARE deadlines now govern recovery",
+          "Treats the unknown ground lease as potentially decisive (a leasehold mortgage's value depends on the lease term and rent)",
+          "Concludes that abstaining, or asking for an extension and a ground-lease confirmation, is the best answer; a bid without this information is not acceptable",
+          "States what information would justify a bid and at roughly what price"
+        ]
+      },
+      "solution": "At $11m you are inside a $9-14m value range with an active bankruptcy and a possible ground lease. Expected value cannot be estimated with the information available, and 48 hours cannot cure it. The professional answer is to decline or to request time, the lease, and the bankruptcy schedules.",
+      "common_mistakes": [
+        "Anchoring on the broker's $14m",
+        "Treating 55 cents as cheap because it is a discount to UPB"
+      ],
+      "intuition": "A discount to UPB is not a discount to value; missing facts can make a discount illusory.",
+      "takeaway": "Abstention is a position. Write down the re-entry conditions.",
+      "related": [
+        "ch01",
+        "ch12",
+        "case_G"
+      ]
+    },
+    {
+      "id": "D119",
+      "category": "E",
+      "topic": "cre_distress",
+      "difficulty": 4,
+      "time_minutes": 20,
+      "title": "The competitor's basis",
+      "inputs": {
+        "sf": 200000,
+        "occupancy": 0.85,
+        "opex": 2400000.0,
+        "leasing_capital": 600000.0,
+        "target_yield": 0.08,
+        "your_basis": 60000000.0,
+        "competitor_basis": 30000000.0
+      },
+      "question": "Two identical 200,000 sf buildings: operating expenses $2.4m, recurring leasing capital $0.6m, 85% occupancy. You own one at a $60m basis; a competitor just bought the other out of foreclosure at $30m. Both want 8%. Give each owner's required gross rent, then say what you would do if market rent is $38.",
+      "answer": {
+        "type": "mixed",
+        "parts": [
+          {
+            "label": "competitor required rent ($/sf)",
+            "value": 31.76,
+            "tolerance": 0.01,
+            "units": "$/sf"
+          },
+          {
+            "label": "your required rent ($/sf)",
+            "value": 45.88,
+            "tolerance": 0.01,
+            "units": "$/sf"
+          }
+        ],
+        "rubric": [
+          "Computes both required rents and the $14.12 gap",
+          "Recognizes the competitor can undercut $38 and still exceed 8%",
+          "Considers renewals defense, a loan modification, or sale rather than matching rents blindly",
+          "Notes that your 8% target on $60m is no longer achievable at market rent"
+        ]
+      },
+      "solution": "Occupied 170,000 sf. Competitor: (0.08 x 30m + 3.0m)/170,000 = $31.76. You: (0.08 x 60m + 3.0m)/170,000 = $45.88. At $38 the competitor earns (38 x 170,000 - 3.0m)/30m = 11.5%; you earn 5.8%.",
+      "common_mistakes": [
+        "Comparing rents without basis",
+        "Assuming the competitor will price at market rather than to fill"
+      ],
+      "intuition": "Basis sets the rent at which an owner is happy; the lowest basis sets the market floor.",
+      "takeaway": "Map competitors' capital structures, not just their rents.",
+      "related": [
+        "ch12",
+        "case_E"
+      ]
+    },
+    {
+      "id": "D120",
+      "category": "F",
+      "topic": "cre_distress",
+      "difficulty": 5,
+      "time_minutes": 60,
+      "title": "Note or REO: the committee",
+      "inputs": {
+        "upb": 48000000.0,
+        "note_price": 33000000.0,
+        "as_is_value": 36000000.0,
+        "reo_expected_price": 37500000.0,
+        "reo_win_probability": 0.35,
+        "p_title": 0.65,
+        "note_irr_of_expected": 0.1862,
+        "reo_irr_if_won": 0.1467
+      },
+      "question": "Present Case G to an investment committee in ten minutes: recommend buying the note, waiting for the REO, or neither. Address the mean-IRR versus IRR-of-expected-flows gap, the bankruptcy and cramdown scenarios, valuation risk, legal risks specific to notes, and your walk-away triggers.",
+      "answer": {
+        "type": "judgment",
+        "rubric": [
+          "Quotes the IRR of expected flows (18.6%) rather than the mean scenario IRR (39%) and explains the difference",
+          "Quantifies the cramdown and stay scenarios and identifies bankruptcy probability as the key diligence item",
+          "Stresses valuation (e.g., -20% stabilized: note 10.3%, REO 2.0%) and explains the basis advantage",
+          "Lists note-specific legal risks: lender liability, loan-file defects, liens, limited reps",
+          "Compares with the REO path including the 65% chance of losing the auction",
+          "States walk-away triggers and a maximum price (about $35.1m at 15%)"
+        ]
+      },
+      "solution": "See case_G.md Mode B and case_G_rubric.md Mode D. A strong presentation recommends the note at or below $33m subject to title, loan-file, guaranty, and valuation diligence, with explicit triggers.",
+      "common_mistakes": [
+        "Presenting the 39% mean IRR",
+        "Treating the foreclosure auction as the purchase venue",
+        "Ignoring the probability of not winning the REO"
+      ],
+      "intuition": "Debt and equity on the same collateral differ in basis, control, timing, and legal risk.",
+      "takeaway": "Choose the instrument after diagnosing the counterparty and the legal path.",
+      "related": [
+        "ch12",
+        "case_G"
+      ]
+    }
+  ]
+}

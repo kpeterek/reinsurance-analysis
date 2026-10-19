@@ -1,0 +1,470 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D121",
+   "category": "A",
+   "topic": "cre_portfolio",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Equity at market",
+   "inputs": {
+    "bid": 30000000,
+    "selling_cost_pct": 0.02,
+    "loan_balance": 16000000,
+    "prepayment": 300000
+   },
+   "question": "A bid of $30.0m is firm. Selling costs are 2%. The loan balance is $16.0m and prepayment costs $0.3m. What is equity at market?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "equity at market ($)",
+      "value": 13100000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "E_M = V(1-s) - B - PP = 30.0 x 0.98 - 16.0 - 0.3 = 29.4 - 16.3 = $13.1m.",
+   "common_mistakes": [
+    "Using gross value minus debt ($14.0m) and ignoring selling and prepayment costs",
+    "Using original equity contributed"
+   ],
+   "intuition": "Holding is equivalent to selling and buying back without the round-trip costs. The capital at stake is what you could take out today.",
+   "takeaway": "The forward hold IRR must be computed on $13.1m, not on the original equity or on gross equity.",
+   "related": [
+    "ch13",
+    "ch10"
+   ]
+  },
+  {
+   "id": "D122",
+   "category": "A",
+   "topic": "cre_valuation",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Implied growth and a cap-rate move",
+   "inputs": {
+    "required_return": 0.075,
+    "cap_rate": 0.05,
+    "cap_rate_after": 0.055
+   },
+   "question": "A sector trades at a 5.0% cap rate and investors require 7.5% unlevered. What growth does the price imply? If the cap rate moves to 5.5% with NOI unchanged, what is the value change?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "implied growth (%)",
+      "value": 2.5,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "value change (%)",
+      "value": -9.0909,
+      "tolerance": 0.05,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "g = k - c = 7.5% - 5.0% = 2.5%. Value change = 5.0/5.5 - 1 = -9.09%.",
+   "common_mistakes": [
+    "Computing -0.5/5.0 = -10% (first-order approximation)",
+    "Assuming the cap move means growth fell, when it may be a higher required return"
+   ],
+   "intuition": "A cap rate is one equation in two unknowns: required return and growth.",
+   "takeaway": "Before calling a sector cheap or expensive, say whether you disagree with its risk premium or its growth forecast.",
+   "related": [
+    "ch13",
+    "ch09"
+   ]
+  },
+  {
+   "id": "D123",
+   "category": "A",
+   "topic": "rates_hedging",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Futures contracts for a pipeline DV01",
+   "inputs": {
+    "exposure_dv01": 27000,
+    "futures_dv01": 75,
+    "treasury_move_bp": 10
+   },
+   "question": "A loan pipeline has DV01 of $27,000. Futures DV01 is $75 per contract. How many contracts do you short, and what does the hedge earn if Treasuries rise 10 bp?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "contracts",
+      "value": 360,
+      "tolerance": 0.5,
+      "units": "contracts"
+     },
+     {
+      "label": "hedge P&L ($)",
+      "value": 270000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "N = 27,000/75 = 360. P&L = 360 x 75 x 10 = $270,000, offsetting the $270,000 PV cost of the higher loan rate.",
+   "common_mistakes": [
+    "Buying rather than selling futures (the borrower is short rates and needs a position that gains when yields rise)",
+    "Hedging notional rather than DV01"
+   ],
+   "intuition": "Match the dollar sensitivity per basis point, not the face amount.",
+   "takeaway": "The hedge covers Treasury moves only. Spread changes and deal failure remain.",
+   "related": [
+    "ch13",
+    "ch06"
+   ]
+  },
+  {
+   "id": "D124",
+   "category": "B",
+   "topic": "relative_value",
+   "difficulty": 3,
+   "time_minutes": 2,
+   "title": "A wide sector spread",
+   "inputs": {
+    "spread_now_bp": 280,
+    "hist_mean_bp": 200,
+    "hist_sd_bp": 40,
+    "years_of_history": 8
+   },
+   "question": "The hotel-industrial cap-rate spread is 280 bp against an 8-year mean of 200 bp and s.d. of 40 bp. Compute the z-score and state what you would need to believe to act.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "z-score",
+      "value": 2.0,
+      "tolerance": 0.01,
+      "units": "sd"
+     }
+    ],
+    "rubric": [
+     "Computes z = (280-200)/40 = 2.0",
+     "Translates the spread into a risk-premium or growth claim (c = k - g)",
+     "Asks whether the 8-year sample contains a regime change or mixed data sources",
+     "Distinguishes which leg must reprice for the trade to pay",
+     "States a data requirement or invalidation before acting"
+    ]
+   },
+   "solution": "z = 2.0. A wide spread means either hotels' required return rose relative to industrial, or their expected growth fell. Acting requires a view that one of those is wrong, supported by supply and demand data, plus evidence that 8 annual observations from one regime are a relevant base rate.",
+   "common_mistakes": [
+    "Treating a z-score from 8 observations as a trading signal",
+    "Ignoring that convergence through the other sector's cap rate does not pay a long position"
+   ],
+   "intuition": "A spread is information about market beliefs before it is a signal.",
+   "takeaway": "Name the belief you disagree with and the data that would prove you wrong.",
+   "related": [
+    "ch13",
+    "ch08",
+    "ch22"
+   ]
+  },
+  {
+   "id": "D125",
+   "category": "C",
+   "topic": "real_options",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Build now or wait one year",
+   "inputs": {
+    "v0": 10000000,
+    "k": 9200000,
+    "u": 1.2,
+    "d": 0.85,
+    "r": 0.04,
+    "delta": 0.05
+   },
+   "question": "A completed building is worth $10.0m today and costs $9.2m to build, now or next year. Next year the completed value is $12.0m or $8.5m. r = 4%, NOI yield 5%. Compute q, the option value, and the value of waiting.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "risk-neutral q",
+      "value": 0.4,
+      "tolerance": 0.001,
+      "units": ""
+     },
+     {
+      "label": "option value ($)",
+      "value": 1076923,
+      "tolerance": 2,
+      "units": "$"
+     },
+     {
+      "label": "value of waiting ($)",
+      "value": 276923,
+      "tolerance": 2,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "q = (1 + 0.04 - 0.05 - 0.85)/(1.2 - 0.85) = 0.14/0.35 = 0.40. Up payoff 12.0 - 9.2 = 2.8; down 8.5 - 9.2 < 0 so 0. Option = 0.40 x 2.8/1.04 = $1.077m. NPV now = $0.8m. Waiting is worth $0.277m more: wait.",
+   "common_mistakes": [
+    "Forgetting the cash yield in q",
+    "Comparing the option with zero instead of with the NPV of building now"
+   ],
+   "intuition": "Waiting truncates the down state at zero. The cost is a year of forgone NOI.",
+   "takeaway": "Positive NPV is necessary, not sufficient, for an irreversible commitment under uncertainty.",
+   "related": [
+    "ch13",
+    "ch18"
+   ]
+  },
+  {
+   "id": "D126",
+   "category": "C",
+   "topic": "cre_debt",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Marginal cost of a cash-out refinancing",
+   "inputs": {
+    "existing": 10000000,
+    "existing_rate": 0.04,
+    "new_loan": 12000000,
+    "new_rate": 0.065,
+    "prepayment": 150000,
+    "fee_pct": 0.01,
+    "years": 3
+   },
+   "question": "Replace a $10.0m 4.00% interest-only loan with a $12.0m 6.50% interest-only loan, both with 3 years to maturity. Prepayment $150,000; fees 1%. Compute cash released and the marginal cost of the cash-out.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "cash released ($)",
+      "value": 1730000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "marginal cost (%)",
+      "value": 26.02,
+      "tolerance": 0.05,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Cash = 12.0 - 10.0 - 0.15 - 0.12 = $1.73m. Incremental interest = 12.0 x 6.5% - 10.0 x 4.0% = 0.78 - 0.40 = $0.38m a year. Lender-side flows: -1.73, 0.38, 0.38, 0.38 + 2.0. IRR = 26.0%.",
+   "common_mistakes": [
+    "Quoting 6.5% as the cost of the new money",
+    "Forgetting the extra $2.0m principal repaid at maturity"
+   ],
+   "intuition": "The new rate applies to the whole balance, including the $10m that was already borrowed at 4%.",
+   "takeaway": "Price incremental capital on incremental flows. A supplemental loan or preferred equity is usually cheaper.",
+   "related": [
+    "ch13",
+    "ch10"
+   ]
+  },
+  {
+   "id": "D127",
+   "category": "D",
+   "topic": "portfolio_risk",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Which asset carries the risk?",
+   "inputs": {
+    "weights": [
+     0.5,
+     0.3,
+     0.2
+    ],
+    "vols": [
+     0.1,
+     0.08,
+     0.22
+    ],
+    "corr": [
+     [
+      1,
+      0.5,
+      0.4
+     ],
+     [
+      0.5,
+      1,
+      0.45
+     ],
+     [
+      0.4,
+      0.45,
+      1
+     ]
+    ]
+   },
+   "question": "A portfolio is 50% multifamily (10% vol), 30% industrial (8%), 20% hotel (22%). Correlations: MF-Ind 0.50, MF-Hotel 0.40, Ind-Hotel 0.45. Compute portfolio volatility and the hotel's share of total risk.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "portfolio volatility (%)",
+      "value": 9.4458,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "hotel share of risk (%)",
+      "value": 36.887,
+      "tolerance": 0.05,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "sigma_p^2 = sum_i sum_j w_i w_j s_i s_j rho_ij = 0.008922; sigma_p = 9.45%. Hotel contribution = w_h (Sigma w)_h / sigma_p; share = 36.9% for a 20% weight.",
+   "common_mistakes": [
+    "Using value weights as risk shares",
+    "Forgetting the covariance terms in the hotel's contribution"
+   ],
+   "intuition": "The high-volatility asset's risk share is roughly its weight times its volatility times its average correlation, relative to the portfolio.",
+   "takeaway": "Most portfolio-risk decisions are decisions about the most volatile asset.",
+   "related": [
+    "ch13",
+    "ch21"
+   ]
+  },
+  {
+   "id": "D128",
+   "category": "D",
+   "topic": "liquidity",
+   "difficulty": 4,
+   "time_minutes": 15,
+   "title": "Reserve with a hotel maturity",
+   "inputs": {
+    "a_noi": 1.2,
+    "a_ds": 0.9,
+    "h_noi": 1.0,
+    "h_ds": 0.8,
+    "h_loan": 9.0,
+    "a_stress": [
+     -0.1,
+     -0.1
+    ],
+    "h_stress": [
+     -0.5,
+     -0.25
+    ],
+    "refi_ltv": 0.5,
+    "stress_cap": 0.1
+   },
+   "question": "Asset A: NOI $1.2m, DS $0.9m. Hotel: NOI $1.0m, DS $0.8m, $9.0m loan maturing end of year 2. Stress: A NOI -10% both years; hotel NOI -50% then -25%. New lender lends 50% of value at a 10% cap on year-2 NOI. Compute the maturity gap and the reserve ($m).",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "maturity gap ($m)",
+      "value": 5.25,
+      "tolerance": 0.005,
+      "units": "$m"
+     },
+     {
+      "label": "reserve ($m)",
+      "value": 5.24,
+      "tolerance": 0.005,
+      "units": "$m"
+     }
+    ]
+   },
+   "solution": "Year 1: (1.08 - 0.9) + (0.5 - 0.8) = -0.12. Year 2: 0.18 + (0.75 - 0.8) = 0.13. Hotel value = 0.75/0.10 = 7.5; new loan 3.75; gap = 9.0 - 3.75 = 5.25. Cumulative: -0.12, then -0.12 + 0.13 - 5.25 = -5.24. Reserve = $5.24m.",
+   "common_mistakes": [
+    "Ignoring the maturity",
+    "Summing shortfalls instead of tracking the cumulative minimum"
+   ],
+   "intuition": "Operating shortfalls are small; the maturity is the event.",
+   "takeaway": "Address the maturity directly (extend, refinance early, sell) and compare its cost with the reserve's drag.",
+   "related": [
+    "ch13",
+    "ch10",
+    "ch21"
+   ]
+  },
+  {
+   "id": "D129",
+   "category": "E",
+   "topic": "hold_sell",
+   "difficulty": 4,
+   "time_minutes": 30,
+   "title": "Sell on a phone call?",
+   "inputs": {
+    "broker_quote_cap": "low 5s",
+    "t12_noi": 1900000,
+    "broker_proforma_noi": 2300000,
+    "loi": null,
+    "loan_assumable": "unknown"
+   },
+   "question": "A broker calls: a buyer 'will pay a low-5s cap' for your apartment building. No LOI exists. The broker's figure appears to use a $2.3m pro forma NOI; your T-12 NOI is $1.9m. You do not know whether the buyer would assume your below-market loan. Your partner wants a sell/hold decision today. What do you do?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Recognizes that there is no firm bid, so equity at market is undefined (the implied price ranges from about $36m to $46m depending on NOI and cap)",
+     "Identifies the NOI basis conflict ($1.9m vs $2.3m) as decisive",
+     "Identifies the loan-assumption question as a material value item",
+     "Declines to decide today and specifies what is needed: a written LOI on stated NOI, assumption terms, and the prepayment quote",
+     "Sets a decision date and the hold-IRR comparison to be run once the bid is firm"
+    ]
+   },
+   "solution": "Abstain from the sell/hold decision today. At a 5.25% cap the quote implies about $36.2m on T-12 NOI or $43.8m on pro forma: the range is wider than any plausible edge from selling. Request a written LOI that states the NOI and cap basis, whether the buyer will assume the loan, and the prepayment cost. Then compute equity at market and the forward hold IRR.",
+   "common_mistakes": [
+    "Treating a verbal cap-rate quote as a price",
+    "Comparing a pro forma cap with a T-12 cap"
+   ],
+   "intuition": "A decision that depends on a number you do not have should wait for the number, especially when obtaining it is cheap.",
+   "takeaway": "No firm bid, no equity at market, no hold-sell decision.",
+   "related": [
+    "ch13",
+    "ch01"
+   ]
+  },
+  {
+   "id": "D130",
+   "category": "F",
+   "topic": "capital_recycling",
+   "difficulty": 5,
+   "time_minutes": 60,
+   "title": "Investment committee: recycle the capital?",
+   "inputs": {
+    "equity_before_costs": 25000000,
+    "switching_costs": 2000000,
+    "hold_return": 0.085,
+    "horizon_years": 5
+   },
+   "question": "The team proposes selling a stabilized asset and buying another of similar risk. Equity before costs $25.0m; total switching costs (sell, prepay, buy, loan fees) $2.0m. The hold return is 8.5%. Over a 5-year horizon, what gross return must the new asset earn to match holding? Then write the IC recommendation.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "required return (%)",
+      "value": 10.3246,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "Computes f = 8% and r = 1.085/(0.92)^(1/5) - 1 = 10.32%",
+     "Requires evidence of a 180+ bp risk-adjusted advantage, not a going-in yield difference",
+     "Checks whether below-market debt is lost on sale",
+     "Considers alternatives: hold, partial sale, return capital (as in the EQR 2016 episode)",
+     "States invalidation criteria and the information that would change the decision"
+    ]
+   },
+   "solution": "f = 2.0/25.0 = 8%. (1 - f)(1 + r)^5 = 1.085^5 gives r = 1.085/0.92^0.2 - 1 = 10.32%: a hurdle of about 182 bp a year over holding, at equal risk.",
+   "common_mistakes": [
+    "Comparing going-in cap rates",
+    "Ignoring transaction costs or spreading them over too long a horizon"
+   ],
+   "intuition": "Round-trip costs are paid once and recovered slowly.",
+   "takeaway": "Recycle only for a large, evidenced edge, a broken thesis, or a deliberate risk reduction.",
+   "related": [
+    "ch13",
+    "ch09"
+   ]
+  }
+ ]
+}

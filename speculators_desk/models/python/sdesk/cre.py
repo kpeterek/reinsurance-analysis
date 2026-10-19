@@ -294,6 +294,9 @@ def distressed_loan_recovery(purchase_price: float, scenarios: Sequence[dict],
         net = s["recovery"] - s.get("costs", 0.0)
         pv_net = net / (1 + discount_rate) ** s["years"]
         exp_pv += s["p"] * pv_net
-        ann = (net / purchase_price) ** (1 / s["years"]) - 1 if net > 0 else -1.0
+        if purchase_price <= 0:
+            ann = None  # no capital at risk: annualized return undefined
+        else:
+            ann = (net / purchase_price) ** (1 / s["years"]) - 1 if net > 0 else -1.0
         detail.append({**s, "net": net, "pv": pv_net, "annualized_return": ann})
     return {"expected_pv": exp_pv, "npv": exp_pv - purchase_price, "detail": detail}
