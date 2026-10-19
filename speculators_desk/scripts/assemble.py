@@ -95,9 +95,10 @@ def build_index(files) -> str:
 
 
 def assemble_markdown(files) -> str:
-    parts = ["---", "title: \"The Speculator's Desk\"",
-             "subtitle: \"Commercial Real Estate, Global Macro, Market Intelligence, and the Art of Decision-Making Under Uncertainty\"",
-             "---", ""]
+    # No YAML header: chapters use '---' rules that pandoc could misread as metadata blocks.
+    # Title metadata is passed on the pandoc command line instead.
+    parts = ["*The Speculator's Desk — Commercial Real Estate, Global Macro, Market Intelligence, "
+             "and the Art of Decision-Making Under Uncertainty*", ""]
     current = None
     for d, f in files:
         if d != current:
@@ -151,7 +152,7 @@ def main(argv=None):
         css = EXPORTS / "book.css"
         css.write_text(CSS)
         html = EXPORTS / "speculators_desk.html"
-        subprocess.run(["pandoc", str(md_path), "-o", str(html), "--standalone", "--mathml", "--toc",
+        subprocess.run(["pandoc", str(md_path), "--from", "markdown-yaml_metadata_block", "-o", str(html), "--standalone", "--mathml", "--toc",
                         "--toc-depth=2", "--embed-resources", f"--css={css}",
                         "--metadata", "title=The Speculator's Desk"], check=True)
         print(f"wrote {html}")

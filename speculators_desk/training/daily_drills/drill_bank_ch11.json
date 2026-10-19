@@ -1,0 +1,785 @@
+{
+ "schema_version": 1,
+ "notes": "Chapter 11 drills (hotels). Numeric answers verified by tests/test_drills.py against drill_checks_ch11.py. All facts hypothetical unless a source ID (references/sources_ch11.md) is cited.",
+ "drills": [
+  {
+   "id": "D056",
+   "category": "A",
+   "topic": "hotel_metrics",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "What one occupancy point is worth",
+   "inputs": {
+    "rooms": 132,
+    "occupancy": 0.72,
+    "adr": 150.0,
+    "noi_flow_through": 0.52,
+    "cap_rate": 0.09
+   },
+   "question": "A 132-room hotel runs 72% occupancy at a $150 ADR. Compute RevPAR, the annual rooms revenue in one occupancy point, and the value of that point at 52% NOI flow-through (occupancy-led) and a 9% cap rate.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "RevPAR ($)",
+      "value": 108.0,
+      "tolerance": 0.01,
+      "units": "$"
+     },
+     {
+      "label": "rooms revenue per occupancy point ($)",
+      "value": 72270.0,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "value per occupancy point ($)",
+      "value": 417560.0,
+      "tolerance": 100,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "RevPAR = 0.72 x 150 = $108.00. One point = 0.01 x 132 x 365 = 481.8 room-nights x $150 = $72,270. NOI = 0.52 x 72,270 = $37,580; value at 9% = $417,560.",
+   "common_mistakes": [
+    "Using rate-led flow-through (about 75%) for an occupancy gain",
+    "Treating one point as 1% of revenue (it is 1/72 = 1.39% of rooms revenue here)"
+   ],
+   "intuition": "Occupancy points are room-nights; their value depends on the variable cost of servicing each extra guest.",
+   "takeaway": "A single occupancy point on a 132-room hotel is worth about $0.4 million of value; small share changes matter.",
+   "related": [
+    "ch11"
+   ]
+  },
+  {
+   "id": "D057",
+   "category": "A",
+   "topic": "hotel_metrics",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Penetration indices",
+   "inputs": {
+    "occ": 0.71,
+    "adr": 158.5,
+    "comp_occ": 0.73,
+    "comp_adr": 150.0
+   },
+   "question": "Subject: 71% occupancy, $158.50 ADR. Comp set: 73%, $150.00. Compute MPI, ARI and RGI.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "MPI",
+      "value": 97.2603,
+      "tolerance": 0.05,
+      "units": "index"
+     },
+     {
+      "label": "ARI",
+      "value": 105.6667,
+      "tolerance": 0.05,
+      "units": "index"
+     },
+     {
+      "label": "RGI",
+      "value": 102.7717,
+      "tolerance": 0.05,
+      "units": "index"
+     }
+    ]
+   },
+   "solution": "MPI = 100 x 71/73 = 97.26. ARI = 100 x 158.5/150 = 105.67. RGI = MPI x ARI / 100 = 102.77.",
+   "common_mistakes": [
+    "Computing RGI as MPI + ARI - 100 (an approximation that drifts as indices move away from 100)",
+    "Reading RGI above 100 as success without checking its trend"
+   ],
+   "intuition": "The hotel is buying rate with occupancy share; RGI shows the net revenue effect.",
+   "takeaway": "Report the RGI trend, not RevPAR growth, when judging the operator (Example 11.1).",
+   "related": [
+    "ch11"
+   ]
+  },
+  {
+   "id": "D058",
+   "category": "A",
+   "topic": "hotel_valuation",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "The EBITDA cap-rate trap",
+   "inputs": {
+    "ebitda": 1257835,
+    "total_revenue": 5463612,
+    "reserve_pct": 0.04,
+    "cap_rate_noi": 0.09
+   },
+   "question": "An owner capitalizes EBITDA of $1,257,835 at a 9% cap. Market cap rates are quoted on NOI after a 4% FF&E reserve; total revenue is $5,463,612. Compute NOI, the correct value, and the owner's overstatement.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "NOI ($)",
+      "value": 1039290.52,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "value at 9% on NOI ($)",
+      "value": 11547672.44,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "overstatement ($)",
+      "value": 2428272.0,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "Reserve = 0.04 x 5,463,612 = $218,544. NOI = $1,039,291. Value = 1,039,291/0.09 = $11,547,672. Owner: 1,257,835/0.09 = $13,975,944. Overstatement = $2,428,272 = reserve/0.09.",
+   "common_mistakes": [
+    "Deducting the reserve from value instead of from income",
+    "Applying the reserve to rooms revenue only"
+   ],
+   "intuition": "A cap rate belongs to a line. The error equals the capitalized reserve.",
+   "takeaway": "Always ask: cap rate on which line, after what reserve?",
+   "related": [
+    "ch11",
+    "ch09"
+   ]
+  },
+  {
+   "id": "D059",
+   "category": "B",
+   "topic": "hotel_operations",
+   "difficulty": 2,
+   "time_minutes": 2,
+   "title": "RevPAR up, NOI down",
+   "inputs": {
+    "revpar_change": "+6%",
+    "noi_change": "-17%"
+   },
+   "question": "An operator reports RevPAR +6% and NOI -17% for the year. Give four plausible explanations and the report you would request to test each.",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Channel mix: occupancy bought through OTAs or discount channels (channel-contribution report, commissions by channel)",
+     "Occupancy-led growth with lower flow-through than rate-led (occupancy/ADR split; CPOR trend)",
+     "Labor cost inflation: wages, overtime, benefits (payroll by department, hours per occupied room)",
+     "Fixed-charge increases: property-tax reassessment, insurance renewal (tax bill, policy)",
+     "Undistributed cost growth or one-off items (A&G, POM, utilities detail)",
+     "States that RevPAR is a revenue measure and NOI is the owner's line; does not accept the RevPAR headline as value creation"
+    ]
+   },
+   "solution": "See Case 11.1. Build a sequential bridge from Year 1 NOI to Year 2 NOI, changing one driver at a time, and classify each step as structural or fixable.",
+   "common_mistakes": [
+    "Accepting 'RevPAR beat budget' as evidence of performance",
+    "Blaming 'costs' without a bridge"
+   ],
+   "intuition": "Revenue can be bought; profit cannot.",
+   "takeaway": "Ask for flow-through and a bridge before discussing value.",
+   "related": [
+    "ch11"
+   ]
+  },
+  {
+   "id": "D060",
+   "category": "A",
+   "topic": "hotel_operations",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Flow-through with the wrong sign",
+   "inputs": {
+    "revenue0": 4421172,
+    "revenue1": 4688698,
+    "gop0": 1945272,
+    "gop1": 1885459,
+    "noi0": 953626,
+    "noi1": 790516
+   },
+   "question": "Total revenue rose from $4,421,172 to $4,688,698. GOP fell from $1,945,272 to $1,885,459 and NOI from $953,626 to $790,516. Compute GOP and NOI flow-through.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "GOP flow-through (%)",
+      "value": -22.3578,
+      "tolerance": 0.05,
+      "units": "%"
+     },
+     {
+      "label": "NOI flow-through (%)",
+      "value": -60.9698,
+      "tolerance": 0.05,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Delta revenue = $267,526. GOP: -59,813/267,526 = -22.4%. NOI: -163,110/267,526 = -61.0%.",
+   "common_mistakes": [
+    "Computing margin change instead of flow-through",
+    "Dividing by the new revenue rather than the change"
+   ],
+   "intuition": "Negative flow-through means costs grew faster than revenue; the growth was bought or costs inflated.",
+   "takeaway": "Flow-through is the first number to ask for when revenue and profit diverge.",
+   "related": [
+    "ch11"
+   ]
+  },
+  {
+   "id": "D061",
+   "category": "C",
+   "topic": "revenue_management",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Take the group?",
+   "inputs": {
+    "rooms": 250,
+    "base_rooms": 20,
+    "group_rooms": 120,
+    "nights": 2,
+    "group_rate": 175.0,
+    "banquet_per_rn": 60.0,
+    "banquet_margin": 0.35,
+    "transient_demand": 190,
+    "transient_adr": 235.0,
+    "transient_acq": 0.15,
+    "cpor": 40.0,
+    "fees_pct": 0.1
+   },
+   "question": "A 250-room hotel (20 contract rooms nightly) is offered a 120-room, two-night group at $175 with $60 banquet spend per room-night at a 35% margin. Transient demand is forecast at 190 rooms per night at $235 with a 15% acquisition cost. CPOR $40; fees 10% of rooms revenue. Compute displaced rooms per night, the net contribution of accepting, and the break-even group rate. Decide.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "displaced transient rooms per night",
+      "value": 80,
+      "tolerance": 0.01,
+      "units": "rooms"
+     },
+     {
+      "label": "net contribution of accepting ($)",
+      "value": 11440.0,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "break-even group rate ($)",
+      "value": 122.037,
+      "tolerance": 0.05,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "Compares contribution, not revenue",
+     "Includes banquet profit and channel costs",
+     "States the decision is conditional on the transient forecast and names the demand level that reverses it",
+     "Proposes protections (cutoff, attrition, F&B minimum) or alternate dates"
+    ]
+   },
+   "solution": "Displaced = 190 - (250 - 20 - 120) = 80. Group = 240 x (157.50 - 40 + 21) = $33,240. Displaced = 160 x (176.25 - 40) = $21,800. Net +$11,440. Break-even: 240 x (0.9r - 19) = 21,800 -> r = $122.04. Accept, with cutoff and attrition protection.",
+   "common_mistakes": [
+    "Comparing group revenue with transient revenue",
+    "Ignoring that displacement depends on a forecast"
+   ],
+   "intuition": "Groups bring banquets and cheaper distribution; transient brings rate.",
+   "takeaway": "Revenue management outputs a minimum rate conditional on demand, not a yes or no.",
+   "related": [
+    "ch11"
+   ]
+  },
+  {
+   "id": "D062",
+   "category": "A",
+   "topic": "hotel_risk",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Break-even occupancy after a wage shock",
+   "inputs": {
+    "rooms": 150,
+    "adr": 128.0,
+    "fixed_costs": 1712500,
+    "debt_service": 1040842,
+    "cpor": 26.8,
+    "var_pct": 0.21,
+    "other_pct": 0.03
+   },
+   "question": "150 rooms, ADR $128, other revenue 3% of rooms, CPOR $26.80, revenue-variable costs 21%, fixed costs $1,712,500, debt service $1,040,842. Break-even occupancy before and after debt service?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "break-even before debt (%)",
+      "value": 40.4358,
+      "tolerance": 0.05,
+      "units": "%"
+     },
+     {
+      "label": "break-even after debt (%)",
+      "value": 65.0123,
+      "tolerance": 0.05,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Contribution = 128 x 1.03 x 0.79 - 26.80 = $77.35. Before: 1,712,500/77.35/54,750 = 40.44%. After: 2,753,342/77.35/54,750 = 65.01%.",
+   "common_mistakes": [
+    "Forgetting other revenue",
+    "Holding ADR fixed in a downturn stress without saying so"
+   ],
+   "intuition": "Break-even is fixed costs over contribution per room.",
+   "takeaway": "See Case 11.6: the wage shock moved break-even up 4 points.",
+   "related": [
+    "ch11",
+    "ch10"
+   ]
+  },
+  {
+   "id": "D063",
+   "category": "C",
+   "topic": "hotel_contracts",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "When does the incentive fee pay?",
+   "inputs": {
+    "total_revenue": 22000000,
+    "gop_scenarios": [
+     4200000,
+     7040000,
+     8820000
+    ],
+    "base_fee_pct": 0.03,
+    "fixed_charges": 1550000,
+    "reserve_pct": 0.04,
+    "imf_pct": 0.2,
+    "priority_pct": 0.08,
+    "invested": 52000000
+   },
+   "question": "Total revenue $22.0m (hold it constant). Base fee 3%; tax and insurance $1.55m; reserve 4%; incentive fee 20% of ACF above an 8% priority on $52m. Compute the incentive fee at GOP of $4.2m, $7.04m and $8.82m.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "IMF at GOP 4.2m ($)",
+      "value": 0.0,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "IMF at GOP 7.04m ($)",
+      "value": 0.0,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "IMF at GOP 8.82m ($)",
+      "value": 314000.0,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "Base fee 660,000; reserve 880,000; ACF = GOP - 3,090,000 = 1,110,000 / 3,950,000 / 5,730,000. Priority 4,160,000. IMF = 0 / 0 / 0.20 x 1,570,000 = $314,000.",
+   "common_mistakes": [
+    "Applying the incentive rate to all of ACF",
+    "Forgetting that the base fee and reserve come out before the priority test"
+   ],
+   "intuition": "The incentive fee is a call option on ACF struck at the owner's priority.",
+   "takeaway": "Value fee proposals across scenarios (Case 11.4).",
+   "related": [
+    "ch11",
+    "ch18"
+   ]
+  },
+  {
+   "id": "D064",
+   "category": "D",
+   "topic": "hotel_pip",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "PIP-adjusted bid",
+   "inputs": {
+    "stabilized_noi": 1550000,
+    "cap_rate": 0.09,
+    "pip": 2340000,
+    "contingency": 0.15,
+    "displacement": 260000,
+    "carry": 150000,
+    "required_profit": 0.15,
+    "rooms": 130
+   },
+   "question": "Stabilized NOI $1.55m at a 9.0% cap. PIP $2.34m, 15% contingency, displacement $260,000, carry $150,000, 15% required profit on PIP capital. Compute stabilized value, the PIP-adjusted price, and price per key (130 rooms).",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "stabilized value ($)",
+      "value": 17222222.22,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "PIP-adjusted price ($)",
+      "value": 13717572.22,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "price per key ($)",
+      "value": 105519.79,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "V = 17,222,222. PIP all-in 2,691,000; profit 403,650. Price = 17,222,222 - 2,691,000 - 260,000 - 150,000 - 403,650 = $13,717,572; $105,520/key.",
+   "common_mistakes": [
+    "Doing the PIP at cost (no required profit)",
+    "Deducting the PIP without contingency or displacement"
+   ],
+   "intuition": "Renovation capital is risk capital and must earn a return.",
+   "takeaway": "Use sdesk.hotel.pip_adjusted_price; see Case 11.8 and Case D.",
+   "related": [
+    "ch11",
+    "ch09"
+   ]
+  },
+  {
+   "id": "D065",
+   "category": "D",
+   "topic": "hotel_debt",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Size the hotel loan",
+   "inputs": {
+    "t12_noi": 2150000,
+    "value": 27428571,
+    "rate": 0.075,
+    "amort_years": 25,
+    "ltv_max": 0.6,
+    "dscr_min": 1.5,
+    "debt_yield_min": 0.12
+   },
+   "question": "T-12 NOI $2.15m; appraised value $27,428,571; 7.50% rate, 25-year amortization. Hotel lender: 60% LTV, 1.50x DSCR, 12% debt yield. Compute each constraint and the loan.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "LTV loan ($)",
+      "value": 16457142.6,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "DSCR loan ($)",
+      "value": 16163175.97,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "debt-yield loan ($)",
+      "value": 17916666.67,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "maximum loan ($)",
+      "value": 16163175.97,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "K = 0.08868. LTV 16,457,143; DSCR 2,150,000/(1.5 x 0.08868) = 16,163,176; DY 17,916,667. DSCR binds: $16,163,176.",
+   "common_mistakes": [
+    "Sizing on pro forma NOI",
+    "Using the annual rate without monthly amortization in the constant"
+   ],
+   "intuition": "Hotel lenders lend on trailing cash flow and demand larger cushions.",
+   "takeaway": "See Example 11.4: about $3m less than a multifamily lender would lend on the same NOI.",
+   "related": [
+    "ch11",
+    "ch10"
+   ]
+  },
+  {
+   "id": "D066",
+   "category": "B",
+   "topic": "hotel_history",
+   "difficulty": 2,
+   "time_minutes": 2,
+   "title": "April 2020: occupancy or rate?",
+   "inputs": {
+    "occ": 0.245,
+    "adr": 73.23,
+    "occ_prior": 0.678,
+    "adr_prior": 131.71,
+    "note": "April 2020 levels from STR (ch11-S04); prior-year levels implied from STR's reported changes (-63.9% occupancy, -44.4% ADR) and rounded"
+   },
+   "question": "STR reported April 2020 U.S. occupancy of 24.5% and ADR of $73.23, with occupancy down 63.9% and ADR down 44.4% year over year. Using implied April 2019 levels of 67.8% and $131.71, compute the RevPAR change and the share of the (log) RevPAR decline due to occupancy. What does this imply for break-even analysis?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "RevPAR change (%)",
+      "value": -79.9088,
+      "tolerance": 0.1,
+      "units": "%"
+     },
+     {
+      "label": "occupancy share of log decline (%)",
+      "value": 63.4244,
+      "tolerance": 0.5,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "Computes RevPAR change near -80% (STR reported -79.9%)",
+     "Uses logs so the shares add to 100%",
+     "Notes ADR also fell sharply, so break-even occupancy at pre-shock ADR is optimistic",
+     "Distinguishes the reported figures [FACT] from the implied prior-year levels [INFERENCE]"
+    ]
+   },
+   "solution": "RevPAR: (0.245 x 73.23)/(0.678 x 131.71) - 1 = -79.9%. ln(0.245/0.678) = -1.018; ln(1 - 0.799) = -1.606; occupancy share = 63.4%, ADR share 36.6%. A break-even computed at the old ADR understates the occupancy needed.",
+   "common_mistakes": [
+    "Adding percentage changes (-63.9% + -44.4%)",
+    "Treating implied prior-year levels as published facts"
+   ],
+   "intuition": "In a demand collapse, occupancy falls first and hardest, but rate follows.",
+   "takeaway": "Stress both occupancy and ADR (\u00a711.10).",
+   "related": [
+    "ch11",
+    "ch23"
+   ]
+  },
+  {
+   "id": "D067",
+   "category": "E",
+   "topic": "hotel_valuation",
+   "difficulty": 5,
+   "time_minutes": 30,
+   "title": "The BOV you should not sign",
+   "inputs": {
+    "t12_revpar": 104,
+    "str_revpar": 92,
+    "rooms": 100,
+    "franchise_expiry_months": 14,
+    "pip_letter": "none",
+    "deadline_hours": 24
+   },
+   "question": "A servicer wants a firm value in 24 hours for a 100-room hotel. The borrower's T-12 shows RevPAR $104; the STR report shows $92 for the same period. The franchise expires in 14 months with no PIP letter, and the tax bill predates a sale three years ago. What do you deliver?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Quantifies the discrepancy: $438,000 of rooms revenue, about $3.5m of value at 75% flow-through and 9.5%",
+     "Lists explanations (non-room revenue in rooms, occupancy taxes, period or room-count differences, STR errors, overstatement) and the documents that resolve each",
+     "Treats the franchise expiry and PIP as a second independent value driver",
+     "Declines a point value; delivers a conditional range and a diligence list with a date for a firm value",
+     "Abstention from a point estimate is the best answer"
+    ]
+   },
+   "solution": "See Problem 11.10. The right deliverable is a conditional range and a reconciliation plan; the wrong deliverable is a confident number.",
+   "common_mistakes": [
+    "Averaging the two RevPAR figures",
+    "Assuming STR is always right"
+   ],
+   "intuition": "When two data sources disagree by more than the valuation tolerance, the value is not yet knowable.",
+   "takeaway": "Abstention from a point value is a professional output, not a failure.",
+   "related": [
+    "ch11",
+    "ch01",
+    "ch20"
+   ]
+  },
+  {
+   "id": "D068",
+   "category": "C",
+   "topic": "hotel_brand",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Flag or no flag",
+   "inputs": {
+    "brand": {
+     "noi": 949090,
+     "cap": 0.0875,
+     "capex": 2240000
+    },
+    "independent": {
+     "noi": 647867,
+     "cap": 0.095,
+     "capex": 700000
+    }
+   },
+   "question": "Renewing the flag: stabilized NOI $949,090 at an 8.75% cap, PIP $2.24m. Going independent: NOI $647,867 at 9.5%, capex $0.70m. Compute value net of capital for each and the difference (ignore ramp-up).",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "brand: value net of PIP ($)",
+      "value": 8606742.86,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "independent: value net of capex ($)",
+      "value": 6119652.63,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "advantage of the brand ($)",
+      "value": 2487090.23,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "Brand: 10,846,743 - 2,240,000 = $8,606,743. Independent: 6,819,653 - 700,000 = $6,119,653. Difference $2,487,090 (Case 11.3 adds ramp-up losses).",
+   "common_mistakes": [
+    "Comparing fee percentages instead of NOI after fees and demand",
+    "Using the same cap rate for both"
+   ],
+   "intuition": "Fees buy demand; compare NOI after both.",
+   "takeaway": "Independence needs an RGI near 103 to compete in Case 11.3.",
+   "related": [
+    "ch11"
+   ]
+  },
+  {
+   "id": "D069",
+   "category": "D",
+   "topic": "hotel_liquidity",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Seasonal working capital",
+   "inputs": {
+    "monthly_cf_after_ds": [
+     -728353,
+     -135705,
+     287531,
+     265977,
+     356605,
+     -130849,
+     754264,
+     492912,
+     -47769,
+     -99659,
+     -211047,
+     -136548
+    ],
+    "months": "Jan-Dec"
+   },
+   "question": "Monthly cash flow after debt service (Jan-Dec) is given. Compute the working-capital reserve needed if peak-season surplus stays with the owner, and the equity needed if a cash trap sweeps every positive month to the lender.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "reserve without trap ($)",
+      "value": 1359081.0,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "equity with trap ($)",
+      "value": 1489930,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "Without trap: largest peak-to-trough fall in cumulative cash = Sep-Feb deficit = $1,359,081. With trap: sum of negative months = $1,489,929.",
+   "common_mistakes": [
+    "Using annual cash flow (+$667,361) and concluding no reserve is needed",
+    "Starting the cumulative sum in January, which hides the Sep-Dec deficit"
+   ],
+   "intuition": "Annual ratios hide monthly cash; covenants decide who keeps the summer cash.",
+   "takeaway": "Size reserves from monthly cash flow (Case 11.5).",
+   "related": [
+    "ch11",
+    "ch10",
+    "ch21"
+   ]
+  },
+  {
+   "id": "D070",
+   "category": "F",
+   "topic": "hotel_disposition",
+   "difficulty": 4,
+   "time_minutes": 60,
+   "title": "Investment committee: sell now or after the PIP",
+   "inputs": {
+    "stabilized_noi": 1550000,
+    "cap": 0.09,
+    "pip": 2340000,
+    "contingency": 0.15,
+    "displacement": 260000,
+    "carry": 150000,
+    "required_profit": 0.15,
+    "sell_cost": 0.025,
+    "noi_now": 1300000,
+    "noi_growth": 0.03,
+    "discount_rate": 0.11,
+    "hold_scenarios": [
+     {
+      "p": 0.35,
+      "exit_cap": 0.0875,
+      "overrun": 0.0
+     },
+     {
+      "p": 0.45,
+      "exit_cap": 0.09,
+      "overrun": 0.08
+     },
+     {
+      "p": 0.2,
+      "exit_cap": 0.0975,
+      "overrun": 0.25
+     }
+    ]
+   },
+   "question": "Using Case 11.8's facts, compute the owner's net proceeds from selling now, the expected PV of renovating and selling in two years, and the difference. Then present a recommendation to the committee with conditions and the facts that would reverse it.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "net proceeds selling now ($)",
+      "value": 13374632.92,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "expected PV of renovate-and-sell ($)",
+      "value": 13867308.74,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "advantage of renovating ($)",
+      "value": 492675.82,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "Prices the sale with contingency, displacement, carry and required profit",
+     "Computes scenario PVs and the expected value, and the bad-case shortfall (about $0.86m)",
+     "States the break-even exit cap (about 9.39%) and the liquidity needed to fund the PIP",
+     "Recommends conditionally; identifies negotiable buyer deductions (about $135,000 per 5 points of contingency or profit)",
+     "Names facts that reverse the decision (fixed-price bid, loan maturity, thin buyer pool)"
+    ]
+   },
+   "solution": "Sell now: price $13,717,572, net $13,374,633. Hold: PVs 14,525,259 / 13,955,543 / 12,517,369; expected $13,867,309; advantage $492,676 with a one-in-five chance of being $857,264 worse off. Renovate only if the owner has the liquidity and a view of exit caps inside 9.39%.",
+   "common_mistakes": [
+    "Comparing the buyer's price with stabilized value",
+    "Ignoring the overrun and cap-rate risk the owner keeps by renovating"
+   ],
+   "intuition": "Selling before a PIP transfers renovation risk and renovation profit together.",
+   "takeaway": "Timing decisions compare risky streams, not prices.",
+   "related": [
+    "ch11",
+    "ch13",
+    "ch20"
+   ]
+  }
+ ]
+}

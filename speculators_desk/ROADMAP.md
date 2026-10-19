@@ -17,7 +17,7 @@ Priority order, as the brief directs: **foundations → macro mechanics → the 
 - Case A (Overpriced Hotel Owner), Modes A–D, separate rubric, reproducible model, data exhibit
 - Drills D001–D015
 
-## Stage 2 — Rates and core CRE (next)
+## Stage 2 — Rates and core CRE (complete)
 1. Chapter 6 — Fixed Income and the Cost of Capital
 2. Chapter 8 — Fundamental Economics of CRE
 3. Chapter 9 — CRE Valuation and Mispricing
@@ -26,12 +26,12 @@ Priority order, as the brief directs: **foundations → macro mechanics → the 
 6. Cases B (Refinancing Cliff), C (Cap Rate Expansion), D (PIP Negotiation)
 7. Drills D016–D060, weighted toward CRE, hotels, and rates
 
-## Stage 3 — Macro and remaining CRE
+## Stage 3 — Macro and remaining CRE (complete; Cases F, H, J delivered here too)
 - Chapters 2, 3, 4, 5, 7, 12, 13
 - Cases E (Distressed Office), F (Hotel vs Treasury), G (Buying the Debt), H (Cross-Asset Shock), I (Land Option), J (Credit Crunch Hotel)
 - Drills D061–D100
 
-## Stage 4 — Cross-asset and quantitative
+## Stage 4 — Cross-asset and quantitative (next)
 - Chapters 14–22
 - Drills D101–D150+; a "1987 desk exercise" in each of Chapters 6, 11, 15, and 21
 

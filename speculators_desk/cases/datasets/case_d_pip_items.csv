@@ -1,0 +1,12 @@
+item,basis,amount_usd,category
+"Guestroom soft goods (carpet, drapery, bedding, wallvinyl)","7,500/key",885000,PIP
+Guestroom case goods and seating,"6,000/key",708000,PIP
+"Bathrooms: tub-to-shower conversions, vanities, lighting","5,500/key",649000,PIP
+PTAC/HVAC replacement,"1,400/key",165200,PIP
+"Lobby, breakfast area, public restrooms",lump sum,420000,PIP
+"Exterior: new-standard signage, paint, porte-cochere",lump sum,260000,PIP
+Pool and fitness,lump sum,95000,PIP
+"Technology: Wi-Fi backbone, mobile key",lump sum,110000,PIP
+Roof replacement,PCA estimate,180000,Deferred capex outside PIP
+Parking lot mill and overlay,PCA estimate,95000,Deferred capex outside PIP
+Elevator modernization,PCA estimate,135000,Deferred capex outside PIP
