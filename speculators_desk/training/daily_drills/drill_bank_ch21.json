@@ -1,0 +1,447 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D185",
+   "category": "A",
+   "topic": "risk_sizing",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Contracts from a stop",
+   "inputs": {
+    "capital": 5000000,
+    "risk_fraction": 0.01,
+    "entry": 2000,
+    "stop": 1960,
+    "multiplier": 50
+   },
+   "question": "Capital $5m, risk 1% per trade. Long an index future at 2,000 with a stop at 1,960; multiplier $50. How many contracts, and what is the loss if the market gaps to 1,920?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "contracts",
+      "value": 25,
+      "tolerance": 0.01,
+      "units": "contracts"
+     },
+     {
+      "label": "loss at 1,920 ($)",
+      "value": 100000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "Risk = $50,000. Loss per contract at the stop = 40 x 50 = $2,000. n = 25. A gap to 1,920 loses 80 x 50 x 25 = $100,000, twice the plan.",
+   "common_mistakes": [
+    "Dividing by the price instead of the stop distance",
+    "Treating the stop as a guaranteed exit"
+   ],
+   "intuition": "The stop rule sizes the loss you plan for; the gap sets the loss you get.",
+   "takeaway": "Size off the plausible gap, not the stop.",
+   "related": [
+    "ch21",
+    "ch01"
+   ]
+  },
+  {
+   "id": "D186",
+   "category": "A",
+   "topic": "risk_sizing",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Half-Kelly in one line",
+   "inputs": {
+    "excess_return": 0.08,
+    "sigma": 0.2,
+    "c": 0.5
+   },
+   "question": "Excess return 8%, volatility 20%, r = 0. Give the Kelly leverage, the maximum excess growth, and the excess growth at half-Kelly.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "Kelly leverage",
+      "value": 2.0,
+      "tolerance": 0.001,
+      "units": "x"
+     },
+     {
+      "label": "max growth (%)",
+      "value": 8.0,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "half-Kelly growth (%)",
+      "value": 6.0,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "f* = 0.08/0.04 = 2.0. G* = 0.08^2/(2 x 0.04) = 8.0%. Half: G* x 0.5 x 1.5 = 6.0%, with half the volatility (20% vs 40%).",
+   "common_mistakes": [
+    "Assuming half the bet gives half the growth",
+    "Forgetting that growth falls to zero at 2x Kelly"
+   ],
+   "intuition": "Growth is a parabola in size; its top is flat.",
+   "takeaway": "Half-Kelly keeps 75% of growth for 25% of the variance.",
+   "related": [
+    "ch21",
+    "ch01"
+   ]
+  },
+  {
+   "id": "D187",
+   "category": "B",
+   "topic": "risk_measures",
+   "difficulty": 3,
+   "time_minutes": 2,
+   "title": "Two loans, zero VaR",
+   "inputs": {
+    "loss_each": 2000000,
+    "pd": 0.03,
+    "confidence": 0.95
+   },
+   "question": "Two independent $2m loans each default with probability 3% (total loss). Give the 95% VaR of one loan, the 95% VaR of the pair, and the 95% ES of the pair. What does this say about VaR limits?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "VaR one loan ($)",
+      "value": 0,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "VaR pair ($)",
+      "value": 2000000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "ES pair ($)",
+      "value": 2036000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "Shows P(any default) = 5.91% > 5%, so pair VaR is one loan",
+     "Computes ES = (0.0009 x 4m + 0.0491 x 2m)/0.05",
+     "States that VaR is not subadditive here while ES is",
+     "Concludes that credit books need ES or default-scenario limits"
+    ]
+   },
+   "solution": "One loan: 3% < 5%, VaR = 0. Pair: P(no default) = 0.9409, so P(loss) = 5.91% and VaR = $2m. ES: (0.0009 x 4m + 0.0491 x 2m)/0.05 = $2.036m, below the $4.8m sum of standalone ES (1.2m each).",
+   "common_mistakes": [
+    "Adding standalone VaRs (0) to get the pair",
+    "Assuming diversification always lowers VaR"
+   ],
+   "intuition": "A quantile ignores everything beyond it.",
+   "takeaway": "VaR limits reward books of small-probability, large-loss positions.",
+   "related": [
+    "ch21",
+    "ch12"
+   ]
+  },
+  {
+   "id": "D188",
+   "category": "C",
+   "topic": "financing_risk",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Margin call and covenant on the same morning",
+   "inputs": {
+    "account_equity": 600000,
+    "contracts": 20,
+    "multiplier": 50,
+    "initial_margin": 24000,
+    "maintenance_margin": 22000,
+    "price_fall_points": 300,
+    "loan": 15000000,
+    "value": 22000000,
+    "max_ltv": 0.75,
+    "value_decline": 0.12
+   },
+   "question": "Long 20 index futures ($50 multiplier) with $600,000 in the account; initial/maintenance margin $24,000/$22,000. Separately, a property worth $22m carries a $15m loan with a 75% LTV covenant. Give the fall in points that triggers the margin call, the call after a 300-point fall, and the cure if the property value falls 12%.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "trigger (points)",
+      "value": 160,
+      "tolerance": 0.01,
+      "units": "points"
+     },
+     {
+      "label": "call after 300 pts ($)",
+      "value": 180000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "cure ($)",
+      "value": 480000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "Uses maintenance margin for the trigger and initial margin for the call",
+     "Computes cure = loan - 0.75 x new value",
+     "Adds the two cash demands and compares with available liquidity",
+     "States which position to cut if cash is insufficient"
+    ]
+   },
+   "solution": "Maintenance total = 20 x 22,000 = $440,000. Trigger = (600,000 - 440,000)/(20 x 50) = 160 points. After 300 points: loss = 300 x 50 x 20 = $300,000, equity $300,000; the call restores initial margin 20 x 24,000 = $480,000, so the call is $180,000. Property: new value 22.0 x 0.88 = $19.36m; cure = 15.0 - 0.75 x 19.36 = $0.48m. Total cash needed the same week: $660,000.",
+   "common_mistakes": [
+    "Restoring only to maintenance",
+    "Applying the covenant to the original value"
+   ],
+   "intuition": "Financing turns price moves into dated cash demands.",
+   "takeaway": "Size positions so that the joint cash demand in a stress fits inside free cash.",
+   "related": [
+    "ch21",
+    "ch10"
+   ]
+  },
+  {
+   "id": "D189",
+   "category": "C",
+   "topic": "risk_sizing",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Stop or put before a weekend",
+   "inputs": {
+    "entry": 4000,
+    "stop": 3880,
+    "gap_open": 3700,
+    "contracts": 10,
+    "multiplier": 50,
+    "put_strike": 3880,
+    "put_premium_points": 30
+   },
+   "question": "Long 10 index futures at 4,000 ($50 multiplier), stop at 3,880. A weekend event is scheduled. Monday could open at 3,700. A 3,880 put costs 30 points. Give the planned loss, the loss if the market gaps to 3,700, and the maximum loss with the puts. Should you buy the puts?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "planned loss ($)",
+      "value": 60000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "gap loss ($)",
+      "value": 150000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "max loss with puts ($)",
+      "value": 75000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "Computes planned and gap losses from the stop and the open",
+     "Adds the premium to the stop-distance loss for the hedged maximum",
+     "Compares the premium with the probability-weighted extra gap loss",
+     "Considers the alternative of cutting size over the event instead of buying insurance"
+    ]
+   },
+   "solution": "Planned = 120 x 50 x 10 = $60,000. Gap = 300 x 50 x 10 = $150,000. With puts: 60,000 + 30 x 50 x 10 = $75,000 whatever the open. The puts cost $15,000; they pay off relative to the stop if P(gap) x extra loss exceeds that, e.g. a 1-in-6 chance of the $90,000 extra loss. Halving size over the event is the cheaper alternative if the view is not event-specific.",
+   "common_mistakes": [
+    "Assuming the stop fills at 3,880 on a gap open",
+    "Treating the premium as wasted if no gap occurs"
+   ],
+   "intuition": "A stop is an order; a put is a contract.",
+   "takeaway": "Buy hard limits for dated events; size down when you cannot price the event.",
+   "related": [
+    "ch21",
+    "ch16"
+   ]
+  },
+  {
+   "id": "D190",
+   "category": "D",
+   "topic": "liquidity_risk",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Liquidity-adjusted VaR for a REIT block",
+   "inputs": {
+    "shares": 800000,
+    "price": 25,
+    "adv": 200000,
+    "participation": 0.2,
+    "daily_vol": 0.018,
+    "stressed_spread": 0.012,
+    "confidence": 0.99
+   },
+   "question": "You hold 800,000 shares at $25. ADV 200,000; max participation 20%; daily vol 1.8%; stressed spread 1.2%. Give days to liquidate, one-day 99% VaR, liquidation-horizon VaR under even daily sales, and LVaR.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "days",
+      "value": 20,
+      "tolerance": 0.01,
+      "units": "days"
+     },
+     {
+      "label": "1-day VaR ($)",
+      "value": 837485,
+      "tolerance": 5,
+      "units": "$"
+     },
+     {
+      "label": "liquidation VaR ($)",
+      "value": 2243304,
+      "tolerance": 10,
+      "units": "$"
+     },
+     {
+      "label": "LVaR ($)",
+      "value": 2363304,
+      "tolerance": 10,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "Days = 800,000/(0.2 x 200,000) = 20. VaR1 = 2.3263 x 0.018 x 20,000,000 = $837,485. Factor (21)(41)/120 = 7.175, sqrt 2.6786: $2,243,304. LVaR adds 0.5 x 1.2% x $20m = $120,000: $2,363,304.",
+   "common_mistakes": [
+    "Scaling by sqrt(20) as if the whole block were held 20 days",
+    "Ignoring the spread, or using the normal-day spread"
+   ],
+   "intuition": "A block you cannot sell today carries more than one day of risk, but less than T days of full exposure.",
+   "takeaway": "Charge illiquid positions for their exit horizon, or cut them to what you can sell before your stop.",
+   "related": [
+    "ch21",
+    "ch02"
+   ]
+  },
+  {
+   "id": "D191",
+   "category": "E",
+   "topic": "risk_measures",
+   "difficulty": 4,
+   "time_minutes": 30,
+   "title": "A low-VaR fund with private loans",
+   "inputs": {
+    "reported_var_pct_nav": 0.012,
+    "history_years": 2,
+    "private_share": 0.3,
+    "mark_frequency": "quarterly",
+    "max_drawdown_reported": 0.03,
+    "leverage": "undisclosed"
+   },
+   "question": "A manager seeks a $10m allocation. Reported one-day 99% VaR is 1.2% of NAV, from two years of daily data. 30% of NAV is in hotel bridge loans marked quarterly by the manager. Reported maximum drawdown is 3%. Fund-level leverage and redemption terms are 'available after commitment'. Do you allocate?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Recognizes that quarterly self-marks on 30% of NAV suppress measured VaR and drawdown (smoothing)",
+     "Notes that two years of data may contain no stress episode and that VaR omits the private book",
+     "Identifies undisclosed leverage and redemption terms as decisive missing information (financing and liquidity risk)",
+     "Requests a stress test of the loan book, the facility terms, and third-party marks",
+     "Concludes that the best action is to abstain until the information is provided, and states what would change that"
+    ]
+   },
+   "solution": "Abstain. The reported risk numbers measure the liquid 70% and a smoothed 30%. Without fund leverage, facility covenants and redemption gates you cannot compute the cash path in stress, which is where ruin occurs. Ask for the facility agreement, a scenario P&L for a 25-35% hotel value decline, third-party marks and the redemption terms. Re-evaluate if they are provided and the stress loss with leverage fits your limit.",
+   "common_mistakes": [
+    "Accepting a low VaR as low risk",
+    "Treating a small reported drawdown on self-marked assets as evidence of skill"
+   ],
+   "intuition": "A risk number that excludes the risky part is a measure of what was measured.",
+   "takeaway": "No financing terms, no allocation.",
+   "related": [
+    "ch21",
+    "ch02",
+    "ch12"
+   ]
+  },
+  {
+   "id": "D192",
+   "category": "F",
+   "topic": "stress_testing",
+   "difficulty": 5,
+   "time_minutes": 60,
+   "title": "Investment committee: stress and re-limit",
+   "inputs": {
+    "nav": 30000000,
+    "tsy_value": 10000000,
+    "tsy_mod_duration": 7,
+    "tsy_convexity": 60,
+    "es_contracts": 10,
+    "es_price": 5000,
+    "es_multiplier": 50,
+    "hotel_value": 16000000,
+    "hotel_loan": 11000000,
+    "hotel_equity": 5000000,
+    "dy": 0.01,
+    "es_return": -0.25,
+    "hotel_return": -0.2
+   },
+   "question": "NAV $30m: $10m Treasuries (D 7, C 60), long 10 ES at 5,000, $5m equity in a $16m hotel with an $11m non-recourse loan. Scenario: yields +100 bp, ES -25%, hotel -20%. Compute P&L by leg, the total and % of NAV, then recommend changes to the book.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "Treasury P&L ($)",
+      "value": -670000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "ES P&L ($)",
+      "value": -625000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "hotel equity P&L ($)",
+      "value": -3200000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "total P&L ($)",
+      "value": -4495000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "% of NAV",
+      "value": -14.9833,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "Computes the Treasury leg with duration and convexity",
+     "Applies the futures multiplier to notional",
+     "Caps the hotel equity loss at the equity and recomputes from value minus loan",
+     "Identifies the hotel as 71% of the loss and the rate-equity correlation as positive in this scenario",
+     "Recommends a change (lower hotel LTV, cure reserve, or reduced duration) with its effect on the stress loss",
+     "States a second scenario in which the Treasury leg behaves differently"
+    ]
+   },
+   "solution": "Treasuries: 10m x (-7 x 0.01 + 0.5 x 60 x 0.0001) = -$670,000. ES: 10 x 5,000 x 50 x -0.25 = -$625,000. Hotel: 16m x 0.8 = 12.8m; equity 1.8m; loss -$3.2m. Total -$4,495,000 = -14.98% of NAV. The hotel is 71% of the loss. In an inflationary shock both hedges and risk assets lose; in a deflationary crash the Treasuries would offset. Cutting the hotel loan to $9m (with $2m more equity) lowers the stress loss rate on hotel equity and removes covenant risk, at a cost in levered return.",
+   "common_mistakes": [
+    "Treating Treasuries as a hedge in every scenario",
+    "Ignoring convexity",
+    "Reporting the loss as a percentage of gross assets rather than NAV"
+   ],
+   "intuition": "A stress test ranks which assumption hurts most if wrong.",
+   "takeaway": "Re-limit on stress loss and cash demand, not on VaR.",
+   "related": [
+    "ch21",
+    "ch10",
+    "ch06"
+   ]
+  }
+ ]
+}
