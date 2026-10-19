@@ -310,3 +310,10 @@ def test_ols_recovers_line():
     assert r["a"] == pytest.approx(2.0, abs=0.2)
     assert 0.99 < r["r2"] <= 1.0
     assert stats.correlation(x, y) ** 2 == pytest.approx(r["r2"])
+
+
+def test_waterfall_without_irr_returns_none():
+    flows = [-16920000, 1450000, 1400000, 1100000, 700000, -2785000, -102500, -302500, -452500]
+    res = cre.irr_hurdle_waterfall(flows, [0.08, 0.12], [1.0, 0.8, 0.7])
+    assert res["investor_irr"] is None
+    assert sum(res["promote"]) == pytest.approx(0.0)

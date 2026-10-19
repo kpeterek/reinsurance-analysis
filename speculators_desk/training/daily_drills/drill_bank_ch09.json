@@ -1,0 +1,465 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D036",
+   "category": "A",
+   "topic": "cre_valuation",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Reversion on forward NOI",
+   "inputs": {
+    "noi_year5": 2000000,
+    "growth": 0.03,
+    "exit_cap": 0.065,
+    "selling_cost_pct": 0.02
+   },
+   "question": "Year 5 NOI is $2,000,000 and grows 3% into Year 6. You sell at the end of Year 5 at a 6.50% cap with 2% selling costs. Compute the net reversion, and how much an analyst understates it by capitalizing Year 5 NOI.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "net reversion ($)",
+      "value": 31058461.54,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "understatement from using Year 5 NOI ($)",
+      "value": 904615.38,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "NOI6 = 2,000,000 x 1.03 = 2,060,000. Gross = 2,060,000/0.065 = 31,692,308. Net = x 0.98 = 31,058,462. Using NOI5: 2,000,000/0.065 x 0.98 = 30,153,846. Difference 904,615 = one year of growth capitalized, net of costs.",
+   "common_mistakes": [
+    "Capitalizing trailing (Year 5) NOI with a cap rate quoted on forward NOI",
+    "Forgetting selling costs"
+   ],
+   "intuition": "The buyer at exit pays for the income they will receive, which is Year 6 NOI.",
+   "takeaway": "Terminal value always uses NOI(T+1). A one-year slip is worth about g/c of the reversion: here 3%/6.5% of nothing but timing.",
+   "related": [
+    "ch09"
+   ]
+  },
+  {
+   "id": "D037",
+   "category": "A",
+   "topic": "cre_valuation",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Loaded cap rate with reassessment",
+   "inputs": {
+    "noi_before_tax": 1500000,
+    "cap_rate": 0.07,
+    "tax_rate": 0.022,
+    "assessment_ratio": 0.8
+   },
+   "question": "NOI before property tax is $1,500,000. After a sale the assessor sets assessed value at 80% of price; the tax rate is 2.2%. The market cap rate on NOI after tax is 7.0%. Value the property, and state the overstatement if you capitalize pre-tax NOI at 7.0%.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "value with reassessment ($)",
+      "value": 17123287.67,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "overstatement if tax ignored ($)",
+      "value": 4305283.76,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "t = 2.2% x 0.80 = 1.76%. Loaded cap = 7.00% + 1.76% = 8.76%. V = 1,500,000/0.0876 = 17,123,288. Check: tax = 301,370; NOI after tax 1,198,630 / 17,123,288 = 7.00%. Ignoring tax entirely: 1,500,000/0.07 = 21,428,571, an overstatement of 4,305,284.",
+   "common_mistakes": [
+    "Applying the tax rate to 100% of price without stating the assessment ratio",
+    "Capitalizing the seller's (lower) tax bill"
+   ],
+   "intuition": "Tax depends on the price, and the price depends on the tax; the loaded cap solves both at once.",
+   "takeaway": "In reassessment jurisdictions, underwrite tax on your price, never on the seller's bill.",
+   "related": [
+    "ch08",
+    "ch09"
+   ]
+  },
+  {
+   "id": "D038",
+   "category": "B",
+   "topic": "cre_valuation",
+   "difficulty": 2,
+   "time_minutes": 2,
+   "title": "What must the buyer believe at a 4.75% cap?",
+   "inputs": {
+    "cap_rate": 0.0475,
+    "required_return": 0.07,
+    "capex_ratio": 0.06
+   },
+   "question": "An apartment portfolio trades at a 4.75% cap. Buyers require 7.0% unlevered and long-run capex is 6% of NOI. What perpetual NOI growth does the price imply? Is that plausible, and what would you check?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "implied perpetual NOI growth (%)",
+      "value": 2.535,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "Computes g = k - c(1 - kappa) = 7.00% - 4.465% = 2.535%",
+     "Compares with a stated long-run inflation and real rent growth view, labeled as an assumption",
+     "Notes that ignoring capex would overstate implied growth's cushion (k - c = 2.25% vs 2.535%)",
+     "Names checks: new supply pipeline, rent-to-income ratios, expense growth (insurance, tax)"
+    ]
+   },
+   "solution": "c(1 - kappa) = 0.0475 x 0.94 = 4.465%. g = 7.00% - 4.465% = 2.535%. The price is a bet that NOI grows near or slightly above long-run inflation forever. Whether that is plausible depends on supply and expense growth; the arithmetic tells you which belief to test.",
+   "common_mistakes": [
+    "Using g = k - c and ignoring capex",
+    "Treating the implied growth as a forecast rather than as the belief the price requires"
+   ],
+   "intuition": "A cap rate is k minus g, grossed up for capital spending.",
+   "takeaway": "Reverse-engineer every price into an implied growth or return, then argue about that number.",
+   "related": [
+    "ch09",
+    "ch06"
+   ]
+  },
+  {
+   "id": "D039",
+   "category": "C",
+   "topic": "cre_valuation",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Trailing versus stabilized NOI in a bid",
+   "inputs": {
+    "stabilized_noi": 900000,
+    "trailing_noi": 720000,
+    "cap_rate": 0.0625,
+    "cost_to_stabilize": 650000
+   },
+   "question": "A small industrial building is 70% leased. Trailing NOI is $720,000; underwritten stabilized NOI is $900,000 after lease-up, which will cost $650,000 in downtime, TI and commissions. The market cap is 6.25% on stabilized NOI. Compute the as-is value and the trailing-NOI value, and say which you would bid and why.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "as-is value ($)",
+      "value": 13750000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "value on trailing NOI ($)",
+      "value": 11520000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "As-is = 900,000/0.0625 - 650,000 = 13,750,000",
+     "Trailing value 11,520,000 is a convention mismatch, not a conservative value",
+     "Bid below as-is to price lease-up risk (not just cost); states the size of the risk discount and why",
+     "Names evidence that would close the gap (signed LOIs, broker tours, comparable lease-ups)"
+    ]
+   },
+   "solution": "Stabilized value = 900,000/0.0625 = 14,400,000. As-is = 14,400,000 - 650,000 = 13,750,000. Trailing value = 720,000/0.0625 = 11,520,000. Bid from as-is less a risk discount for the lease-up; the trailing value misapplies a stabilized cap rate to unstabilized income.",
+   "common_mistakes": [
+    "Paying stabilized value for an unstabilized asset",
+    "Calling the trailing-NOI value conservative"
+   ],
+   "intuition": "Cap rates are quoted on stabilized forward income; adjust the income, not the cap rate.",
+   "takeaway": "As-is value = stabilized value minus the cost and the risk of getting there.",
+   "related": [
+    "ch09"
+   ]
+  },
+  {
+   "id": "D040",
+   "category": "A",
+   "topic": "cre_valuation",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Cap +100 bp, NOI -5%, 65% LTV",
+   "inputs": {
+    "cap0": 0.055,
+    "cap1": 0.065,
+    "noi_change": -0.05,
+    "ltv": 0.65
+   },
+   "question": "Cap rates rise from 5.5% to 6.5% and NOI falls 5%. What is the change in asset value, and in equity at 65% LTV (debt unchanged)?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "asset value change (%)",
+      "value": -19.6154,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "equity change at 65% LTV (%)",
+      "value": -56.044,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "V1/V0 = 0.95 x 5.5/6.5 = 0.80385, a change of -19.62%. Equity = 35% of value at the start: -19.62%/0.35 = -56.04%. LTV after = 65%/0.80385 = 80.9%.",
+   "common_mistakes": [
+    "Adding -5% and -15.4% (the components do not add; they multiply)",
+    "Dividing by 0.65 instead of 0.35"
+   ],
+   "intuition": "Leverage divides the asset move by the equity share.",
+   "takeaway": "A 20% asset decline at 65% LTV removes more than half the equity and moves LTV past most refinancing limits.",
+   "related": [
+    "ch09",
+    "ch10"
+   ]
+  },
+  {
+   "id": "D041",
+   "category": "D",
+   "topic": "development",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Residual land value and a 50 bp cap move",
+   "inputs": {
+    "stabilized_noi": 2400000,
+    "exit_cap": 0.055,
+    "exit_cap_stress": 0.06,
+    "hard": 28000000,
+    "soft": 5600000,
+    "financing": 2200000,
+    "margin": 0.15,
+    "selling_cost_pct": 0.015
+   },
+   "question": "A build-to-rent project has stabilized NOI of $2.4m. Hard $28.0m, soft $5.6m, financing $2.2m, selling costs 1.5%, required margin 15% on total cost. Compute residual land value at a 5.50% and a 6.00% exit cap. The landowner wants $3.0m. Advise the developer.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "residual land at 5.50% ($)",
+      "value": 1575494.07,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "residual land at 6.00% ($)",
+      "value": -1539130.43,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "GDV 43,636,364 and 40,000,000; net values 42,981,818 and 39,400,000",
+     "Land = net/1.15 - 35,800,000",
+     "Recognizes the $3.0m ask exceeds residual value even at 5.50%",
+     "Advises an option or a price tied to entitlement/rates rather than a firm purchase; notes land is a levered call on cap rates"
+    ]
+   },
+   "solution": "At 5.50%: GDV = 2,400,000/0.055 = 43,636,364; net = 42,981,818; /1.15 = 37,375,494; less 35,800,000 = 1,575,494. At 6.00%: 40,000,000 x 0.985 = 39,400,000; /1.15 = 34,260,870; less 35,800,000 = -1,539,130. A 50 bp move swings land by $3.1m.",
+   "common_mistakes": [
+    "Applying the margin to value instead of cost",
+    "Forgetting selling costs"
+   ],
+   "intuition": "Land absorbs every change in GDV after fixed costs and margin.",
+   "takeaway": "Do not buy land outright at a price that requires today's cap rate to hold; buy an option.",
+   "related": [
+    "ch09",
+    "ch13"
+   ]
+  },
+  {
+   "id": "D042",
+   "category": "C",
+   "topic": "cre_valuation",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "The IRR identity and a 50 bp exit-cap stress",
+   "inputs": {
+    "cap0": 0.0525,
+    "growth": 0.025,
+    "exit_cap_stress": 0.0575,
+    "hold": 5
+   },
+   "question": "You buy at a 5.25% going-in cap, NOI grows 2.5% a year, no capex, no transaction costs, 5-year hold. (a) What is the IRR if you exit at 5.25% on Year 6 NOI? (b) What if you exit at 5.75%?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "IRR, exit at going-in cap (%)",
+      "value": 7.75,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "IRR, exit at +50 bp (%)",
+      "value": 6.0879,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "(a) uses the identity IRR = c + g = 7.75% without a calculator",
+     "(b) computes about 6.09%",
+     "States that a 50 bp exit move costs about 166 bp of IRR over five years",
+     "Labels the difference between (a) and (b) as a cap-rate forecast, not a business plan"
+    ]
+   },
+   "solution": "(a) With flat cap, constant growth, no capex or costs, IRR = c + g = 5.25% + 2.5% = 7.75% exactly. (b) Price 1/0.0525 = 19.048 per $1 of NOI; reversion = 1.025^5/0.0575 = 19.677; flows give IRR = 6.09%.",
+   "common_mistakes": [
+    "Thinking the identity needs a long hold; it holds for any hold length",
+    "Ignoring that the exit cap applies to NOI(T+1)"
+   ],
+   "intuition": "If nothing about the pricing changes, you earn the yield plus the growth.",
+   "takeaway": "Every basis point of IRR above c + g is a claim about exit pricing, capex, or growth beyond trend.",
+   "related": [
+    "ch09"
+   ]
+  },
+  {
+   "id": "D043",
+   "category": "E",
+   "topic": "anchoring",
+   "difficulty": 4,
+   "time_minutes": 30,
+   "title": "Three anchors and a maturity",
+   "inputs": {
+    "property": "120-room select-service hotel",
+    "owner_basis": 15000000,
+    "prior_appraisal": 17200000,
+    "replacement_cost_per_key": 165000,
+    "ttm_noi_after_reserve": 1050000,
+    "market_cap_range": [
+     0.09,
+     0.105
+    ],
+    "loan_balance": 11800000,
+    "months_to_maturity": 10
+   },
+   "question": "An owner says: 'I have $15.0m in this hotel, it appraised at $17.2m two years ago, and replacement cost is $165k a key ($19.8m). I'll take $16.5m.' T-12 NOI after a 4% reserve is $1.05m; your market cap range is 9.0%-10.5%. The $11.8m loan matures in 10 months. Write the analysis you would give your committee and the approach you would take with the owner.",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Values the hotel on normalized NOI: 1.05m/9.0%-10.5% = $11.7m-$10.0m before any PIP or normalization; states that the T-12 must be normalized (Case A)",
+     "Identifies basis as sunk, the appraisal as stale (decomposes the gap into NOI and cap-rate effects if data allow), and replacement cost as a supply ceiling not a floor",
+     "Recognizes the loan ($11.8m) is near or above value, so the owner may be unable to sell without bringing cash; computes the payoff price after selling costs",
+     "Proposes a strategy keyed to the maturity: an offer with an expiry, a discussion with the lender, or patience; names what would raise or lower the bid",
+     "States that no transaction may be possible before maturity and that abstention with a re-engagement trigger is acceptable"
+    ]
+   },
+   "solution": "Value is about $10.0-11.7m on the stated NOI, 29-39% below the ask. None of the three anchors is value evidence. The owner's constraint is the loan: at ~$12.0-12.2m gross (after 2-3% selling costs) the owner merely repays the debt. A sale near value requires the owner to bring cash, so expect an extension request first. The professional approach is to put a price with conditions and an expiry in front of the owner, share the arithmetic the lender will apply, and be ready at maturity.",
+   "common_mistakes": [
+    "Treating replacement cost as a floor",
+    "Splitting the difference between the ask and value",
+    "Ignoring the loan's effect on the owner's ability to sell"
+   ],
+   "intuition": "Anchors predict the seller's behavior; constraints predict when that behavior changes.",
+   "takeaway": "Bid on cash flow; time the bid to the constraint that releases the anchor.",
+   "related": [
+    "ch09",
+    "ch11",
+    "case_A"
+   ]
+  },
+  {
+   "id": "D044",
+   "category": "C",
+   "topic": "decision_under_uncertainty",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Break-even exit cap that straddles your range",
+   "inputs": {
+    "price": 20000000,
+    "noi1": 1300000,
+    "growth": 0.02,
+    "hold": 5,
+    "target_irr": 0.08,
+    "your_exit_cap_range": [
+     0.06,
+     0.07
+    ]
+   },
+   "question": "You can buy at $20.0m (6.50% going-in on Year 1 NOI of $1.3m), NOI growth 2%, 5-year hold, no capex or costs. Your target is 8.0% unlevered. Find the exit cap at which IRR = 8.0%. Your honest exit-cap range is 6.0%-7.0%. Bid, pass, or gather information?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "break-even exit cap (%)",
+      "value": 6.6843,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "Solves the break-even exit cap of about 6.68%",
+     "Recognizes the 6.0%-7.0% range straddles the break-even, so the decision depends on an unknown",
+     "Recommends gathering information (recent trades, debt-market depth, supply) or lowering price until the break-even sits above 7.0%; abstention is the right answer if neither is possible",
+     "Computes or estimates the price at which a 7.0% exit still yields 8%"
+    ]
+   },
+   "solution": "IRR is 9.95% at a 6.0% exit and 7.18% at 7.0%; it crosses 8.0% at an exit cap of 6.68%. Your range straddles that value, so at $20.0m the decision rests on a cap-rate forecast you cannot defend. Pass at this price, or bid lower so that a 7.0% exit still clears 8%.",
+   "common_mistakes": [
+    "Using the midpoint of the range (6.5%) as if it were known and bidding confidently",
+    "Assuming exit cap = going-in cap"
+   ],
+   "intuition": "Break-even analysis tells you whether your ignorance matters.",
+   "takeaway": "When your range straddles break-even, abstain or change the price; do not guess.",
+   "related": [
+    "ch01",
+    "ch09",
+    "ch20"
+   ]
+  },
+  {
+   "id": "D045",
+   "category": "D",
+   "topic": "leverage",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Negative leverage: equity IRR below property IRR",
+   "inputs": {
+    "price": 10000000,
+    "noi": 650000,
+    "ltv": 0.6,
+    "rate": 0.07,
+    "hold": 5,
+    "exit_cap": 0.065,
+    "exit_cap_stress": 0.07
+   },
+   "question": "A $10.0m asset with flat NOI of $650,000 (6.50% cap) is financed with a 60% interest-only loan at 7.0%. Five-year hold, no costs. Compute the equity IRR if you exit at 6.50% and at 7.00%. Explain the first answer without a calculator.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "equity IRR, exit 6.50% (%)",
+      "value": 5.75,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "equity IRR, exit 7.00% (%)",
+      "value": 2.342,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "(a) Flat value, IO debt: r_E = (r_A - lambda r_D)/(1 - lambda) = (6.50% - 0.6 x 7.0%)/0.4 = 5.75%. (b) Sale = 650,000/0.07 = 9,285,714; equity flows -4,000,000; 230,000 x 4; 230,000 + 9,285,714 - 6,000,000 = 3,515,714 in Year 5. IRR = 2.34%. The unlevered IRR in (b) is 5.21%.",
+   "common_mistakes": [
+    "Assuming leverage always raises return",
+    "Ignoring the exit-cap effect, which leverage magnifies"
+   ],
+   "intuition": "Borrowing at 7% to own a 6.5% asset lowers the return unless the asset appreciates.",
+   "takeaway": "With negative leverage, every unit of debt is a bet on appreciation.",
+   "related": [
+    "ch01",
+    "ch09",
+    "ch10"
+   ]
+  }
+ ]
+}

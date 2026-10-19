@@ -227,8 +227,11 @@ def irr_hurdle_waterfall(equity_flows: Sequence[float], hurdles: Sequence[float]
             balances = [b - remaining * s for b in balances]
         inv_flows.append(inv_total)
         promote_flows.append(prom_total)
-    return {"investor": inv_flows, "promote": promote_flows,
-            "investor_irr": tvm.irr(inv_flows) if any(f > 0 for f in inv_flows) else None}
+    try:
+        inv_irr = tvm.irr(inv_flows) if any(f > 0 for f in inv_flows) else None
+    except ValueError:  # flows with no sign change on the search interval have no IRR
+        inv_irr = None
+    return {"investor": inv_flows, "promote": promote_flows, "investor_irr": inv_irr}
 
 
 # --------------------------------------------------------------------------

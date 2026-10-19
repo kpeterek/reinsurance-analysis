@@ -1,0 +1,501 @@
+{
+ "schema_version": 1,
+ "notes": "Chapter 10 drills (D046-D055). Numeric answers are verified by tests/test_drills.py against drill_checks_ch10.py. All facts are hypothetical [HYPOTHESIS].",
+ "drills": [
+  {
+   "id": "D046",
+   "category": "A",
+   "topic": "cre_debt",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Debt-yield sizing",
+   "inputs": {
+    "noi": 3150000,
+    "min_debt_yield": 0.09
+   },
+   "question": "NOI is $3.15 million. The lender's minimum debt yield is 9.0%. What is the maximum loan under the debt-yield test?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "max loan ($)",
+      "value": 35000000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "L = NOI / DY = 3,150,000 / 0.09 = $35,000,000. The test ignores rate and amortization, which is why lenders use it alongside DSCR.",
+   "common_mistakes": [
+    "Multiplying NOI by the debt yield",
+    "Applying the debt yield to value instead of NOI"
+   ],
+   "intuition": "Debt yield is the lender's unlevered return on the loan if it owned the property at the loan amount.",
+   "takeaway": "Debt yield is the hardest sizing test to game with IO or a low coupon; check it first in a rising-rate market.",
+   "related": [
+    "ch10",
+    "ch11"
+   ]
+  },
+  {
+   "id": "D047",
+   "category": "A",
+   "topic": "cre_debt",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Loan constant and DSCR",
+   "inputs": {
+    "loan": 20000000,
+    "rate": 0.06,
+    "amort_years": 30,
+    "noi": 1800000
+   },
+   "question": "A $20.0 million loan at 6.00% on a 30-year schedule (monthly payments). NOI is $1.8 million. Give the loan constant (%) and the DSCR.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "loan constant (%)",
+      "value": 7.1946,
+      "tolerance": 0.005,
+      "units": "%"
+     },
+     {
+      "label": "DSCR (x)",
+      "value": 1.2509,
+      "tolerance": 0.002,
+      "units": "x"
+     }
+    ]
+   },
+   "solution": "Monthly payment = 20,000,000 x 0.005 / (1 - 1.005^-360) = $119,910.11; annual DS = $1,438,921; K = 7.1946%. DSCR = 1,800,000 / 1,438,921 = 1.25x.",
+   "common_mistakes": [
+    "Using the 6.00% coupon as the constant (gives 1.50x)",
+    "Using annual compounding for a monthly-pay loan"
+   ],
+   "intuition": "The constant exceeds the coupon by the first-year amortization share; at 6% and 30 years that adds about 1.2 points.",
+   "takeaway": "DSCR covenants are written on debt service, not interest. Know the constant for common rate/amortization pairs.",
+   "related": [
+    "ch10"
+   ]
+  },
+  {
+   "id": "D048",
+   "category": "A",
+   "topic": "cre_debt",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "IO DSCR equals a debt-yield test",
+   "inputs": {
+    "dscr_min": 1.25,
+    "io_rate": 0.064,
+    "noi": 2000000
+   },
+   "question": "An interest-only loan at 6.40% must meet 1.25x DSCR. What debt yield is that test equivalent to, and what is the maximum loan on NOI of $2.0 million?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "equivalent debt yield (%)",
+      "value": 8.0,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "max loan ($)",
+      "value": 25000000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "For IO debt NOI/(L r) >= DSCR iff NOI/L >= DSCR x r = 1.25 x 6.40% = 8.00%. L = 2,000,000 / 0.08 = $25,000,000.",
+   "common_mistakes": [
+    "Dividing the rate by the DSCR",
+    "Forgetting that the identity holds only for interest-only debt"
+   ],
+   "intuition": "With no amortization, coverage and debt yield measure the same thing scaled by the rate.",
+   "takeaway": "When a floating-rate loan is sized at the cap strike, DSCR and debt-yield triggers usually trip together.",
+   "related": [
+    "ch10"
+   ]
+  },
+  {
+   "id": "D049",
+   "category": "B",
+   "topic": "cre_debt",
+   "difficulty": 3,
+   "time_minutes": 2,
+   "title": "Why capped borrowers still defaulted",
+   "inputs": {
+    "loan_type": "floating-rate bridge",
+    "cap_term_years": 2,
+    "loan_term_years": 3,
+    "forward_vs_strike": "forward above strike"
+   },
+   "question": "A multifamily bridge borrower bought a two-year cap struck well below today's forward SOFR. The loan has three years to run plus extension options that require a new cap. Explain in two minutes why the borrower can be in distress even though the cap 'works'.",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "States that the cap caps the coupon only until it expires; the hedge is shorter than the exposure",
+     "Explains that a replacement cap struck below the forward is mostly intrinsic value, so it is a large upfront cash cost",
+     "Notes that extension tests (DSCR at the strike, new cap) can fail even when current interest is covered",
+     "Distinguishes debt service protection from liquidity: the cap protects the lender's DSCR, not the sponsor's cash",
+     "Mentions the cash trap or reserve deposits that cut distributions while the problem persists"
+    ]
+   },
+   "solution": "The cap transferred rate risk only for its term. When it expires with forwards above the strike, a new cap at the same strike costs roughly the present value of the expected payouts, i.e. the interest saving is prepaid in cash. Extension conditions require that cash and a DSCR at the strike. A sponsor can therefore face a maturity or extension default with interest fully covered today.",
+   "common_mistakes": [
+    "Saying the cap eliminates rate risk",
+    "Ignoring the extension conditions"
+   ],
+   "intuition": "A deep in-the-money cap does not hedge; it converts future interest into a payment today.",
+   "takeaway": "Underwrite floating-rate debt at the strike, at the forward after cap expiry, and with the replacement cap's cost.",
+   "related": [
+    "ch10",
+    "ch18"
+   ]
+  },
+  {
+   "id": "D050",
+   "category": "C",
+   "topic": "cre_debt",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Refinancing gap at maturity",
+   "inputs": {
+    "balance": 15500000,
+    "noi": 1400000,
+    "cap_rate": 0.07,
+    "rate": 0.0675,
+    "amort_years": 30,
+    "ltv_max": 0.65,
+    "dscr_min": 1.3,
+    "debt_yield_min": 0.095,
+    "refi_cost_pct": 0.01
+   },
+   "question": "A loan with a $15.5 million balloon matures. NOI $1.4 million; market cap 7.00%. New loan: 6.75%, 30-year amortization, max 65% LTV, min 1.30x DSCR, min 9.5% debt yield; costs 1% of the new loan. Compute the maximum new loan and the equity required to refinance. Should the owner fund it?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "max new loan ($)",
+      "value": 13000000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "equity to refinance ($)",
+      "value": 2630000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "Value = 1.4m / 7% = $20.0m; LTV loan $13.0m binds (DSCR $13.84m, DY $14.74m)",
+     "Gap = 15.5 + 0.13 - 13.0 = $2.63m",
+     "Compares the gap with equity value (20.0 - 15.5 = $4.5m before costs) and concludes funding preserves positive equity",
+     "States what would change the answer: a lower value, a recourse guarantee, or better use of the $2.63m elsewhere"
+    ]
+   },
+   "solution": "V = $20.0m. Loans: LTV 13.0m; DSCR 1.4/1.30/0.07783 = 13.84m; DY 14.74m. LTV binds. Gap = 15,500,000 + 130,000 - 13,000,000 = $2,630,000. Equity is worth about $4.5m before costs, so funding $2.63m to keep it is rational if the value estimate is reliable.",
+   "common_mistakes": [
+    "Sizing on the old balance instead of the new constraints",
+    "Forgetting refinancing costs"
+   ],
+   "intuition": "A positive-equity owner funds the gap to keep the call option in the money.",
+   "takeaway": "Compute the gap and the equity it protects together; one without the other is not a decision.",
+   "related": [
+    "ch10",
+    "ch12"
+   ]
+  },
+  {
+   "id": "D051",
+   "category": "C",
+   "topic": "cre_debt",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Extension fee bargaining zone",
+   "inputs": {
+    "balance": 12000000,
+    "value_now": 10500000,
+    "states": [
+     [
+      0.3,
+      13500000
+     ],
+     [
+      0.4,
+      10500000
+     ],
+     [
+      0.3,
+      8000000
+     ]
+    ],
+    "equity_rate": 0.15,
+    "lender_rate": 0.08,
+    "foreclosure_cost": 0.08
+   },
+   "question": "A non-recourse $12.0m loan is at maturity; value is $10.5m. In one year value will be $13.5m, $10.5m or $8.0m (p = 0.3, 0.4, 0.3). The lender can foreclose (8% costs, proceeds in one year) or extend one year for a fee. Sponsor discount rate 15%, lender 8%. Compute the sponsor's maximum fee and the lender's PV under foreclosure and under extension (before fee).",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "sponsor max fee ($)",
+      "value": 391304,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "lender PV foreclose ($)",
+      "value": 8944444,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "lender PV extend before fee ($)",
+      "value": 8955556,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "Option payoff E[max(V1-12,0)] = 0.3 x 1.5m = $450,000; PV $391,304",
+     "Lender extension is worth slightly more than foreclosure even with no fee",
+     "Bargaining zone: fee from $0 to $391,304",
+     "Notes that the option value comes from dispersion: E[V1] = $10.65m is close to today's value"
+    ]
+   },
+   "solution": "Sponsor: 0.3 x 1.5m / 1.15 = $391,304. Lender foreclose: 10.5m x 0.92 / 1.08 = $8,944,444. Extend: [0.3 x 12.0 + 0.4 x 9.66 + 0.3 x 7.36] / 1.08 = $8,955,556. Any fee in [0, 391,304] improves both parties' positions.",
+   "common_mistakes": [
+    "Calling the equity worthless because V < B",
+    "Ignoring the lender's foreclosure costs and delay"
+   ],
+   "intuition": "Underwater equity is out-of-the-money option value; the lender's foreclosure costs fund the bargaining zone.",
+   "takeaway": "Before refusing or demanding an extension fee, compute both sides' alternatives.",
+   "related": [
+    "ch10",
+    "ch12",
+    "ch18"
+   ]
+  },
+  {
+   "id": "D052",
+   "category": "D",
+   "topic": "cre_capital_stack",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Underwriting a mezzanine loan",
+   "inputs": {
+    "value": 60000000,
+    "senior": 36000000,
+    "senior_io_rate": 0.065,
+    "mezz": 9000000,
+    "mezz_io_rate": 0.115,
+    "noi": 3600000
+   },
+   "question": "Value $60m; senior $36m at 6.50% IO; mezz $9m at 11.50% IO; NOI $3.6m. Give the mezz attachment and detachment (% of value), senior DSCR, combined DSCR, and debt yield through the mezz. What value decline first impairs the mezz?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "attachment (%)",
+      "value": 60.0,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "detachment (%)",
+      "value": 75.0,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "senior DSCR (x)",
+      "value": 1.5385,
+      "tolerance": 0.001,
+      "units": "x"
+     },
+     {
+      "label": "combined DSCR (x)",
+      "value": 1.0667,
+      "tolerance": 0.001,
+      "units": "x"
+     },
+     {
+      "label": "debt yield through mezz (%)",
+      "value": 8.0,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "decline that first impairs mezz (%)",
+      "value": 25.0,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Attach 36/60 = 60%; detach 45/60 = 75%. Senior DS 2.34m (1.54x). Mezz DS 1.035m; combined 3.375m (1.07x). DY 3.6/45 = 8.0%. Impaired once value falls more than 25%.",
+   "common_mistakes": [
+    "Quoting the mezz's own LTV (15%) instead of its position in the stack",
+    "Ignoring that combined DSCR of 1.07x leaves little room for NOI decline"
+   ],
+   "intuition": "The mezz's credit risk is set by cumulative leverage, not its own size.",
+   "takeaway": "A 25% value cushion with a 1.07x combined DSCR means income, not value, will trigger the first default.",
+   "related": [
+    "ch10",
+    "ch17"
+   ]
+  },
+  {
+   "id": "D053",
+   "category": "D",
+   "topic": "cre_debt",
+   "difficulty": 4,
+   "time_minutes": 15,
+   "title": "Replacement cap cost and escrow",
+   "inputs": {
+    "notional": 25000000,
+    "strike": 0.035,
+    "forward": 0.045,
+    "normal_vol": 0.01,
+    "years": 1,
+    "freq": 4
+   },
+   "question": "A lender requires a 1-year replacement cap on $25m struck at 3.50% SOFR. Flat forward 4.50%, normal vol 1.00%, quarterly caplets, first period already fixed. Price it with the Bachelier model and give the monthly escrow needed to fund it over the next 12 months (ignore interest on the escrow).",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "cap premium ($)",
+      "value": 186281,
+      "tolerance": 2,
+      "units": "$"
+     },
+     {
+      "label": "monthly escrow ($)",
+      "value": 15523,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "Three caplets fix at 0.25, 0.5, 0.75 years. Each is about 25m x 0.25 x 1.0% x DF in intrinsic value plus time value. Total $186,281; monthly escrow $15,523.",
+   "common_mistakes": [
+    "Including the already-fixed first period",
+    "Using lognormal (Black) vol quoted in bp"
+   ],
+   "intuition": "With the forward 100 bp above the strike, the cap is mostly prepaid intrinsic value.",
+   "takeaway": "Budget replacement caps as a cash cost in the business plan, not as a hedge that pays for itself.",
+   "related": [
+    "ch10",
+    "ch18"
+   ]
+  },
+  {
+   "id": "D054",
+   "category": "E",
+   "topic": "cre_capital_stack",
+   "difficulty": 5,
+   "time_minutes": 30,
+   "title": "The weekend rescue request (abstain)",
+   "inputs": {
+    "ask": "$4m preferred equity",
+    "deadline_days": 3,
+    "appraisal": "withheld until term sheet",
+    "t3_vs_t12_noi": "T-3 annualized 9% below T-12",
+    "senior_extension_tests": "not provided"
+   },
+   "question": "A sponsor wants $4m of 12% preferred equity committed within three days for an apartment deal facing a loan extension. The appraisal is withheld until you sign a term sheet, T-3 NOI is 9% below T-12, and the loan's extension tests are not provided. What do you do?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Declines to commit on the stated timeline; abstention is the best answer with this information",
+     "Identifies that the pref's attachment point cannot be estimated without value and loan terms, and may sit above current value",
+     "Flags the falling NOI and the withheld appraisal as adverse signals (adverse selection)",
+     "Lists the information required: loan agreement, extension tests, cap requirement and quote, rent roll and monthly P&L, appraisal, sources and uses",
+     "States conditions to re-engage, including control rights and a paydown from existing equity"
+    ]
+   },
+   "solution": "With value, loan tests and use of proceeds unknown, the pref's risk cannot be priced. The deadline is the sponsor's problem. Decline now and set conditions for re-engagement.",
+   "common_mistakes": [
+    "Pricing the pref as credit because it is 'senior to the common'",
+    "Accepting the sponsor's stabilized NOI"
+   ],
+   "intuition": "Capital asked for under time pressure, with information withheld, is adversely selected.",
+   "takeaway": "Abstention is a position. Write down what would change it.",
+   "related": [
+    "ch10",
+    "ch01",
+    "ch20"
+   ]
+  },
+  {
+   "id": "D055",
+   "category": "F",
+   "topic": "distressed_debt",
+   "difficulty": 5,
+   "time_minutes": 45,
+   "title": "IC: buy the defaulted note?",
+   "inputs": {
+    "price": 7000000,
+    "par": 9500000,
+    "required_return": 0.14,
+    "scenarios": [
+     {
+      "p": 0.4,
+      "recovery": 10000000,
+      "costs": 100000,
+      "years": 1.5
+     },
+     {
+      "p": 0.6,
+      "recovery": 8400000,
+      "costs": 900000,
+      "years": 2
+     }
+    ]
+   },
+   "question": "You can buy a defaulted $9.5m note at $7.0m. Resolution A (p 0.4): borrower pays $10.0m including default interest in 1.5 years, costs $0.1m. Resolution B (p 0.6): foreclosure and REO sale at $8.4m gross in 2 years, costs $0.9m. Required return 14%. Compute expected PV and NPV and recommend to the committee.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "expected PV ($)",
+      "value": 6716007,
+      "tolerance": 2,
+      "units": "$"
+     },
+     {
+      "label": "NPV at ask ($)",
+      "value": -283993,
+      "tolerance": 2,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "Computes scenario PVs: $8.13m (A) and $5.77m (B)",
+     "Notes that foreclosure returns only 3.5% a year at the ask, and it is the more likely path",
+     "Recommends passing at $7.0m or bidding at or below about $6.7m",
+     "Identifies what would change the answer: borrower liquidity for a payoff, foreclosure timeline by state, an updated value",
+     "States the probability of A that makes the ask break even, or explains how to find it"
+    ]
+   },
+   "solution": "PV_A = 9.9m / 1.14^1.5 = $8,133,508; PV_B = 7.5m / 1.14^2 = $5,771,006. E[PV] = 0.4 x 8.13 + 0.6 x 5.77 = $6,716,007; NPV -$283,993. Pass at the ask or bid lower.",
+   "common_mistakes": [
+    "Discounting at the note coupon",
+    "Treating default interest as certain cash"
+   ],
+   "intuition": "The likely path (foreclosure) is the one that sets the price.",
+   "takeaway": "Price distressed debt on the resolution you expect, not on par.",
+   "related": [
+    "ch10",
+    "ch12",
+    "ch17"
+   ]
+  }
+ ]
+}
