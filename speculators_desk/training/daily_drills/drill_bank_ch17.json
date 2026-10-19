@@ -1,0 +1,340 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D157",
+   "category": "A",
+   "topic": "credit",
+   "difficulty": 2,
+   "time_minutes": 0.5,
+   "title": "Spread to hazard to five-year PD",
+   "inputs": {
+    "spread": 0.025,
+    "recovery": 0.4,
+    "years": 5
+   },
+   "question": "A five-year CDS trades at 250 bp. Assume 40% recovery. What risk-neutral hazard does the credit triangle imply, and what five-year cumulative default probability?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "hazard (%)",
+      "value": 4.1667,
+      "tolerance": 0.005,
+      "units": "%"
+     },
+     {
+      "label": "5-year cumulative PD (%)",
+      "value": 18.8064,
+      "tolerance": 0.02,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "lambda = s/(1-R) = 0.025/0.60 = 4.167%. Cumulative PD = 1 - exp(-0.041667 x 5) = 1 - exp(-0.20833) = 18.81%.",
+   "common_mistakes": [
+    "Multiplying the hazard by five (20.8%) instead of using survival exp(-lambda t)",
+    "Dividing by R instead of 1 - R",
+    "Calling 18.8% the market's forecast: it is risk-neutral and includes premia"
+   ],
+   "intuition": "Spread divided by loss given default is the default intensity the market charges for, not the one it expects.",
+   "takeaway": "s = lambda x LGD; survival is exponential in lambda t.",
+   "related": [
+    "ch17",
+    "ch06"
+   ]
+  },
+  {
+   "id": "D158",
+   "category": "A",
+   "topic": "credit",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Cumulative PD to hazard and annual PD",
+   "inputs": {
+    "cum_pd": 0.12,
+    "years": 3
+   },
+   "question": "A rating table shows a 12% three-year cumulative default rate. Assuming a constant hazard, give the hazard and the one-year default probability.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "hazard (%)",
+      "value": 4.2611,
+      "tolerance": 0.005,
+      "units": "%"
+     },
+     {
+      "label": "one-year PD (%)",
+      "value": 4.1716,
+      "tolerance": 0.005,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "lambda = -ln(1 - 0.12)/3 = 0.127833/3 = 4.261%. One-year PD = 1 - exp(-0.042611) = 4.172%. The naive 12%/3 = 4.0% understates the annual rate because survivors shrink the base.",
+   "common_mistakes": [
+    "Dividing 12% by 3",
+    "Equating the hazard with the one-year PD"
+   ],
+   "intuition": "Default probabilities compound on the surviving population, not on the original one.",
+   "takeaway": "lambda = -ln(1 - PD)/t; PD_1y = 1 - e^-lambda < lambda.",
+   "related": [
+    "ch17"
+   ]
+  },
+  {
+   "id": "D159",
+   "category": "B",
+   "topic": "credit",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Thin tranche, moderate pool loss",
+   "inputs": {
+    "default_rate": 0.18,
+    "severity": 0.5,
+    "attach": 0.07,
+    "detach": 0.1,
+    "tranche_size": 30000000.0
+   },
+   "question": "A CMBS class attaches at 7% and detaches at 10% of a pool; the class is $30 million. 18% of the pool defaults at a 50% severity. What fraction and dollar amount of the class is lost? What does the answer say about the class's rating?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "tranche loss (%)",
+      "value": 66.6667,
+      "tolerance": 0.05,
+      "units": "%"
+     },
+     {
+      "label": "dollar loss",
+      "value": 20000000.0,
+      "tolerance": 1000.0,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "Pool loss = 18% x 50% = 9%, so the class loses (9 - 7)/(10 - 7) = 2/3",
+     "Recognizes the class is 3% thick: it goes from no loss at 14% defaults to wipeout at 20% (at 50% severity)",
+     "Notes that a rating measures the probability of first loss, not the loss given it",
+     "Mentions that interest shortfalls from appraisal reductions hit the class before principal losses"
+    ]
+   },
+   "solution": "L = 0.18 x 0.50 = 9%. Loss = (0.09 - 0.07)/(0.10 - 0.07) = 66.7%, $20.0 million. First-loss default rate = 7%/50% = 14%; wipeout at 20%.",
+   "common_mistakes": [
+    "Applying the default rate rather than the pool loss to the attachment point",
+    "Dividing the loss by the pool rather than by the tranche thickness"
+   ],
+   "intuition": "Thin tranches convert small changes in pool loss into large changes in bond value.",
+   "takeaway": "Loss = min(max(L - a, 0), d - a)/(d - a); thickness is leverage.",
+   "related": [
+    "ch17",
+    "ch10",
+    "ch12"
+   ]
+  },
+  {
+   "id": "D160",
+   "category": "C",
+   "topic": "credit",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Holdco notes behind an opco",
+   "inputs": {
+    "opco_value": 300.0,
+    "opco_secured": 200.0,
+    "opco_unsecured": 40.0,
+    "holdco_notes": 100.0,
+    "price": 45.0
+   },
+   "question": "A holdco's only asset is its opco. Opco is worth $300m and owes $200m secured and $40m unsecured (including trade). Holdco owes $100m of notes, no opco guarantee, trading at 45. Give the holdco note recovery and the multiple on cost if that value is realized. Then name two things that could make the trade lose money even if the opco value is right.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "holdco recovery (per 100)",
+      "value": 60.0,
+      "tolerance": 0.05,
+      "units": "points"
+     },
+     {
+      "label": "multiple on cost (x)",
+      "value": 1.3333,
+      "tolerance": 0.001,
+      "units": "x"
+     }
+    ],
+    "rubric": [
+     "Holdco receives only opco's residual equity: 300 - 240 = 60, so 60% recovery",
+     "Priming or new opco secured debt (or value moved to an unrestricted subsidiary) reduces holdco value dollar for dollar",
+     "A longer case lowers the return; unsecured claims do not accrue post-petition interest",
+     "Recognizes that the holdco notes are effectively levered equity in opco"
+    ]
+   },
+   "solution": "Opco claims 240; residual 60 reaches holdco; recovery 60/100 = 60%. Multiple 60/45 = 1.33x. Risks: priming debt at opco, asset transfers to unrestricted subsidiaries, timeline extension, valuation fight.",
+   "common_mistakes": [
+    "Ranking holdco 'senior' notes alongside opco unsecured claims",
+    "Ignoring opco trade claims"
+   ],
+   "intuition": "A parent's creditor stands behind every creditor of every subsidiary.",
+   "takeaway": "Read the guarantee and the permitted-lien baskets before the price.",
+   "related": [
+    "ch17",
+    "ch10"
+   ]
+  },
+  {
+   "id": "D161",
+   "category": "D",
+   "topic": "credit",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "CDS upfront when the spread is below the coupon",
+   "inputs": {
+    "spread": 0.048,
+    "coupon": 0.05,
+    "recovery": 0.4,
+    "rate": 0.04,
+    "years": 5,
+    "notional": 20000000.0
+   },
+   "question": "Five-year CDS on a high-yield name trades at a par spread of 480 bp with the standard 500 bp running coupon. Recovery 40%, riskless rate 4% continuous, quarterly premiums. Using the credit-triangle hazard to build the risky annuity, compute the RPV01, the upfront in points (sign from the protection buyer's view) and in dollars on $20 million.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "RPV01 (years)",
+      "value": 3.7038,
+      "tolerance": 0.001,
+      "units": "years"
+     },
+     {
+      "label": "upfront (points, + = buyer pays)",
+      "value": -0.7408,
+      "tolerance": 0.002,
+      "units": "points"
+     },
+     {
+      "label": "upfront ($)",
+      "value": -148151.0,
+      "tolerance": 50.0,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "lambda = 0.048/0.60 = 8.0%. RPV01 = sum 0.25 exp(-0.12 i/4), i=1..20 = 3.7038. Upfront = (0.048 - 0.050) x 3.7038 = -0.741 points: the protection SELLER pays the buyer $148,151 because the buyer will overpay through the 500 bp running coupon.",
+   "common_mistakes": [
+    "Assuming the protection buyer always pays upfront",
+    "Using the riskless annuity (about 4.5) instead of the risky one"
+   ],
+   "intuition": "Upfront = PV of the difference between the fair spread and the coupon you have agreed to pay.",
+   "takeaway": "U = (s - c) x RPV01; it is negative when s < c.",
+   "related": [
+    "ch17",
+    "ch18"
+   ]
+  },
+  {
+   "id": "D162",
+   "category": "E",
+   "topic": "credit",
+   "difficulty": 5,
+   "time_minutes": 30,
+   "title": "The CMBS B-piece with contradictory data",
+   "inputs": {
+    "offer_price": 38,
+    "class": "first-loss B-piece of a 2018 conduit",
+    "servicer_report": "4 loans in special servicing, 18% of pool",
+    "seller_claim": "2 of the 4 loans have signed modifications",
+    "missing": "no current appraisals; trustee report three months old; controlling-class rights status unknown"
+   },
+   "question": "A dealer offers the first-loss B-piece of a 2018 conduit at 38. The servicer report shows 18% of the pool in special servicing. The seller says two of the four loans have signed modifications, but the trustee report is three months old and shows none. No current appraisals are available, and you cannot confirm whether appraisal reductions have already shifted control to the next class. What do you do?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Best answer is to abstain or bid only conditionally: the price cannot be anchored without appraisals and the control status",
+     "Identifies that the B-piece's value is largely its control right (special-servicer appointment); if appraisal reductions have shifted control, the bond is worth materially less",
+     "Treats the seller's modification claim as unverified and asks for the signed documents or a current servicer certification",
+     "Shows how to compute the break-even pool loss once data arrive (B-piece thickness / severity) rather than inventing a number",
+     "Notes interest shortfalls: with 18% in special servicing, current cash to the B-piece is probably already cut"
+    ]
+   },
+   "solution": "Abstain at 38 until (1) current appraisals or broker values for the four loans, (2) the ARA calculation and control-class test, and (3) the modification documents are in hand. The B-piece is a leveraged claim on four loans plus a control option whose existence is uncertain; the contradictions between seller and trustee data are themselves evidence to update toward the worse case.",
+   "common_mistakes": [
+    "Pricing off the seller's modification claim",
+    "Ignoring the control-shift mechanism",
+    "Assuming the stale trustee report is current"
+   ],
+   "intuition": "When the seller's information and the record disagree, the disagreement is information.",
+   "takeaway": "No appraisal, no control test, no bid.",
+   "related": [
+    "ch17",
+    "ch12",
+    "ch01"
+   ]
+  },
+  {
+   "id": "D163",
+   "category": "B",
+   "topic": "credit",
+   "difficulty": 3,
+   "time_minutes": 2,
+   "title": "What is the spread paying for?",
+   "inputs": {
+    "spread": 0.042,
+    "real_world_pd": 0.02,
+    "recovery": 0.4,
+    "liquidity": 0.008
+   },
+   "question": "A B+ bond trades at 420 bp. Your real-world annual PD estimate is 2.0%, recovery 40%, and you estimate an 80 bp liquidity component. Decompose the spread and give the risk-neutral hazard and its ratio to the real-world PD. Who should own this bond?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "expected loss (bp)",
+      "value": 120.0,
+      "tolerance": 0.5,
+      "units": "bp"
+     },
+     {
+      "label": "risk premium (bp)",
+      "value": 220.0,
+      "tolerance": 0.5,
+      "units": "bp"
+     },
+     {
+      "label": "risk-neutral hazard (%)",
+      "value": 5.6667,
+      "tolerance": 0.005,
+      "units": "%"
+     },
+     {
+      "label": "ratio to real-world PD (x)",
+      "value": 2.8333,
+      "tolerance": 0.005,
+      "units": "x"
+     }
+    ],
+    "rubric": [
+     "EL = 2.0% x 60% = 120 bp; liquidity 80 bp; residual 220 bp",
+     "The liquidity component is earned only by holders whose funding cannot be withdrawn",
+     "The risk premium pays for default risk concentrated in recessions; a holder already long cyclical CRE adds correlated risk",
+     "Notes that the PD and liquidity estimates are uncertain, so the residual carries their errors"
+    ]
+   },
+   "solution": "EL = 0.02 x 0.6 = 120 bp. Risk premium = 420 - 120 - 80 = 220 bp. lambda^Q = (420 - 80)/0.6 = 5.67%, 2.83x the real-world PD. Natural owner: an unlevered, long-horizon holder without existing recession-concentrated exposure.",
+   "common_mistakes": [
+    "Calling the whole 420 bp 'excess return over expected loss'",
+    "Using the risk-neutral hazard as a default forecast"
+   ],
+   "intuition": "Spread = expected loss + liquidity + risk premium; only the first is a cost you expect to bear on average.",
+   "takeaway": "Know which component you are paid for and whether you can hold through the state that pays it.",
+   "related": [
+    "ch17",
+    "ch01"
+   ]
+  }
+ ]
+}
