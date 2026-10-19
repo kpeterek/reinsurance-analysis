@@ -1,0 +1,399 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D177",
+   "category": "A",
+   "topic": "probability_bayes",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Base rate and a positive screen",
+   "inputs": {
+    "base_rate": 0.05,
+    "sensitivity": 0.8,
+    "false_positive": 0.1
+   },
+   "question": "5% of office tenants of this credit profile default within two years. A credit model flags 80% of eventual defaulters and 10% of non-defaulters. A tenant is flagged. What is the probability it defaults?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "posterior default probability (%)",
+      "value": 29.63,
+      "tolerance": 0.05,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Prior odds 5:95 = 1:19. LR = 0.80/0.10 = 8. Posterior odds 8:19, so P = 8/27 = 29.6%. Equivalently 0.04/(0.04 + 0.095).",
+   "common_mistakes": [
+    "Answering 80% (sensitivity read as the posterior)",
+    "Forgetting that 95% of tenants are non-defaulters, so false positives dominate"
+   ],
+   "intuition": "With a low base rate, most flags are false alarms even for a decent model.",
+   "takeaway": "A flag raises default risk six-fold, from 5% to 30%. It warrants a deposit or guaranty, not an automatic rejection.",
+   "related": [
+    "ch20",
+    "ch03"
+   ]
+  },
+  {
+   "id": "D178",
+   "category": "A",
+   "topic": "fat_tails",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "How many 4-sigma months?",
+   "inputs": {
+    "months": 360,
+    "z": 4,
+    "nu": 4
+   },
+   "question": "Over 360 months, how many months worse than -4 standard deviations does a normal model expect? How many does a Student-t with 4 degrees of freedom scaled to the same variance expect?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "normal expected count",
+      "value": 0.0114,
+      "tolerance": 0.0005,
+      "units": "months"
+     },
+     {
+      "label": "t4 expected count",
+      "value": 0.866,
+      "tolerance": 0.005,
+      "units": "months"
+     }
+    ]
+   },
+   "solution": "Normal: 360 x Phi(-4) = 360 x 3.17e-5 = 0.011. t4 with unit variance: scale sqrt(2/4) = 0.7071, threshold 4/0.7071 = 5.657, P = 0.002406, count 0.87.",
+   "common_mistakes": [
+    "Comparing an unscaled t4 (variance 2) with a unit-variance normal",
+    "Treating one 4-sigma month as proof the model broke rather than as evidence about the tail"
+   ],
+   "intuition": "At 4 sigma the normal and a fat-tailed model differ by a factor of about 76.",
+   "takeaway": "One 4-sigma month in 30 years is roughly what a fat-tailed model expects and what a normal model calls a 1-in-2,600-year event.",
+   "related": [
+    "ch20",
+    "ch21"
+   ]
+  },
+  {
+   "id": "D179",
+   "category": "B",
+   "topic": "statistical_inference",
+   "difficulty": 2,
+   "time_minutes": 2,
+   "title": "A ten-year track record",
+   "inputs": {
+    "n": 10,
+    "mean": 0.07,
+    "sd": 0.1,
+    "t_crit": 2.262
+   },
+   "question": "A manager shows ten annual returns with mean 7.0% and sample s.d. 10%. Compute the 95% t-interval half-width and its lower bound. Does the record show a positive expected return?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "half-width (%)",
+      "value": 7.153,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "lower bound (%)",
+      "value": -0.153,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "States that the interval includes zero, so the record does not establish a positive mean",
+     "Notes that appraisal smoothing (positive autocorrelation) makes the true interval wider",
+     "Redirects evaluation to deal-level forecasts and outcomes with more observations"
+    ]
+   },
+   "solution": "se = 10%/sqrt(10) = 3.162%. Half-width = 2.262 x 3.162 = 7.15%. Interval [-0.15%, 14.15%]. Zero is inside; with smoothing the interval is wider still.",
+   "common_mistakes": [
+    "Using 1.96 instead of the t critical value",
+    "Treating the sample s.d. of smoothed returns as the true volatility"
+   ],
+   "intuition": "The standard error of a ten-year mean is about a third of annual volatility.",
+   "takeaway": "A decade of annual returns is not evidence of skill. Ask for the forecast log.",
+   "related": [
+    "ch20",
+    "ch02"
+   ]
+  },
+  {
+   "id": "D180",
+   "category": "C",
+   "topic": "value_of_information",
+   "difficulty": 2,
+   "time_minutes": 3,
+   "title": "EVPI on a zoning outcome",
+   "inputs": {
+    "p_good": 0.7,
+    "gain": 2.0,
+    "loss": 3.0
+   },
+   "question": "A land purchase gains $2.0m if a rezoning passes (p = 0.70) and loses $3.0m if it fails. Passing yields 0. What is the EV of buying, and the most you should pay for any information about the rezoning?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "EV of buying ($m)",
+      "value": 0.5,
+      "tolerance": 0.001,
+      "units": "$m"
+     },
+     {
+      "label": "EVPI ($m)",
+      "value": 0.9,
+      "tolerance": 0.001,
+      "units": "$m"
+     }
+    ]
+   },
+   "solution": "EV(buy) = 0.7(2.0) - 0.3(3.0) = 0.5. With perfect information: 0.7(2.0) + 0.3(0) = 1.4. EVPI = 1.4 - 0.5 = 0.9.",
+   "common_mistakes": [
+    "Taking the EV with perfect information (1.4) as the value of information",
+    "Paying more than EVPI for an imperfect study, whose value (EVSI) is always lower"
+   ],
+   "intuition": "Information is worth what it saves you in the states where it changes your action.",
+   "takeaway": "EVPI caps the budget for lobbying counsel, traffic studies, and option fees aimed at learning the outcome.",
+   "related": [
+    "ch20",
+    "ch03"
+   ]
+  },
+  {
+   "id": "D181",
+   "category": "C",
+   "topic": "calibration",
+   "difficulty": 2,
+   "time_minutes": 3,
+   "title": "Brier score of five calls",
+   "inputs": {
+    "forecasts": [
+     0.9,
+     0.8,
+     0.7,
+     0.6,
+     0.2
+    ],
+    "outcomes": [
+     1,
+     0,
+     1,
+     0,
+     0
+    ]
+   },
+   "question": "An analyst's five probability calls and outcomes are: 0.9/yes, 0.8/no, 0.7/yes, 0.6/no, 0.2/no. Compute the Brier score with sdesk.stats.brier_score, and the score of a constant 0.4 forecast (the realized frequency).",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "analyst Brier score",
+      "value": 0.228,
+      "tolerance": 0.0005,
+      "units": "score"
+     },
+     {
+      "label": "constant 0.4 Brier score",
+      "value": 0.24,
+      "tolerance": 0.0005,
+      "units": "score"
+     }
+    ]
+   },
+   "solution": "(0.01 + 0.64 + 0.09 + 0.36 + 0.04)/5 = 1.14/5 = 0.228. Constant 0.4: two events score 0.36 each, three non-events 0.16 each: (0.72 + 0.48)/5 = 0.24.",
+   "common_mistakes": [
+    "Scoring (1 - f) for every forecast regardless of outcome",
+    "Concluding skill from five forecasts"
+   ],
+   "intuition": "A 0.8 call that misses costs 0.64, more than any other single forecast here.",
+   "takeaway": "The analyst barely beats the base rate, and five calls cannot distinguish skill from luck.",
+   "related": [
+    "ch20",
+    "ch25"
+   ]
+  },
+  {
+   "id": "D182",
+   "category": "D",
+   "topic": "value_of_information",
+   "difficulty": 3,
+   "time_minutes": 12,
+   "title": "Phase I environmental: worth it?",
+   "inputs": {
+    "p_clean": 0.9,
+    "npv_clean": 1.2,
+    "npv_contaminated": -4.0,
+    "p_flag_clean": 0.15,
+    "p_flag_contaminated": 0.75,
+    "cost": 0.006
+   },
+   "question": "Buying a light-industrial site has NPV +$1.2m if clean (p = 0.90) and -$4.0m if contaminated. A Phase I report flags 75% of contaminated sites and 15% of clean ones, and costs $6,000. Walking costs nothing. Compute the prior EV, P(flag), EV of buying after a flag and after no flag, EVSI, and the expected net gain. Should you order it, and what must you commit to in advance?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "prior EV of buying ($m)",
+      "value": 0.68,
+      "tolerance": 0.001,
+      "units": "$m"
+     },
+     {
+      "label": "P(flag)",
+      "value": 0.21,
+      "tolerance": 0.001,
+      "units": "prob"
+     },
+     {
+      "label": "EV buy | flag ($m)",
+      "value": -0.6571,
+      "tolerance": 0.001,
+      "units": "$m"
+     },
+     {
+      "label": "EV buy | no flag ($m)",
+      "value": 1.0354,
+      "tolerance": 0.001,
+      "units": "$m"
+     },
+     {
+      "label": "EVSI ($m)",
+      "value": 0.138,
+      "tolerance": 0.001,
+      "units": "$m"
+     },
+     {
+      "label": "net gain ($m)",
+      "value": 0.132,
+      "tolerance": 0.001,
+      "units": "$m"
+     }
+    ],
+    "rubric": [
+     "Orders the Phase I because EVSI far exceeds cost",
+     "Pre-commits to walking or obtaining a Phase II / price cut on a flag; otherwise EVSI is zero",
+     "Notes that a flag raises contamination odds to about 36%, not 75%"
+    ]
+   },
+   "solution": "Prior EV = 0.9(1.2) - 0.1(4.0) = 0.68. P(flag) = 0.1(0.75) + 0.9(0.15) = 0.21. P(contam|flag) = 0.075/0.21 = 0.357; EV = 0.643(1.2) - 0.357(4.0) = -0.657: walk. P(contam|no flag) = 0.025/0.79 = 0.0316; EV = 1.035: buy. EV with report = 0.79 x 1.035 = 0.818. EVSI = 0.138; net 0.132.",
+   "common_mistakes": [
+    "Reading the 75% sensitivity as the posterior",
+    "Valuing the report at EVPI (0.40)",
+    "Ordering the report while intending to close regardless"
+   ],
+   "intuition": "The report is valuable because a flag changes the action.",
+   "takeaway": "Price diligence by the decisions it can change, and write the decision rule down before the report arrives.",
+   "related": [
+    "ch20",
+    "ch01"
+   ]
+  },
+  {
+   "id": "D183",
+   "category": "D",
+   "topic": "expected_utility",
+   "difficulty": 3,
+   "time_minutes": 10,
+   "title": "Certainty equivalent of a co-investment",
+   "inputs": {
+    "wealth": 16.0,
+    "commit": 1.6,
+    "payoffs": [
+     4.0,
+     2.0,
+     0.0
+    ],
+    "probs": [
+     0.5,
+     0.3,
+     0.2
+    ],
+    "gamma": 2
+   },
+   "question": "Wealth $16.0m (ignore the riskless return over the short hold). A $1.6m co-investment returns $4.0m (p = 0.5), $2.0m (0.3), or $0 (0.2). With CRRA gamma = 2, compute expected terminal wealth, the certainty-equivalent wealth, and the risk premium. Accept?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "E[W] ($m)",
+      "value": 17.0,
+      "tolerance": 0.001,
+      "units": "$m"
+     },
+     {
+      "label": "CE wealth ($m)",
+      "value": 16.8476,
+      "tolerance": 0.001,
+      "units": "$m"
+     },
+     {
+      "label": "risk premium ($m)",
+      "value": 0.1524,
+      "tolerance": 0.001,
+      "units": "$m"
+     }
+    ]
+   },
+   "solution": "W = 14.4 + {4.0, 2.0, 0} = {18.4, 16.4, 14.4}. E[W] = 9.2 + 4.92 + 2.88 = 17.0. CE = 1/(0.5/18.4 + 0.3/16.4 + 0.2/14.4) = 16.848 > 16.0: accept. Premium = 0.152.",
+   "common_mistakes": [
+    "Applying utility to the payoff instead of total wealth",
+    "Using the arithmetic mean as the CE"
+   ],
+   "intuition": "At 10% of wealth with a 20% chance of total loss, a strongly positive-EV bet keeps most of its value.",
+   "takeaway": "CE falls quickly as size rises; rerun it at double the commitment before saying yes to an upsize.",
+   "related": [
+    "ch20",
+    "ch21"
+   ]
+  },
+  {
+   "id": "D184",
+   "category": "E",
+   "topic": "decision_under_uncertainty",
+   "difficulty": 5,
+   "time_minutes": 30,
+   "title": "Two studies, one sponsor, no record",
+   "inputs": {
+    "study_A_leaseup_months": 13,
+    "study_B_leaseup_months": 24,
+    "sponsor_completed_projects": 5,
+    "projects_started": "unknown",
+    "commitment": 3.0,
+    "wealth": 15.0
+   },
+   "question": "A sponsor asks for a $3.0m LP commitment ($15.0m liquid wealth) on a lease-up deal. The sponsor's market study (commissioned and paid by the sponsor) projects 13-month lease-up; an independent study you saw on a nearby project projects 24 months for similar product. The sponsor shows five completed deals but will not say how many it started. The close is in 10 days and the sponsor says other LPs are 'ready to fill the round'. What do you do?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Recognizes the two studies are not equally informative: the sponsor's study likely has a high 'favorable' rate in slow markets (low likelihood ratio)",
+     "Identifies survivorship in the five-deal record and asks for all projects started",
+     "Notes that 20% of liquid wealth is too concentrated for an unscored sponsor (CE argument)",
+     "Treats the deadline and 'other LPs' as pressure, not information",
+     "Concludes that abstaining (declining this round, or requesting the full record and a third independent study before any commitment) is the best current action"
+    ]
+   },
+   "solution": "Abstain at this time. The information that would change the decision (the full record of projects started, an independent absorption study) has high EVSI and cannot be obtained in 10 days. The sponsor's study has a low likelihood ratio; the 24-month study suggests the reference class is much slower; the commitment is a fifth of liquid wealth. Re-engage only with the full record, a lease-up reserve, and a smaller size.",
+   "common_mistakes": [
+    "Averaging the two studies to 18.5 months as if equally reliable",
+    "Committing because of the deadline",
+    "Treating five successes as a calibration record"
+   ],
+   "intuition": "When information with high decision value is missing and cannot be obtained before the deadline, the deadline is the sponsor's problem, not yours.",
+   "takeaway": "Abstention is a position. Write down the condition that would make you commit.",
+   "related": [
+    "ch20",
+    "ch01",
+    "ch25"
+   ]
+  }
+ ]
+}
