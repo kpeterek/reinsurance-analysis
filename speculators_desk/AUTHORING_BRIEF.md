@@ -52,3 +52,6 @@ Mix categories A–F. Include messy, contradictory, incomplete-information drill
 
 ## 7. Working alongside other authors
 Other authors write files at the same time. If the full test suite fails **only** in files you do not own (another author's work in progress), first run your own tests (`python3 -m pytest -q tests/test_chNN_examples.py tests/test_drills.py -k "DNNN or chNN"` and your case tests). Retry the full suite a few minutes later. Report the foreign failure, but do not fix another author's files. Do not delete or rewrite files you did not create.
+
+## 8. Source status in this environment
+The network proxy usually blocks direct page fetches from official sites (FRED, BLS, BEA, Federal Reserve, FDIC, SEC, Nareit, NCREIF). A figure confirmed only through a web-search excerpt is **VERIFIED-SECONDARY**, even when the excerpt quotes the primary document. Reserve **VERIFIED-PRIMARY** for documents you actually read in full, and for bibliographic checks of journal articles and books.
