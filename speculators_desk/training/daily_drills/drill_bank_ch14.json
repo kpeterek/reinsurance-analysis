@@ -1,0 +1,337 @@
+{
+ "schema_version": 1,
+ "notes": "Chapter 14 drills (D136-D142). Numeric answers are verified by tests/test_drills.py against drill_checks_ch14.py. All facts are hypothetical [HYPOTHESIS] unless cited.",
+ "drills": [
+  {
+   "id": "D136",
+   "category": "A",
+   "topic": "equity_futures",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "E-mini notional and a bad day",
+   "inputs": {
+    "index": 6000,
+    "multiplier": 50,
+    "contracts": 4,
+    "adverse_points": 7.75
+   },
+   "question": "You are long 4 CME E-mini S&P 500 contracts with the index at 6,000. The multiplier is $50 per point. What is the notional, and what do you lose if the future falls 7.75 points?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "notional ($)",
+      "value": 1200000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "loss ($)",
+      "value": 1550,
+      "tolerance": 0.01,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "Notional = 6,000 x 50 x 4 = $1,200,000. Loss = 7.75 x 50 x 4 = $1,550 (31 ticks of $12.50 x 4).",
+   "common_mistakes": [
+    "Using the Micro multiplier ($5) or treating one point as $12.50",
+    "Confusing margin posted with notional"
+   ],
+   "intuition": "Each E-mini is about $300,000 of index exposure at 6,000; four contracts are a $1.2 million equity position.",
+   "takeaway": "Compute notional before thinking about margin; the multiplier decides the size.",
+   "related": [
+    "ch14"
+   ]
+  },
+  {
+   "id": "D137",
+   "category": "A",
+   "topic": "equity_futures",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Beta hedge in E-minis and Micros",
+   "inputs": {
+    "beta": 1.25,
+    "value": 12000000,
+    "futures": 5000
+   },
+   "question": "A $12 million REIT portfolio has a beta of 1.25 to the S&P 500. The E-mini trades at 5,000. How many E-minis ($50) hedge the beta? How many Micros ($5)?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "E-mini contracts",
+      "value": 60,
+      "tolerance": 0.01,
+      "units": "contracts"
+     },
+     {
+      "label": "Micro contracts",
+      "value": 600,
+      "tolerance": 0.1,
+      "units": "contracts"
+     }
+    ]
+   },
+   "solution": "Dollar beta = 1.25 x 12,000,000 = $15,000,000. N = 15,000,000 / (5,000 x 50) = 60 E-minis, or 15,000,000 / (5,000 x 5) = 600 Micros.",
+   "common_mistakes": [
+    "Hedging $12 million rather than the $15 million dollar beta",
+    "Dividing by the index level without the multiplier"
+   ],
+   "intuition": "Hedge the market exposure, not the market value.",
+   "takeaway": "N = beta x V / (F x multiplier). Micros let you fine-tune the residual fraction.",
+   "related": [
+    "ch14",
+    "ch13"
+   ]
+  },
+  {
+   "id": "D138",
+   "category": "B",
+   "topic": "equity_valuation",
+   "difficulty": 3,
+   "time_minutes": 2,
+   "title": "Earnings yield versus TIPS",
+   "inputs": {
+    "forward_pe": 24,
+    "tips_yield": 0.022
+   },
+   "question": "The S&P 500 trades at 24x forward earnings and the 10-year TIPS yields 2.20%. Compute the earnings yield and its gap to the real yield. A strategist says the gap 'proves stocks are cheap relative to bonds'. Evaluate.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "earnings yield (%)",
+      "value": 4.1667,
+      "tolerance": 0.005,
+      "units": "%"
+     },
+     {
+      "label": "gap to TIPS (pp)",
+      "value": 1.9667,
+      "tolerance": 0.005,
+      "units": "pp"
+     }
+    ],
+    "rubric": [
+     "Computes E/P = 4.17% and the gap = 1.97 pp",
+     "States that E/P equals expected real return only if reinvestment earns the cost of capital (ROE = k)",
+     "Notes cyclical or accounting distortion of forward earnings and offers a normalized check (CAPE or a margin-adjusted EPS)",
+     "Rejects a comparison against the nominal yield as an ERP",
+     "Presents the gap as one estimate in a range, not a proof"
+    ]
+   },
+   "solution": "E/P = 1/24 = 4.17%; gap = 4.17 - 2.20 = 1.97 pp. The gap is a crude real ERP: it assumes ROE = k and representative earnings. A 2 pp premium is modest, not proof of cheapness; compare with Gordon and two-stage estimates.",
+   "common_mistakes": [
+    "Subtracting the nominal 10-year yield",
+    "Treating forward operating EPS at a margin peak as normal"
+   ],
+   "intuition": "E/P is a real yield on a growing claim only under a no-value-creation assumption.",
+   "takeaway": "Report the ERP as a range across methods, with the assumptions named.",
+   "related": [
+    "ch14",
+    "ch06"
+   ]
+  },
+  {
+   "id": "D139",
+   "category": "C",
+   "topic": "reit_valuation",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "REIT implied cap and NAV discount",
+   "inputs": {
+    "price": 30,
+    "shares": 100000000,
+    "debt": 2000000000,
+    "preferred": 100000000,
+    "cash": 100000000,
+    "forward_noi": 330000000,
+    "private_cap": 0.06
+   },
+   "question": "A REIT trades at $30 with 100 million shares, $2.0bn debt, $0.1bn preferred, $0.1bn cash and no other assets. Forward cash NOI is $330m. Private appraisals use a 6.00% cap. Compute the implied cap rate, NAV per share at 6.00%, and the discount. Should you buy?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "implied cap (%)",
+      "value": 6.6,
+      "tolerance": 0.005,
+      "units": "%"
+     },
+     {
+      "label": "NAV per share ($)",
+      "value": 35.0,
+      "tolerance": 0.01,
+      "units": "$"
+     },
+     {
+      "label": "premium/discount to NAV (%)",
+      "value": -14.2857,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Mkt cap $3.0bn; implied RE value = 3.0 + 2.0 + 0.1 - 0.1 = $5.0bn; cap = 330/5,000 = 6.60%. GAV at 6% = $5.5bn; NAV = 5.5 - 2.0 - 0.1 + 0.1 = $3.5bn = $35/share; discount = 30/35 - 1 = -14.3%. Buy only with evidence that private trades clear near 6.0% and a catalyst; otherwise the 60 bp gap may mean the appraisals are stale.",
+   "common_mistakes": [
+    "Calling the discount a bargain without asking which price is stale",
+    "Adding cash to EV instead of subtracting it"
+   ],
+   "intuition": "A NAV discount is a cap-rate disagreement magnified by leverage (GAV/NAV = 1.57 here).",
+   "takeaway": "Convert discounts to cap rates; then ask which number is stale.",
+   "related": [
+    "ch14",
+    "ch12"
+   ]
+  },
+  {
+   "id": "D140",
+   "category": "D",
+   "topic": "equity_futures",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Rich futures: is there an arbitrage?",
+   "inputs": {
+    "spot": 5200,
+    "r": 0.045,
+    "q": 0.015,
+    "t": 0.5,
+    "quoted": 5290,
+    "cost_points": 5
+   },
+   "question": "S&P 500 spot 5,200; financing 4.50% and dividend yield 1.50% (continuous); six months to expiry. The E-mini trades at 5,290. Round-trip arbitrage costs are 5 index points. Compute fair value, the mispricing, and the cash-and-carry profit per contract after costs. What could go wrong?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "fair value",
+      "value": 5278.59,
+      "tolerance": 0.02,
+      "units": "points"
+     },
+     {
+      "label": "rich by (points)",
+      "value": 11.41,
+      "tolerance": 0.02,
+      "units": "points"
+     },
+     {
+      "label": "profit per contract ($)",
+      "value": 320.6,
+      "tolerance": 1.0,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "F* = 5,200 x e^(0.03 x 0.5) = 5,278.59. Rich by 11.41 points. Buy the basket financed at 4.5%, sell futures: (11.41 - 5) x 50 = $320.60 per contract. Risks: dividend estimates, financing rate resets, tracking error in a partial basket, and execution slippage.",
+   "common_mistakes": [
+    "Comparing the future with spot instead of fair value",
+    "Ignoring costs, or using the $5 Micro multiplier"
+   ],
+   "intuition": "The basis is carry; only the deviation from carry beyond costs is profit.",
+   "takeaway": "Fair value first, then the band, then the residual risks.",
+   "related": [
+    "ch14"
+   ]
+  },
+  {
+   "id": "D141",
+   "category": "E",
+   "topic": "short_selling",
+   "difficulty": 4,
+   "time_minutes": 30,
+   "title": "The crowded short before a lock-up expiry",
+   "inputs": {
+    "borrow_fee": "40-80% annualized, rising",
+    "short_interest": "35% of float",
+    "catalyst": "lock-up expiry in 9 weeks",
+    "recall_notices": "two in the last month",
+    "your_view": "fair value 50% below price"
+   },
+   "question": "A recent IPO trades far above your fair value. Borrow costs 40-80% a year and rising, short interest is 35% of the float, your prime broker has issued two recalls this month, and the lock-up expires in nine weeks. A colleague wants a 3% NAV short now. What do you do?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Recognizes that borrow cost over nine weeks (roughly 7-14% of position value) consumes a large part of the expected decline before the catalyst",
+     "Identifies recall risk as correlated with a squeeze, making the holding period random and the exit forced near the worst price",
+     "Notes that the lock-up expiry is public and may already be priced; asks what is not known",
+     "Prefers abstention or a defined-loss structure (puts, if implied vol is not prohibitive) over a 3% NAV naked short",
+     "States what would change the answer: borrow falling, a cheaper defined-loss instrument, evidence that insiders will sell"
+    ]
+   },
+   "solution": "The best answer is to abstain from the naked short at 3% of NAV. The view may be right, but the instrument is wrong: borrow cost, recall risk and squeeze dynamics (Ofek and Richardson, 2003; Palm/3Com) make the path dangerous. Reconsider with puts, a much smaller size, or after the lock-up when borrow eases.",
+   "common_mistakes": [
+    "Sizing a short on conviction about value rather than on path risk",
+    "Ignoring that recalls cluster in squeezes"
+   ],
+   "intuition": "A mispricing that requires a scarce borrow can outlast your margin.",
+   "takeaway": "Abstaining is a position when the instrument, not the thesis, is the problem.",
+   "related": [
+    "ch14",
+    "ch01"
+   ]
+  },
+  {
+   "id": "D142",
+   "category": "F",
+   "topic": "cre_hedging",
+   "difficulty": 5,
+   "time_minutes": 60,
+   "title": "Committee: futures hedge on a private hotel book",
+   "inputs": {
+    "gross_value": 200000000,
+    "asset_beta": 0.75,
+    "futures": 5000,
+    "erp": 0.03,
+    "years": 0.5,
+    "rally": 0.12,
+    "available_liquidity": 10000000
+   },
+   "question": "A private hotel portfolio (gross value $200m, 60% LTV) is to be sold in six months. The lodging REIT asset beta is 0.75. E-mini at 5,000. ERP 3%. The office has $10m of free liquidity. Compute the contracts for a full beta hedge, the expected cost over six months, and the variation margin in a 12% rally. Recommend to committee.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "contracts",
+      "value": 600,
+      "tolerance": 0.01,
+      "units": "contracts"
+     },
+     {
+      "label": "expected cost ($)",
+      "value": 2250000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "variation margin in 12% rally ($)",
+      "value": 18000000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "Sizes on dollar beta of gross assets (0.75 x 200m = 150m), not on equity",
+     "Quantifies the expected cost as beta dollars x ERP x time",
+     "Shows that a 12% rally needs $18m against $10m of liquidity, which is a forced-unwind risk",
+     "Identifies residual risks: property-specific, public-private basis, smoothed appraisals",
+     "Proposes alternatives: signed sale with hard deposit, partial hedge sized to liquidity, index or REIT puts"
+    ]
+   },
+   "solution": "Dollar beta = 0.75 x 200m = $150m; N = 150,000,000 / (5,000 x 50) = 600 contracts. Expected cost = 150m x 3% x 0.5 = $2.25m. A 12% rally costs 600 x 50 x 5,000 x 0.12 = $18m of variation margin, 1.8x available liquidity. Recommend a partial hedge sized to liquidity (at most about 330 contracts for a 12% rally with $10m) or puts, and prioritize a signed sale contract.",
+   "common_mistakes": [
+    "Hedging only the $80m equity with the REIT equity beta",
+    "Ignoring variation-margin liquidity against an illiquid asset"
+   ],
+   "intuition": "A futures hedge converts market risk into liquidity risk.",
+   "takeaway": "Hedge what you can fund through a rally; transfer the rest by selling.",
+   "related": [
+    "ch14",
+    "ch13",
+    "ch21"
+   ]
+  }
+ ]
+}
