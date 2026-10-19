@@ -1,0 +1,352 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D164",
+   "category": "A",
+   "topic": "derivatives_volatility",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Break-even move from implied vol",
+   "inputs": {
+    "implied_vol": 0.25,
+    "trading_days": 252,
+    "weeks": 52
+   },
+   "question": "An index option trades at 25% implied vol. What daily move (%) does a delta-hedged long position need to break even? What weekly move if you re-hedge weekly?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "daily break-even move (%)",
+      "value": 1.5749,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "weekly break-even move (%)",
+      "value": 3.4669,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Daily = 0.25/sqrt(252) = 0.25/15.87 = 1.575%. Weekly = 0.25/sqrt(52) = 0.25/7.21 = 3.467%. Mental: 16 vol is about 1% a day, so 25 vol is about 25/16 = 1.56%.",
+   "common_mistakes": [
+    "Dividing by 252 instead of sqrt(252)",
+    "Using 365 calendar days for a trading-day move",
+    "Thinking the move must be in one direction"
+   ],
+   "intuition": "The option's theta is the rent for gamma. It is paid back when the squared move equals implied variance per period, whatever the sign.",
+   "takeaway": "Translate every implied vol into a daily move and compare it with the moves you actually see.",
+   "related": [
+    "ch18"
+   ]
+  },
+  {
+   "id": "D165",
+   "category": "A",
+   "topic": "derivatives_options",
+   "difficulty": 2,
+   "time_minutes": 0.5,
+   "title": "Put-call parity check",
+   "inputs": {
+    "s": 200,
+    "k": 190,
+    "t": 0.25,
+    "r": 0.05,
+    "call": 15.4,
+    "put": 3.1
+   },
+   "question": "Stock 200, no dividends. Three-month European options struck at 190: call 15.40, put 3.10. r = 5% continuous. What does parity say C - P should be, and what is the gap (quoted C - P minus parity)? Each option has a 0.20 bid-ask spread. Is there an arbitrage?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "parity value of C - P",
+      "value": 12.3602,
+      "tolerance": 0.005,
+      "units": "$"
+     },
+     {
+      "label": "gap",
+      "value": -0.0602,
+      "tolerance": 0.005,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "Parity: C - P = S - K e^{-rT} = 200 - 190 e^{-0.0125} = 200 - 187.640 = 12.360. Quoted C - P = 12.30. Gap = -0.06. Crossing two 0.20 spreads costs about 0.20 (half-spread on each of two legs), more than the gap. No arbitrage.",
+   "common_mistakes": [
+    "Discounting the strike with simple interest",
+    "Comparing the gap with mid prices only, ignoring spreads",
+    "Forgetting the cost of shorting the stock leg"
+   ],
+   "intuition": "Parity is a static replication: call minus put is a forward. It holds for any volatility.",
+   "takeaway": "Small parity gaps are usually costs, dividends or borrow fees, not arbitrage.",
+   "related": [
+    "ch18",
+    "ch01"
+   ]
+  },
+  {
+   "id": "D166",
+   "category": "B",
+   "topic": "derivatives_volatility",
+   "difficulty": 2,
+   "time_minutes": 2,
+   "title": "Hedged long option in a quiet market",
+   "inputs": {
+    "vega_per_vol_point": 0.2,
+    "implied_vol_pts": 18,
+    "realized_vol_pts": 14,
+    "units": 20000
+   },
+   "question": "You bought 20,000 units of an at-the-money option at 18% implied vol and delta-hedged daily. Realized vol came in at 14%. Vega is 0.20 per vol point per unit. (a) Approximate the P&L. (b) Your colleague says the loss means the market 'went the wrong way'. Respond.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "approximate P&L ($)",
+      "value": -16000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "States that the hedged P&L depends on realized versus implied variance, not on direction",
+     "Notes the vega approximation ignores path dependency: P&L is gamma-weighted, so it depends on where the moves occurred relative to the strike",
+     "Mentions discrete hedging noise and transaction costs as further sources of difference"
+    ]
+   },
+   "solution": "P&L ~ vega x (sigma_r - sigma_i) x units = 0.20 x (14 - 18) x 20,000 = -$16,000. Direction is irrelevant to a delta-hedged position; the loss came from paying theta at an 18% rate while gamma earned at about 14%.",
+   "common_mistakes": [
+    "Attributing a delta-hedged loss to direction",
+    "Using vol differences in decimals with vega quoted per vol point",
+    "Treating the approximation as exact"
+   ],
+   "intuition": "A hedged option is a swap of realized variance for implied variance, weighted by gamma.",
+   "takeaway": "Before buying options for a view, say where and when you expect realized vol to exceed implied.",
+   "related": [
+    "ch18"
+   ]
+  },
+  {
+   "id": "D167",
+   "category": "C",
+   "topic": "cre_debt_derivatives",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Choosing a cap strike under a DSCR test",
+   "inputs": {
+    "notional": 30000000,
+    "noi": 3000000,
+    "spread": 0.0325,
+    "min_dscr": 1.25,
+    "forward": 0.04,
+    "normal_vol": 0.011,
+    "years": 2,
+    "strike_a": 0.045,
+    "strike_b": 0.05
+   },
+   "question": "A $30m two-year floating loan at SOFR + 3.25% on a property with NOI $3.0m. The lender requires DSCR >= 1.25x at the cap strike. Flat forward 4.00%, normal vol 1.10%, quarterly caplets, first period excluded (cap_premium convention). (a) Maximum strike. (b) DSCR at a 4.50% strike. (c) Premium of the 4.50% cap. (d) Premium of the 5.00% cap. Which strike do you buy?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "maximum strike (%)",
+      "value": 4.75,
+      "tolerance": 0.005,
+      "units": "%"
+     },
+     {
+      "label": "DSCR at 4.50%",
+      "value": 1.2903,
+      "tolerance": 0.001,
+      "units": "x"
+     },
+     {
+      "label": "premium at 4.50% ($)",
+      "value": 110354,
+      "tolerance": 2,
+      "units": "$"
+     },
+     {
+      "label": "premium at 5.00% ($)",
+      "value": 53609,
+      "tolerance": 2,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "Rejects the 5.00% strike because DSCR at the strike (1.21x) fails the covenant, however cheap it is",
+     "Recognizes the covenant sets the maximum strike, and tests DSCR at the strike on stressed NOI before settling at 4.50%",
+     "Notes the premium must be budgeted at a dealer quote and that a cap shorter than the loan creates replacement risk"
+    ]
+   },
+   "solution": "K_max = NOI/(DSCR x N) - s = 3.0/(1.25 x 30) - 0.0325 = 0.08 - 0.0325 = 4.75%. DSCR at 4.50% = 3.0/(30 x 0.0775) = 1.290x. xc.cap_premium(30e6, 0.045, 0.04, 0.011, 2) = $110,354 (19.2 bp/yr); at 5.00% = $53,609 but DSCR = 3.0/(30 x 0.0825) = 1.21x fails. Buy 4.50% (or 4.75% if quoted).",
+   "common_mistakes": [
+    "Buying the cheapest strike without checking the covenant",
+    "Sizing DSCR at today's SOFR rather than the strike",
+    "Ignoring that both strikes are out of the money and therefore vega-heavy"
+   ],
+   "intuition": "The cap's strike is chosen by cash flow; its price by the forward and the vol.",
+   "takeaway": "Covenant first, cash-flow stress second, price third.",
+   "related": [
+    "ch18",
+    "ch10"
+   ]
+  },
+  {
+   "id": "D168",
+   "category": "C",
+   "topic": "derivatives_hedging",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Futures hedge and margin buffer",
+   "inputs": {
+    "exposure": 25000000,
+    "rho": 0.8,
+    "sigma_exposure": 0.2,
+    "sigma_futures": 0.16,
+    "futures_price": 5000,
+    "multiplier": 50,
+    "rally": 0.05
+   },
+   "question": "Hedge $25m of REIT shares with index futures at 5,000 ($50 multiplier). Correlation 0.80, vols 20% (REITs) and 16% (futures). (a) Hedge ratio. (b) Contracts. (c) Hedge effectiveness. (d) Variation margin owed on a 5% index rally.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "hedge ratio",
+      "value": 1.0,
+      "tolerance": 0.001,
+      "units": "x"
+     },
+     {
+      "label": "contracts",
+      "value": 100,
+      "tolerance": 0.5,
+      "units": "contracts"
+     },
+     {
+      "label": "effectiveness (variance removed)",
+      "value": 0.64,
+      "tolerance": 0.001,
+      "units": "fraction"
+     },
+     {
+      "label": "variation margin ($)",
+      "value": 1250000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "h* = 0.8 x 0.20/0.16 = 1.00. Contracts = 1.00 x 25,000,000/(5,000 x 50) = 100. Effectiveness = 0.64. Margin = 100 x 50 x 250 = $1,250,000 in cash, the next day.",
+   "common_mistakes": [
+    "Setting the hedge ratio to 1 by assumption rather than from rho and vols",
+    "Forgetting the $50 multiplier",
+    "Assuming the shares' offsetting gain can fund the margin"
+   ],
+   "intuition": "A futures hedge swaps price risk for basis and liquidity risk.",
+   "takeaway": "Size the cash buffer to a stress move in the hedge, not to the expected move.",
+   "related": [
+    "ch18"
+   ]
+  },
+  {
+   "id": "D169",
+   "category": "D",
+   "topic": "cre_debt_derivatives",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Swap breakage on an early sale",
+   "inputs": {
+    "notional": 20000000,
+    "fixed_rate": 0.0425,
+    "zero_1y": 0.0325,
+    "zero_2y": 0.034
+   },
+   "question": "A borrower pays fixed 4.25% on a $20m swap with two annual payments left (accrual 1.0, on a reset date). Annually compounded zero rates are now 3.25% (1y) and 3.40% (2y). The property is being sold and the loan repaid. (a) Annuity factor. (b) Current par swap rate. (c) Termination value to the borrower (pay-fixed). Who pays whom?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "annuity factor",
+      "value": 1.90384,
+      "tolerance": 0.0001,
+      "units": "years"
+     },
+     {
+      "label": "par swap rate (%)",
+      "value": 3.3975,
+      "tolerance": 0.005,
+      "units": "%"
+     },
+     {
+      "label": "value to pay-fixed ($)",
+      "value": -324608,
+      "tolerance": 2,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "P1 = 1/1.0325 = 0.968523; P2 = 1/1.034^2 = 0.935317; A = 1.903840. Par = (1 - 0.935317)/1.903840 = 3.3975%. Value = N(1 - P2) - N K A = 1,293,656 - 1,618,264 = -$324,608. Check: N A (par - K) = 20m x 1.90384 x (0.033975 - 0.0425) = -$324,608. The borrower pays about $325k plus dealer spread.",
+   "common_mistakes": [
+    "Assuming the swap terminates for free with the loan",
+    "Getting the sign backwards: pay-fixed loses when rates fall",
+    "Using the original swap rate as the discount rate"
+   ],
+   "intuition": "A swap is a fixed-rate loan's prepayment penalty in disguise: it crystallizes when you exit after rates fall.",
+   "takeaway": "When the exit date is uncertain, compare the swap's breakage distribution with a cap's premium.",
+   "related": [
+    "ch18",
+    "ch10",
+    "ch06"
+   ]
+  },
+  {
+   "id": "D170",
+   "category": "E",
+   "topic": "cre_debt_derivatives",
+   "difficulty": 4,
+   "time_minutes": 30,
+   "title": "The 'zero-cost' collar on a hotel loan",
+   "inputs": {
+    "loan": 40000000,
+    "term_years": 3,
+    "offered_structure": "zero-cost collar: cap at 5.00%, floor at 3.25%",
+    "information_missing": [
+     "dealer vol quotes by strike",
+     "termination and assignment terms",
+     "credit support annex / lien sharing",
+     "exit date distribution"
+    ]
+   },
+   "question": "A lender's affiliate offers the sponsor of a hotel with a $40m three-year floating loan a 'zero-cost collar': a cap at 5.00% paid for by selling a floor at 3.25%. The sponsor plans to sell in 12\u201336 months. No vol quotes by strike, no termination terms and no credit-support terms are provided. Your deal team wants you to sign today to 'lock in free protection'. What do you do?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Recommends not signing today (abstain) until strike-specific vol quotes, termination/assignment terms and credit-support terms are received; the cheapest correct answer is to wait or buy a plain cap",
+     "Explains that a collar is long a cap and short a floor, so 'zero cost' means the sponsor sells floor value equal to the cap premium; if rates fall, the floor creates a mark-to-market liability that crystallizes on an early sale, like swap breakage",
+     "Notes that with an uncertain exit (12\u201336 months) the floor liability is most likely to be owed when rates have fallen in a downturn, when a sale may be forced",
+     "Identifies that pricing cannot be checked without vol quotes by strike (skew matters for both legs) and that a lender affiliate as counterparty may hold the dealer spread invisibly",
+     "States what would change the answer: competitive quotes from at least two dealers, a termination formula, assignability to a buyer, and an exit date that is near-certain"
+    ]
+   },
+   "solution": "Abstain for now. 'Zero cost' is a statement about the upfront premium, not about value or risk: the sponsor is short a 3.25% floor. On an early sale after rates fall below 3.25%, the sponsor owes the floor's market value. Without strike-specific vol quotes the sponsor cannot check whether the floor sold is worth more than the cap bought (the hidden fee). Request quotes and terms, compare with a plain 5.00% cap bought for cash, and decide then.",
+   "common_mistakes": [
+    "Treating zero upfront cost as zero cost",
+    "Ignoring the floor's breakage on an early exit",
+    "Accepting a single quote from an affiliated counterparty"
+   ],
+   "intuition": "Every 'free' hedge is paid for by an option you sold.",
+   "takeaway": "Name each option you are long and short before signing a hedge, and price the one you sold.",
+   "related": [
+    "ch18",
+    "ch10"
+   ]
+  }
+ ]
+}
