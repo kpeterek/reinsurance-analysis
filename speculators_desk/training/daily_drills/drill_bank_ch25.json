@@ -1,0 +1,303 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D215",
+   "category": "A",
+   "topic": "market_intelligence",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "COT net position as a share of open interest",
+   "inputs": {
+    "long": 210000,
+    "short": 140000,
+    "open_interest": 700000
+   },
+   "question": "In the CFTC Traders in Financial Futures report, Leveraged Funds hold 210,000 long and 140,000 short contracts in a Treasury futures market with open interest of 700,000. Give the net position and the net as a percentage of open interest. As of which day's close are these positions?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "net position (contracts)",
+      "value": 70000,
+      "tolerance": 0.5,
+      "units": "contracts"
+     },
+     {
+      "label": "net as % of open interest",
+      "value": 10.0,
+      "tolerance": 0.05,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Net = 210,000 - 140,000 = 70,000. 70,000/700,000 = 10.0%. Positions are as of Tuesday's close; the report is normally released Friday at 3:30 p.m. ET (CFTC).",
+   "common_mistakes": [
+    "Dividing by gross long rather than open interest",
+    "Treating the Friday release as current positioning",
+    "Reading a leveraged-fund futures short as a directional view when it may be one leg of a cash-futures basis trade"
+   ],
+   "intuition": "The COT is a free, widely followed, three-day-old count. It describes potential squeeze fuel, not timing.",
+   "takeaway": "Grade COT relevance low for timing and moderate for risk: who would have to cover if the move goes the other way?",
+   "related": [
+    "ch25",
+    "ch22"
+   ]
+  },
+  {
+   "id": "D216",
+   "category": "A",
+   "topic": "calibration",
+   "difficulty": 1,
+   "time_minutes": 1,
+   "title": "Brier score of four journal forecasts",
+   "inputs": {
+    "forecasts": [
+     0.9,
+     0.6,
+     0.2,
+     0.7
+    ],
+    "outcomes": [
+     1,
+     0,
+     0,
+     1
+    ]
+   },
+   "question": "Your journal has four resolved forecasts: 0.9 (happened), 0.6 (did not), 0.2 (did not), 0.7 (happened). Compute the Brier score. Is it better than always saying 0.5?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "Brier score",
+      "value": 0.125,
+      "tolerance": 0.0005,
+      "units": "score"
+     }
+    ]
+   },
+   "solution": "(0.1^2 + 0.6^2 + 0.2^2 + 0.3^2)/4 = (0.01 + 0.36 + 0.04 + 0.09)/4 = 0.50/4 = 0.125. Always saying 0.5 scores 0.25, so this is better, but four forecasts prove nothing about skill.",
+   "common_mistakes": [
+    "Squaring (1 - f) for every forecast regardless of outcome",
+    "Treating a score from four forecasts as evidence of calibration"
+   ],
+   "intuition": "The score punishes confident misses quadratically: the single 0.6 miss contributes 72% of the total.",
+   "takeaway": "Use sdesk.stats.brier_score on the whole journal quarterly; the decomposition (reliability vs resolution) needs dozens of forecasts per bin.",
+   "related": [
+    "ch25",
+    "ch20"
+   ]
+  },
+  {
+   "id": "D217",
+   "category": "B",
+   "topic": "pnl_attribution",
+   "difficulty": 2,
+   "time_minutes": 2,
+   "title": "Separate the hedge from the stock-picking",
+   "inputs": {
+    "es_entry": 6000,
+    "es_exit": 5940,
+    "es_contracts": 4,
+    "multiplier": 50,
+    "reit_value": 1000000,
+    "reit_beta": 1.0,
+    "reit_return": -0.025
+   },
+   "question": "You are short 4 ES contracts ($50 multiplier) from 6,000 to 5,940 and long a $1,000,000 REIT basket (beta 1.0 to ES) that returned -2.5%. Compute the ES P&L, the REIT's systematic P&L, and its idiosyncratic P&L. Did the hedge work?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "ES P&L ($)",
+      "value": 12000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "REIT systematic P&L ($)",
+      "value": -10000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "REIT idiosyncratic P&L ($)",
+      "value": -15000,
+      "tolerance": 1,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "ES: (-1)(5,940 - 6,000)(50)(4) = +12,000. Index return = -1.0%. REIT systematic = 1,000,000 x 1.0 x -0.01 = -10,000. REIT total = -25,000, so idiosyncratic = -15,000. The hedge over-covered beta (+12,000 vs -10,000; notional 1.2m vs 1.0m beta exposure). The loss is stock-specific.",
+   "common_mistakes": [
+    "Calling the whole -25,000 a market loss",
+    "Forgetting the short side sign on the futures"
+   ],
+   "intuition": "Attribution tells you which thesis the P&L belongs to. Here the hedge did its job, and the selection thesis lost money.",
+   "takeaway": "Review the idiosyncratic term against the thesis on file. A -2.5% idiosyncratic week may be noise; check it against its usual dispersion before acting.",
+   "related": [
+    "ch25",
+    "ch13"
+   ]
+  },
+  {
+   "id": "D218",
+   "category": "C",
+   "topic": "trade_ticket",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Trade ticket: invalidation versus gap risk",
+   "inputs": {
+    "contracts": 40,
+    "dv01_per_contract": 85,
+    "invalidation_bp": 15,
+    "gap_bp": 35,
+    "limit": 100000
+   },
+   "question": "A ticket proposes short 40 10-year note futures (DV01 $85 each) into a payroll release. Invalidation is 15 bp against you; a 35 bp gap is plausible on the release. The per-trade limit is $100,000. Compute the loss at invalidation, the gap loss, and the maximum contracts within the limit under the gap. Decide: trade as proposed, resize, or wait.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "loss at invalidation ($)",
+      "value": 51000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "gap loss ($)",
+      "value": 119000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "maximum contracts under gap",
+      "value": 33,
+      "tolerance": 0.5,
+      "units": "contracts"
+     }
+    ],
+    "rubric": [
+     "Computes DV01 3,400/bp, invalidation loss 51,000 and gap loss 119,000",
+     "Recognizes that the stop does not cap the loss across a release gap",
+     "Resizes to 33 contracts or waits until after the release; records any exception with an approver",
+     "States the thesis invalidation separately from the price stop"
+    ]
+   },
+   "solution": "DV01 = 40 x 85 = 3,400/bp. Invalidation loss = 3,400 x 15 = 51,000. Gap loss = 3,400 x 35 = 119,000 > 100,000. Max contracts = floor(100,000/(85 x 35)) = floor(33.6) = 33. Resize to 33 or wait for the release.",
+   "common_mistakes": [
+    "Sizing to the stop distance only",
+    "Rounding 33.6 up to 34, which breaches the limit"
+   ],
+   "intuition": "On release days the relevant loss is the gap, not the stop.",
+   "takeaway": "Every ticket carries a gap-loss line; size to the larger of stop loss and gap loss.",
+   "related": [
+    "ch25",
+    "ch21"
+   ]
+  },
+  {
+   "id": "D219",
+   "category": "E",
+   "topic": "market_intelligence",
+   "difficulty": 5,
+   "time_minutes": 30,
+   "title": "Conflicting signals and a threshold you cannot clear",
+   "inputs": {
+    "prior": 0.5,
+    "likelihood_ratios": {
+     "lender": 1.5,
+     "transactions": 0.7,
+     "industry": 1.2
+    },
+    "correlated_with_lender": "industry",
+    "decision_threshold": 0.55
+   },
+   "question": "Hypothesis: office cap rates in your submarket widen >= 50 bp within a year. Prior 0.50. Lender term sheets (LR 1.5), a transaction database showing tight comps (LR 0.7), and a brokerage industry report warning of widening (LR 1.2) arrive. The broker's report cites the same lender survey you used. You will cut your bid only if P >= 0.55. Compute the posterior with all three signals independent, and with the industry report dropped as a duplicate of the lender signal. Decide.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "posterior, independent (%)",
+      "value": 55.75,
+      "tolerance": 0.05,
+      "units": "%"
+     },
+     {
+      "label": "posterior, duplicate removed (%)",
+      "value": 51.22,
+      "tolerance": 0.05,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "Computes both posteriors via odds x product of LRs",
+     "Identifies the industry report as a likely duplicate of the lender signal",
+     "Notes that the threshold lies between the two posteriors, so the decision depends on an assumption rather than evidence",
+     "Chooses to gather independent evidence (direct lender questions, recent bid-ask spreads on marketed assets) or to abstain from changing the bid; does not average",
+     "States what new evidence would move the posterior decisively"
+    ]
+   },
+   "solution": "Independent: odds 1 x (1.5 x 0.7 x 1.2) = 1.26, P = 55.75%. Duplicate removed: odds 1.05, P = 51.22%. The threshold (55%) sits between them. Best answer: do not act on the current evidence; gather an independent signal first, and if none is available by the bid date, abstain from changing the bid.",
+   "common_mistakes": [
+    "Counting a brokerage report that recycles lender data as a third independent signal",
+    "Averaging the two posteriors and acting on 53.5%"
+   ],
+   "intuition": "Repetition is not confirmation. Three documents can carry two pieces of information.",
+   "takeaway": "When the decision flips on the independence assumption, the next hour belongs to testing that assumption.",
+   "related": [
+    "ch25",
+    "ch03",
+    "ch20"
+   ]
+  },
+  {
+   "id": "D220",
+   "category": "D",
+   "topic": "desk_process",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "The cost of hand transcription",
+   "inputs": {
+    "error_rate": 0.004,
+    "numbers_per_day": 120,
+    "check_catch_rate": 0.9
+   },
+   "question": "Your morning blotter process copies 120 numbers by hand, with an assumed 0.4% error rate per copy. Compute the probability of at least one error per morning, the same probability with an independent check that catches 90% of errors, and the expected number of errors per morning without the check. What does this imply for a paper-based routine?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "P(>=1 error), no check (%)",
+      "value": 38.18,
+      "tolerance": 0.05,
+      "units": "%"
+     },
+     {
+      "label": "P(>=1 error), with check (%)",
+      "value": 4.69,
+      "tolerance": 0.05,
+      "units": "%"
+     },
+     {
+      "label": "expected errors per morning",
+      "value": 0.48,
+      "tolerance": 0.005,
+      "units": "errors"
+     }
+    ]
+   },
+   "solution": "1 - 0.996^120 = 38.18%. With the check, q = 0.0004, and 1 - 0.9996^120 = 4.69%. Expected errors = 120 x 0.004 = 0.48. Keep paper for selection and judgment; do arithmetic in code; use the paper sheet as a control total.",
+   "common_mistakes": [
+    "Computing 120 x 0.4% = 48% and calling it a probability",
+    "Assuming the check removes all errors"
+   ],
+   "intuition": "Small per-number error rates compound across a sheet. The slowness of paper is a filter, not an accuracy guarantee.",
+   "takeaway": "Reduce the count of hand-copied numbers before adding checks: the cheapest error is the number you never copy.",
+   "related": [
+    "ch25"
+   ]
+  }
+ ]
+}
