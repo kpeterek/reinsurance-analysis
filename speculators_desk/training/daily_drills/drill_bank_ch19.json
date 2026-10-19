@@ -1,0 +1,299 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D171",
+   "category": "A",
+   "topic": "private_funds",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "DPI, RVPI, TVPI",
+   "inputs": {
+    "called": 80,
+    "distributed": 24,
+    "nav": 76
+   },
+   "question": "A fund has called $80m, distributed $24m and reports NAV of $76m. Give DPI, RVPI and TVPI.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "DPI",
+      "value": 0.3,
+      "tolerance": 0.005,
+      "units": "x"
+     },
+     {
+      "label": "RVPI",
+      "value": 0.95,
+      "tolerance": 0.005,
+      "units": "x"
+     },
+     {
+      "label": "TVPI",
+      "value": 1.25,
+      "tolerance": 0.005,
+      "units": "x"
+     }
+    ]
+   },
+   "solution": "DPI = 24/80 = 0.30x. RVPI = 76/80 = 0.95x. TVPI = 1.25x, of which 76% is an estimate.",
+   "common_mistakes": [
+    "Dividing by commitments instead of paid-in capital",
+    "Reporting TVPI as if it were realized"
+   ],
+   "intuition": "Only DPI is cash. RVPI is the GP's estimate of what is left.",
+   "takeaway": "Early in a fund's life, TVPI is mostly an appraisal.",
+   "related": [
+    "ch19",
+    "ch02"
+   ]
+  },
+  {
+   "id": "D172",
+   "category": "A",
+   "topic": "collectibles",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "Auction round trip",
+   "inputs": {
+    "hammer": 800000,
+    "buyer_premium": 0.27,
+    "seller_commission": 0.1,
+    "years": 5
+   },
+   "question": "A work is bought at an $800,000 hammer with a 27% buyer's premium and later resold at the same hammer with a 10% seller's commission. What is the round-trip cost, and the annual drag over a 5-year hold?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "round-trip cost (%)",
+      "value": 29.13,
+      "tolerance": 0.02,
+      "units": "%"
+     },
+     {
+      "label": "annual drag (%)",
+      "value": 6.65,
+      "tolerance": 0.02,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Paid = 800,000 x 1.27 = 1,016,000. Net = 800,000 x 0.90 = 720,000. Round trip = 1 - 720/1,016 = 29.13%. Drag = 1 - 0.7087^(1/5) = 6.65% a year.",
+   "common_mistakes": [
+    "Adding 27% + 10% = 37%",
+    "Ignoring the premium because an index measures hammer prices"
+   ],
+   "intuition": "Two fees on two different bases: the premium is on top of the hammer, the commission comes out of it.",
+   "takeaway": "Hammer prices must rise about 6.7% a year for five years just to get the money back.",
+   "related": [
+    "ch19",
+    "ch02"
+   ]
+  },
+  {
+   "id": "D173",
+   "category": "B",
+   "topic": "private_funds",
+   "difficulty": 3,
+   "time_minutes": 2,
+   "title": "TVPI versus KS-PME",
+   "inputs": {
+    "calls": [
+     50,
+     50,
+     0,
+     0
+    ],
+    "distributions": [
+     0,
+     0,
+     60,
+     90
+    ],
+    "index": [
+     100,
+     120,
+     140,
+     150
+    ]
+   },
+   "question": "Calls of 50 at years 0 and 1, distributions of 60 at year 2 and 90 at year 3. Index levels 100, 120, 140, 150. Compute TVPI and KS-PME. Did the fund beat the index?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "TVPI",
+      "value": 1.5,
+      "tolerance": 0.005,
+      "units": "x"
+     },
+     {
+      "label": "KS-PME",
+      "value": 1.1221,
+      "tolerance": 0.002,
+      "units": "x"
+     }
+    ],
+    "rubric": [
+     "Computes TVPI = 150/100 = 1.50x",
+     "Computes KS-PME = (60/140 + 90/150)/(50/100 + 50/120) = 1.028571/0.916667 = 1.12",
+     "Interprets KS-PME > 1 as outperformance in index units, not risk-adjusted",
+     "Notes that a 1.50x multiple overstates the advantage because the index itself rose 50%",
+     "Asks about the fund's leverage (beta above one) before calling it skill"
+    ]
+   },
+   "solution": "TVPI = 1.50x. Index units: calls 0.5 + 0.4167 = 0.9167; distributions 0.4286 + 0.6 = 1.0286. KS-PME = 1.12. The fund beat the index by 12% in index units over three years, before any beta adjustment.",
+   "common_mistakes": [
+    "Comparing TVPI with the index's 1.50x end level and concluding the fund merely matched",
+    "Discounting at a fixed rate instead of the realized index return"
+   ],
+   "intuition": "KS-PME converts every dollar into index units on its own date.",
+   "takeaway": "Report a PME with every private-fund multiple.",
+   "related": [
+    "ch19",
+    "ch22"
+   ]
+  },
+  {
+   "id": "D174",
+   "category": "C",
+   "topic": "private_funds",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "A discount to a stale NAV",
+   "inputs": {
+    "nav": 40.0,
+    "beta": 1.4,
+    "index_move": -0.18,
+    "bid_pct_nav": 0.82
+   },
+   "question": "A seller offers an LP interest at 82% of a $40.0m NAV struck before listed comparables fell 18%. The fund's beta to that index is about 1.4. A colleague says it is an 18% discount. Re-mark the NAV and state the bid against it. Would you buy?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "corrected NAV ($m)",
+      "value": 29.92,
+      "tolerance": 0.01,
+      "units": "$m"
+     },
+     {
+      "label": "bid vs corrected NAV (%)",
+      "value": 9.63,
+      "tolerance": 0.05,
+      "units": "%"
+     }
+    ],
+    "rubric": [
+     "Computes corrected value 40 x (1 - 1.4 x 0.18) = 29.92",
+     "Computes 32.8/29.92 - 1 = +9.6%: a premium, not a discount",
+     "Questions the beta estimate and tests a second value",
+     "Considers unfunded commitments and the remaining J-curve",
+     "Declines at this price or re-bids below corrected NAV; states what would change the view (an updated mark, portfolio detail)"
+    ]
+   },
+   "solution": "Corrected NAV = 40.0 x (1 - 0.252) = $29.92m. Bid = 0.82 x 40 = $32.8m, 9.6% above corrected value. Re-bid below about $29.9m less a liquidity discount, or wait for the next mark.",
+   "common_mistakes": [
+    "Accepting the stale mark as current value",
+    "Ignoring unfunded commitments that come with the interest"
+   ],
+   "intuition": "A discount to an old price can be a premium to the current one.",
+   "takeaway": "Re-mark before you negotiate.",
+   "related": [
+    "ch19",
+    "ch02",
+    "ch13"
+   ]
+  },
+  {
+   "id": "D175",
+   "category": "D",
+   "topic": "venture",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "The fund without the unicorn",
+   "inputs": {
+    "p_top": 0.03,
+    "x_top": 40,
+    "n_deals": 15,
+    "mean_multiple": 2.4
+   },
+   "question": "Seed deals have a mean multiple of 2.4x; 3% of deals return 40x. A manager makes 15 independent equal-sized investments. What is the probability the fund holds no 40x deal, and its expected multiple in that case? What should an LP expect from one commitment?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "P(no 40x) (%)",
+      "value": 63.33,
+      "tolerance": 0.05,
+      "units": "%"
+     },
+     {
+      "label": "E[multiple | no 40x]",
+      "value": 1.2371,
+      "tolerance": 0.002,
+      "units": "x"
+     }
+    ],
+    "rubric": [
+     "Computes 0.97^15 = 63.3%",
+     "Computes (2.4 - 0.03 x 40)/0.97 = 1.24x",
+     "Concludes the median commitment is far below the 2.4x mean",
+     "Links the result to portfolio size and to manager access",
+     "Sizes the commitment so that a sub-1.5x outcome is acceptable"
+    ]
+   },
+   "solution": "P(no 40x) = 0.97^15 = 63.3%. Conditional mean = 1.2/0.97 = 1.24x. Most single commitments will not contain the deal that makes the average.",
+   "common_mistakes": [
+    "Treating the mean as the typical outcome",
+    "Assuming diversification raises the mean (it raises the median)"
+   ],
+   "intuition": "Half the average comes from 3% of deals.",
+   "takeaway": "Underwrite venture commitments on the median, not the mean.",
+   "related": [
+    "ch19",
+    "ch21"
+   ]
+  },
+  {
+   "id": "D176",
+   "category": "E",
+   "topic": "digital_assets",
+   "difficulty": 5,
+   "time_minutes": 30,
+   "title": "Collateral the borrower printed",
+   "inputs": {
+    "loan_usd_m": 50,
+    "collateral": "borrower's affiliated exchange token, market value $90m",
+    "daily_volume_token_usd_m": 12,
+    "audited": false,
+    "rate_offered": 0.14
+   },
+   "question": "A trading firm asks the family office for a $50m one-year loan at 14%, secured by $90m (180% coverage) of a token issued by its affiliated exchange. Daily token volume is about $12m. The firm's financials are unaudited, the firm's CEO says the token 'cannot fall below $20 because we will buy it', and a broker says three other lenders have already committed. Information on who else holds the token is not available. Decide.",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Identifies the collateral as self-referential: its value falls when the borrower's solvency is questioned",
+     "Notes that $90m of collateral is 7.5 days of total market volume, so liquidation value is far below market value",
+     "Treats the price-support promise as a liability of the same borrower, not as protection",
+     "Treats other lenders' commitments as non-evidence (and possibly as competing claims on the same collateral)",
+     "Recommends abstention, or states conditions (independent collateral, audited accounts) so strict they amount to abstention"
+    ]
+   },
+   "solution": "Abstain. Haircut the token to near zero in the stress state, because it is most likely to collapse when the borrower defaults. Coverage of 180% at market is close to 0% in the state that matters. 14% does not compensate for an unsecured loan to an unaudited borrower. This is the structure documented in the 2022 FTX/Alameda episode (Chapter 19 \u00a719.9).",
+   "common_mistakes": [
+    "Relying on the 180% coverage ratio",
+    "Treating a liquid quoted price as liquidation value"
+   ],
+   "intuition": "Collateral is only valuable if it is worth something when the borrower is not.",
+   "takeaway": "Self-issued collateral is unsecured credit with extra steps.",
+   "related": [
+    "ch19",
+    "ch03",
+    "ch17"
+   ]
+  }
+ ]
+}
