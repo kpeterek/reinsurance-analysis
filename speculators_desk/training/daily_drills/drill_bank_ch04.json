@@ -1,0 +1,393 @@
+{
+  "schema_version": 1,
+  "notes": "Chapter 4 drills (D087-D094). Numeric answers are verified by tests/test_drills.py against drill_checks_ch04.py. All scenario facts are hypothetical.",
+  "drills": [
+    {
+      "id": "D087",
+      "category": "A",
+      "topic": "macro_interpretation",
+      "difficulty": 1,
+      "time_minutes": 0.5,
+      "title": "Annualizing a quarterly GDP decline",
+      "inputs": {
+        "qoq_growth": -0.006
+      },
+      "question": "Real GDP fell 0.6% quarter on quarter. What annualized rate will the BEA report, and how far is it from the simple 4 x q approximation?",
+      "answer": {
+        "type": "numeric",
+        "parts": [
+          {
+            "label": "annualized growth (%)",
+            "value": -2.3785,
+            "tolerance": 0.005,
+            "units": "%"
+          },
+          {
+            "label": "annualized minus 4q (percentage points)",
+            "value": 0.0215,
+            "tolerance": 0.002,
+            "units": "pp"
+          }
+        ]
+      },
+      "solution": "a = (1 + q)^4 - 1 = (0.994)^4 - 1 = -2.3785%. Simple approximation 4 x -0.6% = -2.40%. Compounding makes the decline 0.0215 points smaller in magnitude (the gap is 6q^2 + 4q^3 + q^4 = +0.000215).",
+      "common_mistakes": [
+        "Annualizing a number the BEA has already annualized (reporting -9.1% from a headline of -2.4%)",
+        "Treating the compounding gap as material at normal growth rates; it is about 2 bp here"
+      ],
+      "intuition": "The headline quarterly GDP number is the quarter's change compounded over four quarters; a 0.6% quarterly fall is reported as roughly -2.4%.",
+      "takeaway": "Always ask whether a growth figure is q/q, annualized or year over year before comparing it with anything.",
+      "related": [
+        "ch04"
+      ]
+    },
+    {
+      "id": "D088",
+      "category": "A",
+      "topic": "macro_interpretation",
+      "difficulty": 2,
+      "time_minutes": 1,
+      "title": "Contributions: investment versus consumption",
+      "inputs": {
+        "shares": {
+          "C": 0.68,
+          "I": 0.17,
+          "G": 0.17,
+          "NX": -0.02
+        },
+        "growth": {
+          "C": 0.005,
+          "I": -0.1,
+          "G": 0.0,
+          "NX": 0.0
+        }
+      },
+      "question": "Shares of GDP: consumption 68%, investment 17%, government 17%, net exports -2%. Consumption grows 0.5%, investment falls 10%, government and net exports are unchanged. Give investment's and consumption's contributions and GDP growth, in percentage points.",
+      "answer": {
+        "type": "numeric",
+        "parts": [
+          {
+            "label": "investment contribution (pp)",
+            "value": -1.7,
+            "tolerance": 0.005,
+            "units": "pp"
+          },
+          {
+            "label": "consumption contribution (pp)",
+            "value": 0.34,
+            "tolerance": 0.005,
+            "units": "pp"
+          },
+          {
+            "label": "GDP growth (%)",
+            "value": -1.36,
+            "tolerance": 0.005,
+            "units": "%"
+          }
+        ]
+      },
+      "solution": "Contribution = share x growth. I: 0.17 x -10% = -1.70 pp. C: 0.68 x 0.5% = +0.34 pp. GDP = -1.70 + 0.34 = -1.36%.",
+      "common_mistakes": [
+        "Weighting the components equally",
+        "Reading the 10% investment decline as a 10% hit to GDP"
+      ],
+      "intuition": "A sixth of GDP that swings 10% outweighs two-thirds of GDP that moves half a percent.",
+      "takeaway": "Recessions are usually investment events; ask which components moved before translating a GDP print into property demand.",
+      "related": [
+        "ch04",
+        "ch08"
+      ]
+    },
+    {
+      "id": "D089",
+      "category": "C",
+      "topic": "macro_interpretation",
+      "difficulty": 3,
+      "time_minutes": 5,
+      "title": "Sahm rule from raw unemployment rates",
+      "inputs": {
+        "unemployment_rate": [
+          3.7,
+          3.7,
+          3.6,
+          3.6,
+          3.7,
+          3.7,
+          3.8,
+          3.8,
+          3.8,
+          3.9,
+          4.0,
+          4.0,
+          4.1,
+          4.2,
+          4.3
+        ]
+      },
+      "question": "Monthly unemployment rates for months 1-15 are 3.7, 3.7, 3.6, 3.6, 3.7, 3.7, 3.8, 3.8, 3.8, 3.9, 4.0, 4.0, 4.1, 4.2, 4.3 (%). Compute the Sahm indicator for month 15 (three-month average minus the minimum three-month average of the previous 12 months). Does it signal? Your fund's policy says to stop signing new hotel acquisitions when the rule signals; what do you do with a hotel bid due next week?",
+      "answer": {
+        "type": "mixed",
+        "parts": [
+          {
+            "label": "Sahm indicator, month 15 (pp)",
+            "value": 0.5667,
+            "tolerance": 0.001,
+            "units": "pp"
+          }
+        ],
+        "rubric": [
+          "Computes the month-15 average (4.1 + 4.2 + 4.3)/3 = 4.2000 and the window minimum 3.6333 (months 4 and 5), giving 0.5667",
+          "States that the rule has signalled (>= 0.50) and that the policy therefore applies",
+          "Recognizes the rule as recognition, not forecast: the recession may already have begun, so hotel NOI risk is near-term",
+          "Does not override the policy on the grounds that the level of unemployment is still low; if an exception is argued, it is documented with a specific reason (for example, a labor-supply-driven rise visible in participation and claims data)"
+        ]
+      },
+      "solution": "Three-month averages: month 3 = 3.6667, months 4 and 5 = 3.6333, month 6 = 3.6667 ... month 15 = 4.2000. Window for month 15 = months 3-14; minimum 3.6333. S = 4.2000 - 3.6333 = 0.5667 >= 0.50: the rule signals. Under the policy the bid is withdrawn or put on hold.",
+      "common_mistakes": [
+        "Using monthly rates rather than three-month averages",
+        "Taking the minimum of the raw monthly rates (3.6), which gives 0.60",
+        "Treating a low level of unemployment as evidence against the signal"
+      ],
+      "intuition": "The rule measures the change in unemployment, which captures the labor-income loop; the level is irrelevant.",
+      "takeaway": "A pre-committed rule is valuable because it cannot be argued away in the meeting where it matters.",
+      "related": [
+        "ch04",
+        "ch20"
+      ]
+    },
+    {
+      "id": "D090",
+      "category": "B",
+      "topic": "macro_interpretation",
+      "difficulty": 2,
+      "time_minutes": 2,
+      "title": "Payroll beat, household survey miss",
+      "inputs": {
+        "payrolls_vs_consensus": 60000,
+        "prior_revisions": -90000,
+        "household_employment_change": -300000,
+        "unemployment_rate_change": 0.2
+      },
+      "question": "Payrolls beat consensus by 60,000, but the prior two months were revised down 90,000, household-survey employment fell 300,000 and the unemployment rate rose 0.2 point. Two-year yields fall 8 bp. Explain the market reaction and what you would check next.",
+      "answer": {
+        "type": "judgment",
+        "rubric": [
+          "Computes the effective payroll surprise including revisions: +60,000 - 90,000 = -30,000, so the report is weaker than consensus on the level of employment",
+          "Notes that the household survey is noisier month to month but can turn first near cycle peaks; a 0.2-point rise moves the Sahm indicator",
+          "Explains the yield fall as the market weighting revisions and the unemployment rate over the headline",
+          "Names the next checks: initial jobless claims trend, the Sahm indicator value, wage growth and hours, and whether the household weakness is in participation or in employment"
+        ]
+      },
+      "solution": "The headline beat is offset by revisions (effective surprise -30,000) and the household survey and unemployment rate point to weakness. Front-end yields fall because the probability of policy easing rose. Check claims, hours, and the Sahm reading before concluding either way.",
+      "common_mistakes": [
+        "Reading the headline beat alone",
+        "Dismissing the household survey because it is noisy, without checking whether claims confirm it"
+      ],
+      "intuition": "Markets trade the revision to the level of employment, not the headline change.",
+      "takeaway": "Compute the effective surprise before interpreting any payroll reaction.",
+      "related": [
+        "ch04",
+        "ch05"
+      ]
+    },
+    {
+      "id": "D091",
+      "category": "C",
+      "topic": "probability_decision",
+      "difficulty": 3,
+      "time_minutes": 5,
+      "title": "Inverted curve, base rate, and a floating-rate hotel",
+      "inputs": {
+        "prior": 0.2,
+        "p_inv_given_r": 0.9,
+        "p_inv_given_not_r": 0.15
+      },
+      "question": "Your prior that a recession starts within 12-18 months is 20%. The curve has inverted. Assume P(inversion | recession) = 0.90 and P(inversion | no recession) = 0.15. Compute the posterior. A sponsor's hotel acquisition with floating-rate debt works only if the recession probability is below 25%. Decide.",
+      "answer": {
+        "type": "mixed",
+        "parts": [
+          {
+            "label": "posterior recession probability (%)",
+            "value": 60.0,
+            "tolerance": 0.05,
+            "units": "%"
+          }
+        ],
+        "rubric": [
+          "Computes 0.18/(0.18 + 0.12) = 60%",
+          "Notes that the false-positive rate is uncertain (small sample; 1966 and 2022-24 episodes) and shows the posterior remains far above 25% even at a 25-30% false-positive rate",
+          "Concludes that the deal as structured should not proceed, or only with lower leverage, a fixed rate or long cap, and a price based on trough NOI",
+          "Does not claim certainty of recession; frames the answer as a scenario weight"
+        ]
+      },
+      "solution": "P(R|Inv) = 0.9 x 0.2 / (0.9 x 0.2 + 0.15 x 0.8) = 0.18/0.30 = 60%. Even with a 30% false-positive rate the posterior is 0.18/(0.18 + 0.24) = 43%. The deal's 25% tolerance is breached; restructure or pass.",
+      "common_mistakes": [
+        "Reading 90% hit rate as 90% recession probability",
+        "Ignoring the base rate"
+      ],
+      "intuition": "The signal's value depends on how often it appears without a recession, not only on how often it appears before one.",
+      "takeaway": "Translate every indicator into a likelihood ratio and an explicit posterior before it enters an IC memo.",
+      "related": [
+        "ch04",
+        "ch20"
+      ]
+    },
+    {
+      "id": "D092",
+      "category": "D",
+      "topic": "hotel_operations",
+      "difficulty": 3,
+      "time_minutes": 15,
+      "title": "Hotel NOI and DSCR in a recession",
+      "inputs": {
+        "revenue": 12000000,
+        "fixed_costs": 4200000,
+        "variable_ratio": 0.35,
+        "revenue_change": -0.12,
+        "debt_service": 2400000
+      },
+      "question": "A hotel has total revenue of $12.0m, fixed costs of $4.2m, and variable costs (including fees and a 4% FF&E reserve) of 35% of revenue. Annual debt service is $2.4m. A recession cuts revenue 12%. Compute recession NOI, the percentage change in NOI, and the DSCR.",
+      "answer": {
+        "type": "numeric",
+        "parts": [
+          {
+            "label": "recession NOI ($)",
+            "value": 2664000,
+            "tolerance": 1,
+            "units": "$"
+          },
+          {
+            "label": "NOI change (%)",
+            "value": -26.0,
+            "tolerance": 0.05,
+            "units": "%"
+          },
+          {
+            "label": "DSCR (x)",
+            "value": 1.11,
+            "tolerance": 0.005,
+            "units": "x"
+          }
+        ]
+      },
+      "solution": "NOI0 = 12.0 x 0.65 - 4.2 = $3.60m (DSCR 1.50x). Revenue 10.56m; NOI1 = 10.56 x 0.65 - 4.2 = $2.664m, -26.0%. Degree of operating leverage = 7.8/3.6 = 2.17. DSCR = 2.664/2.4 = 1.11x.",
+      "common_mistakes": [
+        "Applying the 12% revenue decline to NOI one-for-one (-12%)",
+        "Using GOP or EBITDA instead of NOI after reserve for the DSCR",
+        "Forgetting that fees and reserve vary with revenue while labor minimums and taxes do not"
+      ],
+      "intuition": "Hotel fixed costs do not shrink with revenue, so NOI falls about twice as fast as revenue.",
+      "takeaway": "Size hotel debt on trough NOI; a 1.50x DSCR at the peak is about 1.1x in an ordinary recession.",
+      "related": [
+        "ch04",
+        "ch11"
+      ]
+    },
+    {
+      "id": "D093",
+      "category": "C",
+      "topic": "cre_debt",
+      "difficulty": 3,
+      "time_minutes": 5,
+      "title": "SLOOS tightening to a refinancing gap",
+      "inputs": {
+        "counts": {
+          "tightened_considerably": 5,
+          "tightened_somewhat": 21,
+          "eased_somewhat": 4,
+          "eased_considerably": 0,
+          "respondents": 70
+        },
+        "noi": 1500000,
+        "cap_rate": 0.075,
+        "rate": 0.07,
+        "amort_years": 30,
+        "ltv_max": 0.6,
+        "dscr_min": 1.35,
+        "debt_yield_min": 0.1,
+        "existing_loan": 13500000
+      },
+      "question": "Of 70 SLOOS respondents, 5 tightened CRE standards considerably, 21 somewhat, 40 were unchanged and 4 eased somewhat. Compute the net percentage tightening. Your building has NOI of $1.5m and a $13.5m loan maturing. New terms: value at a 7.5% cap, max LTV 60%, min DSCR 1.35x at 7.0% on 30-year amortization, min debt yield 10%. Compute the maximum loan and the refinancing gap.",
+      "answer": {
+        "type": "numeric",
+        "parts": [
+          {
+            "label": "net percentage tightening (%)",
+            "value": 31.43,
+            "tolerance": 0.01,
+            "units": "%"
+          },
+          {
+            "label": "maximum loan ($)",
+            "value": 12000000,
+            "tolerance": 1,
+            "units": "$"
+          },
+          {
+            "label": "refinancing gap ($)",
+            "value": 1500000,
+            "tolerance": 1,
+            "units": "$"
+          }
+        ]
+      },
+      "solution": "Net = (5 + 21 - 4)/70 = 31.43%. Value = 1.5/0.075 = $20.0m. LTV test 0.60 x 20.0 = $12.0m; DSCR test: constant 0.07984, 1.5/1.35/0.07984 = $13.92m; debt yield 1.5/0.10 = $15.0m. LTV binds at $12.0m. Gap = 13.5 - 12.0 = $1.5m.",
+      "common_mistakes": [
+        "Counting only 'considerably' responses",
+        "Excluding 'unchanged' banks from the denominator",
+        "Taking the largest rather than the smallest constraint"
+      ],
+      "intuition": "Breadth of tightening in the survey shows up at the property level as a lower LTV on a lower value.",
+      "takeaway": "Run the maturity test early; the gap usually grows as the cycle proceeds.",
+      "related": [
+        "ch04",
+        "ch10",
+        "ch12"
+      ]
+    },
+    {
+      "id": "D094",
+      "category": "E",
+      "topic": "probability_decision",
+      "difficulty": 5,
+      "time_minutes": 30,
+      "title": "Contradictory data, one-week deadline: the case for abstaining",
+      "inputs": {
+        "advance_gdp_annualized": 0.025,
+        "inventory_contribution_pp": 1.8,
+        "gdi_prior_quarter_annualized": -0.004,
+        "sahm_indicator": 0.42,
+        "curve_10y3m_bp_change_3m": 60,
+        "hotel_market_revpar_yoy": -0.04,
+        "seller_pnls_years": 1,
+        "pcr_available": false,
+        "bid_deadline_days": 7
+      },
+      "question": "A seller wants a firm, non-contingent bid on a 200-room urban hotel within seven days, at a 7.5% cap on trailing NOI. Advance GDP is +2.5% annualized, but inventories contributed 1.8 points; GDI for the prior quarter was -0.4%; the Sahm indicator is 0.42; the 10y-3m curve has re-steepened 60 bp from deep inversion as markets price cuts; market RevPAR is -4% year over year. The seller provides one year of P&Ls and no property-condition report. What do you do?",
+      "answer": {
+        "type": "judgment",
+        "rubric": [
+          "Identifies that underlying demand (GDP ex-inventories about +0.7%), GDI, the Sahm reading and market RevPAR all point toward elevated recession risk, while headline GDP is the only strong datum",
+          "Recognizes that the information gap (one year of P&Ls, no PCR, no contingencies) creates adverse selection that cannot be priced in a week",
+          "Shows that a 7.5% cap on trailing NOI becomes a much lower yield on recession NOI given hotel operating leverage near 2x",
+          "Concludes that the best answer is to abstain from a firm bid, or to offer only a conditional bid (diligence period, three years of P&Ls, price based on trough NOI) that the seller may reject",
+          "States what would change the decision: full diligence access, a lower price, or data that lower the recession probability (claims and household employment stabilizing, Sahm reading below 0.30)"
+        ]
+      },
+      "solution": "This is a deliberately unfavorable combination: high and rising recession probability, the most cyclical property type, a price based on trailing NOI, and no diligence. Abstention, or a conditional bid the seller is free to refuse, dominates. A firm bid at the asking terms earns no credit regardless of the argument offered.",
+      "common_mistakes": [
+        "Anchoring on headline GDP",
+        "Treating the curve's re-steepening as an all-clear when it reflects priced rate cuts",
+        "Bidding to 'stay in the deal flow' without a price that works on trough NOI"
+      ],
+      "intuition": "When the macro evidence and the information asymmetry point the same way, the option to wait is worth more than the deal.",
+      "takeaway": "Abstention is a position. Write down the conditions under which you would re-engage.",
+      "related": [
+        "ch01",
+        "ch04",
+        "ch11",
+        "ch20"
+      ]
+    }
+  ]
+}
