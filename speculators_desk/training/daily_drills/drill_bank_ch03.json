@@ -1,0 +1,409 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D079",
+   "category": "A",
+   "topic": "mean_reversion",
+   "difficulty": 2,
+   "time_minutes": 0.5,
+   "title": "Half-life from a quarterly AR(1)",
+   "inputs": {
+    "phi_quarterly": 0.85
+   },
+   "question": "A cap-rate spread follows a quarterly AR(1) with phi = 0.85. (a) What is the half-life in quarters? (b) What is the equivalent annual persistence coefficient?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "half-life (quarters)",
+      "value": 4.265,
+      "tolerance": 0.02,
+      "units": "quarters"
+     },
+     {
+      "label": "annual phi",
+      "value": 0.522,
+      "tolerance": 0.002,
+      "units": "ratio"
+     }
+    ]
+   },
+   "solution": "H = ln 0.5 / ln 0.85 = -0.6931 / -0.1625 = 4.27 quarters (about 1.07 years). Annual persistence = 0.85^4 = 0.522.",
+   "common_mistakes": [
+    "Reporting 4.27 years: the half-life is in the period of the data (quarters)",
+    "Using 4 x 0.85 or 0.85/4 for the annual coefficient instead of 0.85^4"
+   ],
+   "intuition": "Each quarter keeps 85% of the deviation; it takes a little over four quarters to lose half.",
+   "takeaway": "Always state the period of phi; estimated phi near one is biased down, so the true half-life is probably longer.",
+   "related": [
+    "ch03",
+    "ch22"
+   ]
+  },
+  {
+   "id": "D080",
+   "category": "A",
+   "topic": "bayesian_updating",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "One likelihood-ratio update",
+   "inputs": {
+    "prior": 0.25,
+    "likelihood_ratio": 2.4
+   },
+   "question": "Your prior that a lender will pull back from hotel lending this year is 25%. A loan officer's comment is 2.4 times as likely if the pullback is coming. What is your posterior probability (%)?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "posterior (%)",
+      "value": 44.44,
+      "tolerance": 0.05,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Prior odds = 0.25/0.75 = 1/3. Posterior odds = 1/3 x 2.4 = 0.8. Posterior = 0.8/1.8 = 44.4%.",
+   "common_mistakes": [
+    "Multiplying the probability by the LR (25% x 2.4 = 60%)",
+    "Ignoring that an anecdote's LR is itself uncertain"
+   ],
+   "intuition": "Likelihood ratios multiply odds, not probabilities.",
+   "takeaway": "Convert to odds, multiply, convert back. Record the LR before you see the outcome.",
+   "related": [
+    "ch03",
+    "ch20"
+   ]
+  },
+  {
+   "id": "D081",
+   "category": "B",
+   "topic": "reflexivity",
+   "difficulty": 3,
+   "time_minutes": 2,
+   "title": "Loop gain up and down",
+   "inputs": {
+    "ltv": 0.65,
+    "theta_up": 0.5,
+    "theta_down": 0.9,
+    "collateral_bn": 200,
+    "impact_per_bn": 0.008,
+    "shock": 0.03
+   },
+   "question": "Pledged collateral in a market is $200bn, lenders advance 65%, owners draw half of new capacity, and each $1bn of net demand moves prices 0.8%. (a) Loop gain on the way up. (b) Multiplier. (c) Total price rise (%) from a +3% fundamental shock. (d) The downside multiplier if 90% of collateral must repay lost capacity. (e) What does the gap between (b) and (d) imply for leverage decisions?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "loop gain up",
+      "value": 0.52,
+      "tolerance": 0.005,
+      "units": "ratio"
+     },
+     {
+      "label": "multiplier up",
+      "value": 2.083,
+      "tolerance": 0.01,
+      "units": "x"
+     },
+     {
+      "label": "total rise (%)",
+      "value": 6.25,
+      "tolerance": 0.05,
+      "units": "%"
+     },
+     {
+      "label": "multiplier down",
+      "value": 15.625,
+      "tolerance": 0.05,
+      "units": "x"
+     }
+    ],
+    "rubric": [
+     "States that borrowing is optional but repayment is forced, so downside gain exceeds upside gain",
+     "Notes the downside gain 0.936 is near the stability boundary and the linear model is only a fragility indicator",
+     "Concludes leverage should be sized to the downside loop, not the upside one",
+     "Mentions that lenders cutting LTV after losses would raise the downside gain further"
+    ]
+   },
+   "solution": "m_up = 0.65 x 0.5 x 200 x 0.008 = 0.52; multiplier 1/0.48 = 2.08; total 3% x 2.083 = 6.25%. m_down = 0.65 x 0.9 x 200 x 0.008 = 0.936; multiplier 1/0.064 = 15.6. The same market is mildly amplifying up and close to unstable down.",
+   "common_mistakes": [
+    "Using the same theta in both directions",
+    "Treating 15.6x as a forecast rather than a fragility signal"
+   ],
+   "intuition": "Owners choose how much new capacity to use; borrowers at the covenant limit have no choice about repaying.",
+   "takeaway": "Stress tests should use the downside loop gain.",
+   "related": [
+    "ch03",
+    "ch10",
+    "ch21"
+   ]
+  },
+  {
+   "id": "D082",
+   "category": "C",
+   "topic": "real_options",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Build now or wait",
+   "inputs": {
+    "v0": 20.0,
+    "cost_now": 18.5,
+    "up": 1.2,
+    "down": 0.85,
+    "rf": 0.04,
+    "payout_yield": 0.05,
+    "cost_growth": 0.03
+   },
+   "question": "A completed building would be worth $20.0m today and $24.0m or $17.0m next year. Construction costs $18.5m now or 3% more next year. The completed building yields 5% cash on today's value; the risk-free rate is 4%. (a) Static NPV ($m). (b) Risk-neutral probability. (c) Value of waiting ($m). (d) Build or wait, and what would change the answer?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "NPV now ($m)",
+      "value": 1.5,
+      "tolerance": 0.01,
+      "units": "$m"
+     },
+     {
+      "label": "q",
+      "value": 0.4,
+      "tolerance": 0.005,
+      "units": "probability"
+     },
+     {
+      "label": "wait value ($m)",
+      "value": 1.902,
+      "tolerance": 0.01,
+      "units": "$m"
+     }
+    ],
+    "rubric": [
+     "Chooses to wait because 1.90 > 1.50, and calls the 0.40 difference the option premium",
+     "Names the costs of waiting: forgone yield, cost inflation, entitlement or competitive pre-emption risk",
+     "States that lower uncertainty or higher yield would favor building now",
+     "Notes that land priced at residual (1.5) undervalues the option"
+    ]
+   },
+   "solution": "NPV now = 20.0 - 18.5 = 1.5. q = (20 x 1.04 - 1.0 - 17.0)/(24.0 - 17.0) = 2.8/7.0 = 0.40. Next-year cost = 19.055; up payoff 24.0 - 19.055 = 4.945; down 0. W = 0.40 x 4.945/1.04 = 1.902. Wait.",
+   "common_mistakes": [
+    "Discounting at the real-world probability without adjusting for risk",
+    "Forgetting the forgone 5% yield or the cost escalation"
+   ],
+   "intuition": "Waiting lets you skip the bad state; you pay for that with the yield and cost inflation you forgo.",
+   "takeaway": "Positive NPV is necessary but not sufficient to build now.",
+   "related": [
+    "ch03",
+    "ch13",
+    "ch18"
+   ]
+  },
+  {
+   "id": "D083",
+   "category": "C",
+   "topic": "forced_selling",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Margin call with price impact",
+   "inputs": {
+    "units": 200,
+    "price_after_shock": 47.0,
+    "debt": 7200,
+    "max_ltv": 0.75,
+    "impact": 0.02
+   },
+   "question": "A fund holds 200 units, now priced at 47, with debt of 7,200 and a 75% LTV covenant. (a) Units to sell with no price impact. (b) Units to sell if each unit sold lowers the price by 0.02 (all units marked at the post-sale price). (c) Post-sale price. (d) Remaining equity. (e) Is the fund near the spiral zone?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "units, no impact",
+      "value": 12.766,
+      "tolerance": 0.01,
+      "units": "units"
+     },
+     {
+      "label": "units, with impact",
+      "value": 17.314,
+      "tolerance": 0.02,
+      "units": "units"
+     },
+     {
+      "label": "post-sale price",
+      "value": 46.654,
+      "tolerance": 0.01,
+      "units": "$"
+     },
+     {
+      "label": "equity",
+      "value": 2130.74,
+      "tolerance": 0.5,
+      "units": "$"
+     }
+    ],
+    "rubric": [
+     "Computes the marginal threshold (1-0.75) x 47/(0.75 x 200) = 0.078 and compares it with 0.02",
+     "Notes impact raised the forced sale by about a third",
+     "Recognizes that other holders of the same asset now face lower marks",
+     "Says the cure is feasible but the buffer should have been sized to include impact"
+    ]
+   },
+   "solution": "LTV = 7,200/9,400 = 76.6%. No impact: s = (7,200/47 - 150)/0.25 = 12.77. With impact solve (47 - 0.02s)(150 + 0.25s) = 7,200: s = 17.31, price 46.65, equity 200 x 46.654 - 7,200 = 2,130.7.",
+   "common_mistakes": [
+    "Selling just enough to repay the dollar excess (debt - 0.75 x value) instead of dividing by 1 - 0.75",
+    "Ignoring the mark-down on retained units"
+   ],
+   "intuition": "Each dollar sold repays a dollar of debt but lowers allowed debt by 75 cents, and impact lowers the value of everything you keep.",
+   "takeaway": "Covenant buffers must include your own price impact.",
+   "related": [
+    "ch03",
+    "ch21"
+   ]
+  },
+  {
+   "id": "D084",
+   "category": "B",
+   "topic": "crowding",
+   "difficulty": 2,
+   "time_minutes": 2,
+   "title": "Exit capacity alone and crowded",
+   "inputs": {
+    "position_m": 30,
+    "adv_m": 12,
+    "participation": 0.1,
+    "crowd_total_m": 180
+   },
+   "question": "You hold $30m of a REIT that trades $12m a day; you will not exceed 10% of volume. Similar funds hold $180m in total including yours. (a) Days to exit alone. (b) Days for the crowd to exit together.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "days alone",
+      "value": 25,
+      "tolerance": 0.1,
+      "units": "days"
+     },
+     {
+      "label": "days crowded",
+      "value": 150,
+      "tolerance": 0.5,
+      "units": "days"
+     }
+    ]
+   },
+   "solution": "Alone: 30/(0.10 x 12) = 25 days. Crowd: 180/1.2 = 150 days, which is also your exit time if capacity is shared pro rata.",
+   "common_mistakes": [
+    "Using total ADV rather than the participation share",
+    "Assuming your exit is unaffected by others' selling"
+   ],
+   "intuition": "In a stress, exit capacity is shared with everyone who must sell.",
+   "takeaway": "Size to crowded exit time relative to your funding horizon.",
+   "related": [
+    "ch03",
+    "ch21"
+   ]
+  },
+  {
+   "id": "D085",
+   "category": "D",
+   "topic": "regime_change",
+   "difficulty": 4,
+   "time_minutes": 15,
+   "title": "The broker's two-year downturn",
+   "inputs": {
+    "p_stay_contraction_quarterly": 0.85,
+    "broker_claim_avg_years": 2.0,
+    "loan_maturity_quarters": 6
+   },
+   "question": "Your quarterly regime model, fitted on two decades of hotel data with three contractions, gives p22 = 0.85. A broker says 'hotel downturns last two years on average, so a six-quarter bridge loan gets you through'. A contraction has just begun. (a) Model-implied expected duration (quarters). (b) Probability the contraction lasts more than 8 quarters. (c) Probability it is still under way after the loan's 6 quarters. (d) Reconcile the model with the broker and decide whether the bridge loan is acceptable.",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "expected duration (quarters)",
+      "value": 6.667,
+      "tolerance": 0.01,
+      "units": "quarters"
+     },
+     {
+      "label": "P(lasts > 8 quarters)",
+      "value": 0.2725,
+      "tolerance": 0.002,
+      "units": "probability"
+     },
+     {
+      "label": "P(still in contraction after 6)",
+      "value": 0.3771,
+      "tolerance": 0.002,
+      "units": "probability"
+     }
+    ],
+    "rubric": [
+     "Notes the model's mean (1.67 years) and the broker's (2 years) differ, and that with three contractions neither is precise",
+     "Points out that even if the broker's average were right, the duration distribution is wide: averages do not get you through",
+     "Uses the 38% probability of maturing inside the contraction as the key risk number",
+     "Considers extension options, interest reserves, or a longer loan",
+     "Flags the geometric (memoryless) assumption as itself questionable"
+    ]
+   },
+   "solution": "E[D] = 1/(1-0.85) = 6.67 quarters. P(D > 8) = 0.85^8 = 0.272. P(still in contraction after 6 quarters) = 0.85^6 = 0.377. A loan whose term equals the average duration matures inside the contraction more than a third of the time under the model.",
+   "common_mistakes": [
+    "Matching loan term to the average duration",
+    "Treating the broker's claim and the model as independent confirmations",
+    "Trusting p22 estimated from three episodes to two decimals"
+   ],
+   "intuition": "Durations are skewed: many short downturns and a few long ones. The long ones are the ones that hurt.",
+   "takeaway": "Size debt maturities to the tail of the duration distribution, not its mean.",
+   "related": [
+    "ch03",
+    "ch10",
+    "ch12"
+   ]
+  },
+  {
+   "id": "D086",
+   "category": "E",
+   "topic": "bayesian_updating",
+   "difficulty": 5,
+   "time_minutes": 30,
+   "title": "Three signals, unknown dependence: bid or abstain",
+   "inputs": {
+    "prior_downturn": 0.3,
+    "signals": [
+     "STR RevPAR -3% (one month)",
+     "new competing hotel announced",
+     "broker says 'buyers are everywhere'"
+    ],
+    "seller_deadline_days": 5,
+    "value_if_downturn_m": 15.0,
+    "value_if_not_m": 19.0,
+    "ask_m": 17.5
+   },
+   "question": "A seller wants a firm bid in five days on a hotel worth about $19m if the market holds and $15m in a downturn; the ask is $17.5m. Your prior on a downturn is 30%. In the past week: one month of RevPAR -3%, a competing hotel announcement, and a broker telling you buyers are 'everywhere'. You cannot estimate likelihood ratios with any confidence, and the first two signals may reflect the same supply event. What do you do?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Computes the break-even downturn probability: 19 - 4p = 17.5 gives p = 0.375, before any margin of safety",
+     "Recognizes the prior (0.30) is already close to break-even, so the decision depends on LRs that cannot be estimated",
+     "Identifies the dependence between RevPAR and the supply announcement and the low information content of the broker's comment",
+     "Concludes that abstaining or bidding only with a price well below ask (with a margin of safety) is the disciplined answer given a five-day deadline",
+     "Names the data that would resolve it (STR supply pipeline, group pace, three months of RevPAR) and says the seller's deadline is itself information"
+    ]
+   },
+   "solution": "Expected value at the prior is 19 - 4 x 0.30 = 17.8, only 1.7% above ask. Break-even p = 0.375. Any reasonable LR for the RevPAR print (say 2) would push the posterior above break-even (odds 0.429 x 2 = 0.857, p = 0.46), while an LR near 1 would leave it below. With dependent signals and a five-day deadline you cannot tell which. The best answer is to abstain, or to bid only at a price that works at a posterior of about 0.5 (19 - 2 = 17.0, less a margin), and to walk away if refused.",
+   "common_mistakes": [
+    "Inventing precise LRs to force a decision",
+    "Counting the RevPAR print and the supply announcement as independent evidence",
+    "Treating the broker's enthusiasm as evidence about fundamentals"
+   ],
+   "intuition": "When the decision hinges on numbers you cannot estimate, the value of waiting for information exceeds the value of the deal.",
+   "takeaway": "Abstention is a position. Take it when the prior is near break-even and the evidence is unweighable.",
+   "related": [
+    "ch01",
+    "ch03",
+    "ch20"
+   ]
+  }
+ ]
+}
