@@ -1,0 +1,364 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D095",
+   "category": "A",
+   "topic": "monetary_policy",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Fed funds futures price to implied rate",
+   "inputs": {
+    "price": 96.115
+   },
+   "question": "A 30-Day Federal Funds futures contract trades at 96.115. What average effective federal funds rate for the contract month does it imply, in percent?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "implied average EFFR (%)",
+      "value": 3.885,
+      "tolerance": 0.0005,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Price = 100 - average daily EFFR over the contract month. 100 - 96.115 = 3.885%.",
+   "common_mistakes": [
+    "Reading the price as a discount yield on 30 days",
+    "Treating the implied rate as the rate after the meeting rather than the month's average"
+   ],
+   "intuition": "The contract settles on the arithmetic average of every calendar day's EFFR, so it mixes pre- and post-meeting days.",
+   "takeaway": "Convert price to rate first; only then think about which days of the month the meeting affects.",
+   "related": [
+    "ch05"
+   ]
+  },
+  {
+   "id": "D096",
+   "category": "A",
+   "topic": "real_rates",
+   "difficulty": 1,
+   "time_minutes": 1,
+   "title": "Exact Fisher real yield",
+   "inputs": {
+    "nominal": 0.046,
+    "breakeven": 0.024
+   },
+   "question": "The 10-year nominal Treasury yields 4.60% and the 10-year breakeven is 2.40%. What real yield does the exact Fisher relation imply, in percent?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "real yield (%)",
+      "value": 2.1484,
+      "tolerance": 0.001,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "r = (1 + 0.046)/(1 + 0.024) - 1 = 1.021484 - 1 = 2.1484%. The approximation 4.60 - 2.40 = 2.20% overstates it by about 5 bp (the cross-term r x pi).",
+   "common_mistakes": [
+    "Stopping at the subtraction 2.20%",
+    "Treating the breakeven as pure expected inflation"
+   ],
+   "intuition": "Nominal = (1 + real)(1 + inflation); the cross-term grows with the level of rates.",
+   "takeaway": "Use the exact form when rates and inflation are both several percent; it changes real-return comparisons by several basis points.",
+   "related": [
+    "ch05",
+    "ch06"
+   ]
+  },
+  {
+   "id": "D097",
+   "category": "B",
+   "topic": "monetary_policy",
+   "difficulty": 2,
+   "time_minutes": 2,
+   "title": "Day-weighted hike probability",
+   "inputs": {
+    "price": 96.07,
+    "n_days": 30,
+    "pre_days": 10,
+    "r0": 3.88,
+    "move": 0.25
+   },
+   "question": "A 30-day month has an FOMC decision effective on day 11, so 10 days are at the pre-meeting EFFR of 3.88%. The meeting-month fed funds future trades at 96.07. Assuming the only outcomes are hold and a 25 bp hike, compute the expected post-meeting EFFR and the implied hike probability.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "expected post-meeting EFFR (%)",
+      "value": 3.955,
+      "tolerance": 0.001,
+      "units": "%"
+     },
+     {
+      "label": "hike probability (%)",
+      "value": 30.0,
+      "tolerance": 0.3,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "Average = 100 - 96.07 = 3.93%. E[r1] = (30 x 3.93 - 10 x 3.88)/20 = (117.9 - 38.8)/20 = 3.955%. p = (3.955 - 3.88)/0.25 = 30%. The naive (3.93 - 3.88)/0.25 = 20% ignores that only 20 of 30 days are post-meeting.",
+   "common_mistakes": [
+    "Ignoring day-weighting (gives 20%)",
+    "Using business days instead of calendar days"
+   ],
+   "intuition": "Only the post-meeting share of the month responds to the decision, so the price move must be scaled up by N/(N-d).",
+   "takeaway": "Day-weight, then cross-check with the next month's contract, which is entirely post-meeting.",
+   "related": [
+    "ch05"
+   ]
+  },
+  {
+   "id": "D098",
+   "category": "C",
+   "topic": "cre_financing",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Floating-rate DSCR after a 100 bp SOFR rise",
+   "inputs": {
+    "loan": 20000000,
+    "spread": 0.0325,
+    "sofr0": 0.0385,
+    "sofr1": 0.0485,
+    "noi": 1900000
+   },
+   "question": "A property with NOI of $1.9 million has a $20 million interest-only loan at SOFR + 3.25%, interest accrued actual/360, no cap. Compute annual interest and DSCR at SOFR 3.85% and at 4.85%. Would you close an acquisition with this structure and a 1.20x cash-sweep covenant?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "interest at 3.85% ($)",
+      "value": 1439722,
+      "tolerance": 2,
+      "units": "$"
+     },
+     {
+      "label": "DSCR at 3.85% (x)",
+      "value": 1.3197,
+      "tolerance": 0.001,
+      "units": "x"
+     },
+     {
+      "label": "interest at 4.85% ($)",
+      "value": 1642500,
+      "tolerance": 2,
+      "units": "$"
+     },
+     {
+      "label": "DSCR at 4.85% (x)",
+      "value": 1.1568,
+      "tolerance": 0.001,
+      "units": "x"
+     }
+    ],
+    "rubric": [
+     "Uses actual/360 (x 365/360)",
+     "Notes that a 100 bp rise breaches the 1.20x sweep",
+     "Requires a cap struck at or below the SOFR that keeps DSCR at 1.20x (about 4.56%) or proposes lower leverage",
+     "Does not underwrite at today's SOFR as if fixed"
+    ]
+   },
+   "solution": "Interest = 20,000,000 x 0.071 x 365/360 = $1,439,722; DSCR = 1.32x. At 4.85%: 20,000,000 x 0.081 x 365/360 = $1,642,500; DSCR = 1.16x, below the 1.20x sweep. The SOFR that gives 1.20x is 1,900,000/(1.20 x 20,000,000 x 365/360) - 0.0325 = 4.56%. Close only with a cap at or below that strike, or with lower leverage.",
+   "common_mistakes": [
+    "Using 30/360 and understating interest by 1.4%",
+    "Ignoring the covenant and looking only at DSCR > 1.0x"
+   ],
+   "intuition": "The floating channel is mechanical: each 100 bp of SOFR is $202,778 a year on $20 million at actual/360.",
+   "takeaway": "Covenant cushions, not default thresholds, are the binding constraint for floating-rate CRE.",
+   "related": [
+    "ch05",
+    "ch10",
+    "ch18"
+   ]
+  },
+  {
+   "id": "D099",
+   "category": "C",
+   "topic": "cre_financing",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "DSCR-sized proceeds after a coupon rise",
+   "inputs": {
+    "noi": 1500000,
+    "dscr": 1.25,
+    "amort_years": 30,
+    "rate0": 0.0575,
+    "rate1": 0.065
+   },
+   "question": "A lender sizes a 30-year amortizing loan at 1.25x DSCR on NOI of $1.5 million. Compute the maximum loan at a 5.75% coupon and at 6.50%, and the percentage change.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "loan at 5.75% ($)",
+      "value": 17135821,
+      "tolerance": 5,
+      "units": "$"
+     },
+     {
+      "label": "loan at 6.50% ($)",
+      "value": 15821082,
+      "tolerance": 5,
+      "units": "$"
+     },
+     {
+      "label": "change (%)",
+      "value": -7.672,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "K(5.75%) = 0.070028; loan = 1,500,000/1.25/0.070028 = $17,135,821. K(6.50%) = 0.075848; loan = $15,821,082. Change = -7.67%. A 75 bp coupon rise (13% proportionally) cuts proceeds by 7.7%, consistent with an elasticity of about -0.6 to -0.7.",
+   "common_mistakes": [
+    "Using the interest rate instead of the loan constant",
+    "Dividing by DSCR in the wrong place (multiplying NOI by 1.25)"
+   ],
+   "intuition": "Amortization dampens the effect of the rate on the constant, so proceeds fall less than proportionally to the coupon.",
+   "takeaway": "Check whether DSCR actually binds; if LTV binds, proceeds fall later, through the appraisal.",
+   "related": [
+    "ch05",
+    "ch10"
+   ]
+  },
+  {
+   "id": "D100",
+   "category": "A",
+   "topic": "monetary_policy",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Taylor-rule prescription",
+   "inputs": {
+    "rstar": 1.0,
+    "inflation": 3.0,
+    "gap": 0.0,
+    "target": 2.0
+   },
+   "question": "Neutral real rate 1.0%, inflation 3.0%, target 2%, output gap zero. What does the Taylor (1993) rule prescribe, in percent?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "prescribed rate (%)",
+      "value": 4.5,
+      "tolerance": 0.001,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "i = 1.0 + 3.0 + 0.5(3.0 - 2.0) + 0.5(0) = 4.5%.",
+   "common_mistakes": [
+    "Omitting the inflation term itself and adding only 0.5 x gap",
+    "Using r* = 2 when the problem gives 1"
+   ],
+   "intuition": "The nominal rate moves 1.5-for-1 with inflation, so the real rate rises when inflation rises (the Taylor principle).",
+   "takeaway": "Each 1 point of uncertainty in r* is 1 point of uncertainty in the prescription.",
+   "related": [
+    "ch05"
+   ]
+  },
+  {
+   "id": "D101",
+   "category": "E",
+   "topic": "monetary_policy",
+   "difficulty": 4,
+   "time_minutes": 30,
+   "title": "A meeting bet with no edge",
+   "inputs": {
+    "implied_hike_probability": "about 50% (day-weighted)",
+    "speakers": "two FOMC participants with opposite emphases",
+    "data": "core inflation in line with consensus; payrolls slightly weak",
+    "proposal": "put 3% of NAV at risk in fed funds futures on a hike"
+   },
+   "question": "Fed funds futures, correctly day-weighted, imply about a 50% chance of a 25 bp hike at next week's meeting. The latest data were mixed, and two Committee participants gave speeches pointing in opposite directions. A colleague proposes risking 3% of NAV on a hike in fed funds futures because 'the Fed is behind the curve.' What do you do?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Recognizes that expected P&L at the market-implied probability is zero before costs and that a profit requires a better-than-market probability",
+     "Asks what information the colleague has that the market lacks; 'behind the curve' is a widely held view already in the price",
+     "Notes that implied probabilities are risk-neutral and can contain a premium, which cuts both ways",
+     "Identifies abstention (or a small, explicitly sized position with a written thesis and stop) as the best answer",
+     "Considers whether the book already has front-end exposure (floating-rate CRE debt) and whether a hedge, not a bet, is the relevant question"
+    ]
+   },
+   "solution": "Abstain. At a 50% implied probability, the trade has zero expected value unless your probability differs and is better calibrated than the market's. Mixed data and split speakers are public. If the desk has floating-rate CRE debt, the relevant question is whether to hedge that exposure with caps or SOFR futures, which is a risk decision, not a meeting bet.",
+   "common_mistakes": [
+    "Confusing a strong opinion with an informational edge",
+    "Sizing a coin flip at 3% of NAV"
+   ],
+   "intuition": "Futures prices aggregate public information about the meeting; a view that is common is priced.",
+   "takeaway": "Before any macro trade, write down why your probability differs from the market's. If you cannot, do not trade.",
+   "related": [
+    "ch05",
+    "ch20",
+    "ch21"
+   ]
+  },
+  {
+   "id": "D102",
+   "category": "D",
+   "topic": "cross_asset",
+   "difficulty": 3,
+   "time_minutes": 15,
+   "title": "Hot CPI: equity futures plus a Treasury position",
+   "inputs": {
+    "es_contracts": 10,
+    "es_points": -90,
+    "es_multiplier": 50,
+    "ust_face": 10000000,
+    "ust_coupon": 0.0425,
+    "ust_years": 10,
+    "y0": 0.0425,
+    "dy": 0.0015
+   },
+   "question": "A desk is long 10 E-mini S&P 500 contracts and $10 million face of a 10-year Treasury (4.25% coupon, priced at par, semiannual). On a hot CPI print, ES falls 90 points and the 10-year yield rises 15 bp. Compute the ES P&L, the Treasury P&L by full repricing, the Treasury DV01, and the total.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "ES P&L ($)",
+      "value": -45000,
+      "tolerance": 1,
+      "units": "$"
+     },
+     {
+      "label": "Treasury P&L ($)",
+      "value": -120301,
+      "tolerance": 2,
+      "units": "$"
+     },
+     {
+      "label": "Treasury DV01 ($/bp)",
+      "value": 8078,
+      "tolerance": 2,
+      "units": "$"
+     },
+     {
+      "label": "total ($)",
+      "value": -165301,
+      "tolerance": 3,
+      "units": "$"
+     }
+    ]
+   },
+   "solution": "ES: -90 x $50 x 10 = -$45,000 (not $250, the old big-contract multiplier). Treasury: price at 4.40% = $9,879,699, so P&L = -$120,301. DV01 = $8,078 per bp; 15 x 8,078 = $121,169 is the duration estimate, and convexity reduces the loss by about $868. Total = -$165,301.",
+   "common_mistakes": [
+    "Using a $250 multiplier",
+    "Using a DV01 per $100 face without scaling to $10 million",
+    "Treating stocks and bonds as diversifying on an inflation surprise"
+   ],
+   "intuition": "An inflation surprise hits duration and equities together; the stock-bond correlation is regime-dependent.",
+   "takeaway": "On inflation-release days, a stock-plus-bond book can have one risk factor. See Case H.",
+   "related": [
+    "ch05",
+    "ch06",
+    "ch14",
+    "case_H"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,368 @@
+{
+ "schema_version": 1,
+ "drills": [
+  {
+   "id": "D103",
+   "category": "A",
+   "topic": "fiscal_sovereign",
+   "difficulty": 1,
+   "time_minutes": 0.5,
+   "title": "Debt-stabilizing primary balance when r < g",
+   "inputs": {
+    "debt_ratio": 1.1,
+    "r_effective": 0.04,
+    "g_nominal": 0.05,
+    "primary_balance": -0.03
+   },
+   "question": "Debt is 110% of GDP, the effective interest rate is 4.0%, nominal GDP growth is 5.0%, and the government runs a primary deficit of 3.0% of GDP. (a) What primary balance would hold the debt ratio constant? (b) What is next year's debt ratio?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "debt-stabilizing primary balance (% of GDP)",
+      "value": -1.0476,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "next year's debt ratio (% of GDP)",
+      "value": 111.9524,
+      "tolerance": 0.01,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "pb* = d(r-g)/(1+g) = 1.10 x (0.04-0.05)/1.05 = -1.048% (a primary deficit of about 1.05% is compatible with stable debt). d1 = 1.10 x 1.04/1.05 + 0.03 = 1.08952 + 0.03 = 1.11952, i.e., 111.95% of GDP. The actual deficit is about 2 points larger than the stabilizing one, so debt drifts up by about 2 points a year.",
+   "common_mistakes": [
+    "Using r - g without dividing by (1+g) (gives -1.10%, close but not exact)",
+    "Sign error: subtracting a negative primary balance as if it were a surplus",
+    "Concluding that r < g means any deficit is sustainable"
+   ],
+   "intuition": "With r < g the snowball works in the government's favor, but only up to a deficit of d(g-r)/(1+g).",
+   "takeaway": "Always compute pb* before judging a deficit; the debt level scales it and the sign of r-g sets its direction.",
+   "related": [
+    "ch07",
+    "ch06"
+   ]
+  },
+  {
+   "id": "D104",
+   "category": "A",
+   "topic": "sovereign_credit",
+   "difficulty": 2,
+   "time_minutes": 1,
+   "title": "CDS spread to hazard rate and five-year default probability",
+   "inputs": {
+    "cds_spread_bps": 450,
+    "recovery": 0.25,
+    "years": 5
+   },
+   "question": "A sovereign's 5-year CDS trades at 450 bp. Assume 25% recovery. Compute the hazard rate and the five-year cumulative risk-neutral default probability.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "hazard rate (% per year)",
+      "value": 6.0,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "5-year default probability (%)",
+      "value": 25.9182,
+      "tolerance": 0.05,
+      "units": "%"
+     }
+    ]
+   },
+   "solution": "lambda = s/(1-R) = 0.045/0.75 = 6.0% per year. P(default by 5) = 1 - exp(-0.06 x 5) = 1 - exp(-0.30) = 1 - 0.7408 = 25.92%. Mental check: 5 x 6% = 30% less compounding of survival.",
+   "common_mistakes": [
+    "Dividing by recovery instead of LGD (0.045/0.25 = 18%)",
+    "Multiplying the hazard by 5 and stopping (30%)",
+    "Treating the result as a real-world probability; it includes risk, liquidity and redenomination premia"
+   ],
+   "intuition": "Spread = expected loss per year under risk-neutral pricing. Lower recovery means each default costs more, so fewer defaults explain the same spread.",
+   "takeaway": "Always state the recovery assumption next to any implied default probability.",
+   "related": [
+    "ch07",
+    "ch17"
+   ]
+  },
+  {
+   "id": "D105",
+   "category": "B",
+   "topic": "fx_hedging",
+   "difficulty": 2,
+   "time_minutes": 2,
+   "title": "Hedged Treasury yield for a yen investor",
+   "inputs": {
+    "spot_usdjpy": 155.0,
+    "r_usd": 0.045,
+    "r_jpy": 0.0025,
+    "ust_yield": 0.044,
+    "jgb_yield": 0.015,
+    "investment_jpy": 1000000000
+   },
+   "question": "USD/JPY spot is 155.00. One-year rates: USD 4.50%, JPY 0.25%. A Japanese life insurer can buy the 10-year Treasury at 4.40% (assume the yield is unchanged after one year) or a 10-year JGB at 1.50%. Compute (a) the one-year CIP forward USD/JPY, (b) the one-year hedged return in yen on a 1 billion yen investment, and (c) the hedged pick-up versus the JGB in basis points.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "forward USD/JPY",
+      "value": 148.6962,
+      "tolerance": 0.01,
+      "units": "JPY per USD"
+     },
+     {
+      "label": "hedged return (%)",
+      "value": 0.1541,
+      "tolerance": 0.005,
+      "units": "%"
+     },
+     {
+      "label": "pick-up vs JGB (bp)",
+      "value": -134.59,
+      "tolerance": 0.5,
+      "units": "bp"
+     }
+    ]
+   },
+   "solution": "Pair USD/JPY: base USD, quote JPY, so F = S(1+r_JPY)/(1+r_USD) = 155 x 1.0025/1.045 = 148.6962. Convert: 1,000,000,000/155 = $6,451,613. Terminal $ = 6,451,613 x 1.044 = $6,735,484. Sold forward: x 148.6962 = 1,001,540,670 yen, a 0.154% return. Approximation: 4.40% - (4.50% - 0.25%) = 0.15%. Pick-up = 0.154% - 1.50% = -1.346%, i.e., about -135 bp.",
+   "common_mistakes": [
+    "Putting the USD rate in the numerator (pair direction error)",
+    "Using the 10-year rate differential instead of the one-year rate differential as the hedge cost",
+    "Comparing the unhedged 4.40% with the 1.50% JGB and calling it a 290 bp pick-up"
+   ],
+   "intuition": "The hedge cost is the short-rate differential. With USD short rates above the 10-year yield (an inverted curve) and yen rates near zero, the hedge consumes all the yield.",
+   "takeaway": "Hedged foreign demand for Treasuries depends on the U.S. front end and curve shape, not just on long yields.",
+   "related": [
+    "ch07",
+    "ch15"
+   ]
+  },
+  {
+   "id": "D106",
+   "category": "B",
+   "topic": "fiscal_sovereign",
+   "difficulty": 3,
+   "time_minutes": 2,
+   "title": "A weak long-bond auction and your exit cap",
+   "inputs": {
+    "event": "30-year auction tails; long yields up sharply on the day; no change in Fed expectations",
+    "your_position": "bidding on a stabilized industrial asset with a 7-year hold, exit cap assumed equal to entry"
+   },
+   "question": "A 30-year Treasury auction tails badly and long yields rise sharply on the day while fed funds futures barely move. You are about to submit a bid on a stabilized industrial asset with a 7-year hold whose model assumes exit cap = entry cap. What does the event tell you, what does it not tell you, and what do you change in your underwriting?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Identifies the move as a term-premium (supply/duration absorption) move rather than a change in expected policy rates, because short-rate expectations did not move",
+     "Measures supply in duration: a 30-year auction carries roughly twice the DV01 per dollar of a 10-year",
+     "Does not extrapolate one auction into a trend; names what would confirm it (subsequent auctions, refunding guidance, term-premium model estimates with the model named)",
+     "Changes underwriting by running exit cap sensitivities (+25 and +50 bp) and checking refinancing/DSCR at higher long rates rather than changing the bid on one day's news",
+     "Notes the effect on hedged foreign demand and on the marginal buyer, and that deficit-to-yield sensitivities are uncertain scenario parameters"
+    ]
+   },
+   "solution": "An auction tail with unchanged policy expectations points to a higher term premium: buyers demanded more yield to absorb duration. It does not establish a persistent change, and the deficit-to-yield sensitivity is uncertain (Laubach-type estimates are about forward rates and are unstable over time). The right response is a scenario change, not a regime call: add +25/+50 bp exit-cap cases, check the refinancing at higher long rates, and look at whether the bid still works without assuming cap-rate compression.",
+   "common_mistakes": [
+    "Treating the move as a signal about Fed policy",
+    "Changing the bid wholesale on one data point",
+    "Ignoring that the exit cap is the largest single sensitivity in a 7-year hold"
+   ],
+   "intuition": "Expected short rates and the term premium both sit inside the 10-year yield; only the second is about supply.",
+   "takeaway": "Fiscal supply matters most to CRE through the exit cap and refinancing, not through year-1 income.",
+   "related": [
+    "ch07",
+    "ch06",
+    "ch09"
+   ]
+  },
+  {
+   "id": "D107",
+   "category": "C",
+   "topic": "global_cre_capital",
+   "difficulty": 3,
+   "time_minutes": 5,
+   "title": "Can a hedged euro buyer pay your cap rate?",
+   "inputs": {
+    "spot_eurusd": 1.08,
+    "r_usd": 0.0425,
+    "r_eur": 0.0225,
+    "price_usd": 50000000,
+    "cap_rate": 0.0525,
+    "domestic_yield": 0.046
+   },
+   "question": "You are selling a U.S. logistics asset for $50 million at a 5.25% cap rate. A European insurer is the expected high bidder. EUR/USD spot 1.08; one-year rates USD 4.25%, EUR 2.25%. The insurer's domestic logistics alternative yields 4.60%. Assume flat USD value over one year and a full forward hedge of value plus NOI. (a) Compute the insurer's hedged one-year return in euros. (b) Compute its pick-up versus the domestic alternative in bp. (c) Should you count on this bidder at the asking price? What would change your answer?",
+   "answer": {
+    "type": "mixed",
+    "parts": [
+     {
+      "label": "hedged return (%)",
+      "value": 3.2308,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "pick-up vs domestic (bp)",
+      "value": -136.92,
+      "tolerance": 0.5,
+      "units": "bp"
+     }
+    ],
+    "rubric": [
+     "Computes the hedged return as (1.0525)(1.0225/1.0425) - 1 and recognizes the hedge cost is about the 2-point short-rate differential",
+     "Concludes a fully hedged buyer is roughly 137 bp below its domestic alternative and is unlikely to pay 5.25% on fundamentals",
+     "Considers that the bidder may be partially hedged, use USD debt, or have strategic diversification motives, and asks which",
+     "Names what would change the answer: a fall in USD short rates relative to EUR, a narrower cross-currency basis, or a lower price",
+     "Does not rely on foreign competition to set the price without evidence of the bidder's hedging policy"
+    ]
+   },
+   "solution": "F = 1.08 x 1.0425/1.0225 = 1.101125. Equity in euros = 50,000,000/1.08 = 46,296,296. Year-end $ = 52,625,000; sold forward = 47,792,044 euros. Hedged return = 3.231%. Pick-up = 3.231% - 4.60% = -1.369% (about -137 bp). A fully hedged bidder cannot pay 5.25% on these numbers; if they bid, they are unhedged, levered in dollars, or strategic.",
+   "common_mistakes": [
+    "Ignoring the hedge cost and comparing 5.25% with 4.60%",
+    "FX quote-direction errors with EUR/USD",
+    "Assuming CIP holds exactly in live markets (check the basis)"
+   ],
+   "intuition": "A foreign buyer's required dollar cap rate rises when U.S. short rates rise relative to its home rates.",
+   "takeaway": "Underwrite who the marginal buyer is and what it can pay after hedging before you rely on a bid.",
+   "related": [
+    "ch07",
+    "ch15",
+    "ch09"
+   ]
+  },
+  {
+   "id": "D108",
+   "category": "D",
+   "topic": "fiscal_sovereign",
+   "difficulty": 3,
+   "time_minutes": 10,
+   "title": "Doom loop: bank capital and forced shrinkage",
+   "inputs": {
+    "assets": 80.0,
+    "equity": 4.8,
+    "sovereign_bonds": 16.0,
+    "mod_duration": 6.0,
+    "spread_shock_bps": 200,
+    "target_leverage_ratio": 0.06
+   },
+   "question": "A bank has assets of EUR 80 billion and equity of EUR 4.8 billion (a 6.0% leverage ratio it targets). It holds EUR 16 billion of domestic sovereign bonds at fair value with modified duration 6.0. The sovereign spread widens 200 bp. It cannot raise equity. Compute (a) the capital loss in EUR billion, (b) the new leverage ratio in %, and (c) the asset reduction in EUR billion needed to restore 6.0%.",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "capital loss (EUR bn)",
+      "value": 1.92,
+      "tolerance": 0.005,
+      "units": "EUR bn"
+     },
+     {
+      "label": "new leverage ratio (%)",
+      "value": 3.6885,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "required asset reduction (EUR bn)",
+      "value": 30.08,
+      "tolerance": 0.01,
+      "units": "EUR bn"
+     }
+    ]
+   },
+   "solution": "Loss = 16 x 6.0 x 0.02 = 1.92 bn. Equity = 2.88 bn; assets = 78.08 bn; ratio = 3.69%. Max assets at 6% = 2.88/0.06 = 48.0 bn. Reduction = 78.08 - 48.0 = 30.08 bn, or 38.5% of the balance sheet. If sovereigns are kept, the cut falls on the 64.0 bn of other assets (47%).",
+   "common_mistakes": [
+    "Forgetting to reduce assets by the loss before computing the ratio",
+    "Computing shrinkage from the original 80 bn",
+    "Assuming amortized-cost accounting removes the economic loss"
+   ],
+   "intuition": "At 6% leverage, each euro of lost capital removes about 17 euros of lending capacity.",
+   "takeaway": "Underwrite the lender's sovereign exposure relative to its equity when refinancing CRE in a stressed country.",
+   "related": [
+    "ch07",
+    "ch10",
+    "ch12"
+   ]
+  },
+  {
+   "id": "D109",
+   "category": "E",
+   "topic": "fiscal_sovereign",
+   "difficulty": 5,
+   "time_minutes": 30,
+   "title": "Contradictory signals on a periphery hotel portfolio (abstention test)",
+   "inputs": {
+    "offer": "portfolio of 6 hotels in a euro-area country, seller is a state-supported bank",
+    "spread_signal": "sovereign spread fell 120 bp in a month after a central-bank statement",
+    "rating_signal": "two agencies kept negative outlooks",
+    "data": "T-12 P&Ls for 4 of 6 hotels; no STR data; franchise status unknown for 2",
+    "deadline": "binding bid in 7 days"
+   },
+   "question": "A state-supported bank offers a six-hotel portfolio in a euro-area country with a binding bid due in seven days. The sovereign spread has just fallen 120 bp after a central-bank statement, but two rating agencies kept negative outlooks. You have T-12 P&Ls for four hotels, no STR data, and do not know the franchise status of two. The seller's broker says the spread compression 'proves the bottom is in.' What do you do?",
+   "answer": {
+    "type": "judgment",
+    "rubric": [
+     "Recognizes the spread move may be a fall in redenomination/liquidity premium due to policy, not an improvement in fundamentals; it does not by itself value the hotels",
+     "Identifies the information gaps (two hotels without P&Ls, franchise status, no STR, no PIP information) as decisive for a binding bid",
+     "Treats a binding bid in seven days on incomplete data as unacceptable; abstains or submits a non-binding indication conditional on diligence",
+     "Notes the seller's incentives (state-supported bank under capital pressure) and the asymmetric-information risk",
+     "States what would change the decision: full P&Ls, STR and franchise/PIP status, a longer timetable, or a price that compensates for the unknowns"
+    ]
+   },
+   "solution": "The best answer is to abstain from a binding bid. A policy-driven spread compression changes the discount-rate environment but not the operating facts you lack. Two of six hotels cannot be underwritten, franchise status (and any PIP) is unknown, and there is no market data. Offer a non-binding indication subject to diligence and a longer timetable, or pass.",
+   "common_mistakes": [
+    "Reading spread compression as proof of a property-market bottom",
+    "Bidding on four hotels' data and extrapolating to six",
+    "Ignoring PIP and franchise risk because the macro story is compelling"
+   ],
+   "intuition": "Macro relief can be real and still irrelevant to whether you can underwrite a specific asset.",
+   "takeaway": "Abstention is a position. Missing asset-level information is a reason not to bid binding, whatever the macro tape says.",
+   "related": [
+    "ch07",
+    "ch11",
+    "ch01"
+   ]
+  },
+  {
+   "id": "D110",
+   "category": "A",
+   "topic": "balance_of_payments",
+   "difficulty": 1,
+   "time_minutes": 1,
+   "title": "Twin deficits from the savings-investment identity",
+   "inputs": {
+    "private_saving": 0.19,
+    "private_investment": 0.2,
+    "government_balance": -0.03,
+    "gdp_bn": 1500
+   },
+   "question": "Private saving is 19% of GDP, private investment 20%, and the government balance -3% of GDP. GDP is $1,500 billion. What is the current-account balance (% of GDP), and how much net foreign financing does the country need per year ($ billion)?",
+   "answer": {
+    "type": "numeric",
+    "parts": [
+     {
+      "label": "current account (% of GDP)",
+      "value": -4.0,
+      "tolerance": 0.01,
+      "units": "%"
+     },
+     {
+      "label": "net foreign financing ($bn)",
+      "value": 60.0,
+      "tolerance": 0.1,
+      "units": "$bn"
+     }
+    ]
+   },
+   "solution": "CA = (S_p - I) + (T - G) = (0.19 - 0.20) + (-0.03) = -0.04, i.e., -4.0% of GDP. Net foreign financing = 0.04 x 1,500 = $60 billion per year (ignoring the capital account and errors).",
+   "common_mistakes": [
+    "Sign errors on the government balance",
+    "Treating the identity as a forecast of how the deficit will be closed"
+   ],
+   "intuition": "A country that spends more than it saves must sell claims on itself to foreigners.",
+   "takeaway": "The identity tells you the financing need; prices (rates, the currency) decide who fills it.",
+   "related": [
+    "ch07"
+   ]
+  }
+ ]
+}
